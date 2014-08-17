@@ -16,7 +16,7 @@ DEFAULT_PAGINATION = 5
 MD_EXTENSIONS = [FontAwesomeExtension(), 'codehilite(css_class=highlight)', 'extra', 'toc']
 
 # Leave this blank for local development, publishconf.py has the "real" value:
-SITEURL = 'https://ewsterrenburg.github.io/tamandua/'
+SITEURL = 'http://ewsterrenburg.github.io/tamandua/'
 
 FEED_ATOM = None
 FEED_RSS = 'feeds/all.rss'

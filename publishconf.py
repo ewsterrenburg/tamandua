@@ -10,7 +10,7 @@ from pelicanconf import *
 # production version of your site:
 #SITEURL = 'https://example.com
 # OR
-SITEURL = 'https://ewsterrenburg.github.io/tamandua/'
+SITEURL = 'http://ewsterrenburg.github.io/tamandua/'
 
 # If then you can enable Google Analytics tracking:
 #GOOGLE_ANALYTICS = ''
