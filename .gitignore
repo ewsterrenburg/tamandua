@@ -1,6 +1,7 @@
 #Custom
 output
 cache
+publishconf.py
 
 #Python
 *.py[cod]

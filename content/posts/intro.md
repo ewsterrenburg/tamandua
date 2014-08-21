@@ -4,33 +4,37 @@ title: This is a sample post
 slug: sample-post-for-pelican-powered-blog
 tags: blog, sample
 sidebarimage: http://www.cheffen.nl/rode%20aardbei.png
-summary:
+summary: This is a test post powered by [Pelican].
 
 todo:
-- gebruik summary
-- about page
-- eerste blogpost
-- deploy workflow (fabric?)
-- nette git start
-- gebruikte foto
-- domein
 
+-   about page
+-   eerste blogpost
+-   deploy workflow (fabric?)?
+-   gebruikte foto?
+-   favicon
+-	description ([http://www.voidynullness.net/blog/2013/05/25/html-meta-description-in-pelican-blog-posts/])
 
-This is a test post powered by [Pelican].
+	1.	hdf
+	2.	fjd
+	>2
+		jdfkj
 
+>	[This] is a test post powered by [Pelican].
+>	`slug` refers to the final filename of the post. For example this post is "sample-post-for-peldddican-powered-blog.md" so Pelican will generate a file named "sample-post-for-pelican-powered-blog.html" which is what will appear in the address bar of your browser. Note that this can be different that the title of the post. The point of this attribute is to have a consistent name for the page that will *never* change even if the title/content changes.
 
-
-`slug` refers to the final filename of the post. For example this post is "sample-post-for-peldddican-powered-blog.md" so Pelican will generate a file named "sample-post-for-pelican-powered-blog.html" which is what will appear in the address bar of your browser. Note that this can be different that the title of the post. The point of this attribute is to have a consistent name for the page that will *never* change even if the title/content changes.
-
-`tags` are comma seperated list of metadata describing your posts. They're optional but if you add them to your posts the Pelican will automatically generate pages listing your posts by tag. For example you could have all your 'foobar' organized together.
+>	`tags` are comma seperated list of metadata describing your posts. They're optional but if you add them to your posts the Pelican will automatically generate pages listing your posts by tag. For example you could have all your 'foobar' organized together.
 
 `summary` refers to the text summary that will appear on the front page of your blog.
 
 And here is how you add a image:
 
-<img width="200" height="200" src="/images/smiley.png" alt="Smiley" title="What you feel like when blogging with Pelican" />
+<img width="200" height="200" src="http://pilosa.eu/images/smiley.png" alt="Smiley" title="What you feel like when blogging with Pelican" />
+
+![Alt Text](|filename|/images/smiley.png)
 
 [Pelican]: http://getpelican.com/
+[This]: http://jdlfjfl.com
 Inline
 
 LaTex between \$..\$, for example, $x^2$, will be rendered inline with respect to the current html block.

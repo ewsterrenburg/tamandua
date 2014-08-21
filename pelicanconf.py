@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 from fontawesome_markdown import FontAwesomeExtension
+import os
 
 AUTHOR = u"Erwin Sterrenburg"
 SITENAME = u"My Sample Blog"
@@ -46,12 +47,19 @@ STATIC_PATHS = [
     ]
 
 # Here's a sample EXTRA_PATH_METADATA that adds the favicon, an iOS touch icon and a GPG key:
-EXTRA_PATH_METADATA = {
-    'extras/robots.txt': {'path': 'robots.txt'},
-    'extras/favicon.ico': {'path': 'favicon.ico'},
-    'extras/apple-touch-icon.png': {'path': 'apple-touch-icon.png'},
-    'extras/CNAME': {'path': 'CNAME'}
-    }
+#EXTRA_PATH_METADATA = {
+#    'extras/robots.txt': {'path': 'robots.txt'},
+#    'extras/favicon.ico': {'path': 'favicon.ico'},
+#    'extras/apple-touch-icon.png': {'path': 'apple-touch-icon.png'},
+#    'extras/CNAME': {'path': 'CNAME'}
+#    }
+
+EXTRA_PATH_METADATA = dict()
+for f in os.listdir('content/extras'):
+    STATIC_PATHS.append('extras/{0}'.format(f))
+    EXTRA_PATH_METADATA['extras/{0}'.format(f)]={'path': f}
+
+
 
 #Theme
 THEME = './themes/pure-single-master'
