@@ -5,8 +5,8 @@ from fontawesome_markdown import FontAwesomeExtension
 import os
 
 AUTHOR = u"Erwin Sterrenburg"
-SITENAME = u"My Sample Blog"
-TAGLINE = 'Sample Tag Line'
+SITENAME = u"PILOSA.EU"
+TAGLINE = 'Scribblings of World\'s Most Curious Anteater'
 TIMEZONE = 'Europe/Amsterdam'
 LOCALE='en_US.utf8'
 DEFAULT_LANG = u'en'
@@ -17,17 +17,24 @@ DEFAULT_PAGINATION = 5
 MD_EXTENSIONS = [FontAwesomeExtension(), 'codehilite(css_class=highlight)', 'extra', 'toc']
 
 # Leave this blank for local development, publishconf.py has the "real" value:
-SITEURL = 'http://ewsterrenburg.github.io/tamandua/'
+SITEURL = ''
+RELATIVE_URLS = True
 
-FEED_ATOM = None
-FEED_RSS = 'feeds/all.rss'
+# Feed generation is usually not desired when developing
+FEED_ALL_RSS = 'feed.xml'
+CATEGORY_FEED_RSS = None
+TRANSLATION_FEED_RSS = None
+FEED_ALL_ATOM = None
+CATEGORY_FEED_ATOM = None
+TRANSLATION_FEED_ATOM = None
 FEED_DOMAIN = SITEURL
 
 MENUITEMS = [('Archive', 'archives.html'), ('About', 'about.html'),]
 SOCIAL = (
+    ('envelope-o', 'mailto:ewsterrenburg@gmail.com'),
     ('github', 'https://github.com/ewsterrenburg/'),
     ('linkedin', 'https://www.linkedin.com/in/ewsterrenburg'),
-    ('rss', FEED_RSS),
+    ('rss', FEED_ALL_RSS),
 )
 
 
@@ -47,13 +54,6 @@ STATIC_PATHS = [
     ]
 
 # Here's a sample EXTRA_PATH_METADATA that adds the favicon, an iOS touch icon and a GPG key:
-#EXTRA_PATH_METADATA = {
-#    'extras/robots.txt': {'path': 'robots.txt'},
-#    'extras/favicon.ico': {'path': 'favicon.ico'},
-#    'extras/apple-touch-icon.png': {'path': 'apple-touch-icon.png'},
-#    'extras/CNAME': {'path': 'CNAME'}
-#    }
-
 EXTRA_PATH_METADATA = dict()
 for f in os.listdir('content/extras'):
     STATIC_PATHS.append('extras/{0}'.format(f))
@@ -63,10 +63,15 @@ for f in os.listdir('content/extras'):
 
 #Theme
 THEME = './themes/pure-single-master'
-COVER_IMG_URL = "http://commoditychainsthatbind.files.wordpress.com/2013/03/bananas-925216.jpeg"
+COVER_IMG_URL = "/images/bananas.jpeg"
 SINGLE_AUTHOR = True
+# Sole author and don't use categories ... disable these features
+AUTHOR_SAVE_AS = False
+AUTHORS_SAVE_AS = False
+
+
 DISPLAY_CATEGORIES_ON_MENU = False
-DEFAULT_DATE_FORMAT = ('%b %m %Y')
+DEFAULT_DATE_FORMAT = ('%b %d %Y')
 TYPOGRIFY = True
 
 # Cleaner page links
