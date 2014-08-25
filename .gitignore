@@ -2,6 +2,7 @@
 output
 cache
 publishconf.py
+*.pid
 
 #Python
 *.py[cod]
