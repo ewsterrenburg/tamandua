@@ -2,6 +2,7 @@ date: 2014-09-03
 author: Erwin Sterrenburg
 title: SWMM GISWATER 3: Creating Junctions
 slug: swmm-giswater-3-creating-junctions
+status: draft
 tags: GISWATER, SWMM
 summary: A short welcome message
 

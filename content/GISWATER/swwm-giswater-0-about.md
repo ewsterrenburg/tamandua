@@ -3,6 +3,7 @@ author: Erwin Sterrenburg
 title: SWMM GISWATER 0: About GISWATER
 slug: swmm-giswater-0-about-giswater
 tags: GISWATER, SWMM
+status: draft
 summary: A short welcome message.
 
 #SWMM & GISWATER Tutorial 0: what is it?

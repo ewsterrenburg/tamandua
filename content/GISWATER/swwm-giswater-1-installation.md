@@ -3,6 +3,7 @@ author: Erwin Sterrenburg
 title: SWMM GISWATER 1: Installation
 slug: swmm-giswater-1-installation
 tags: GISWATER, SWMM
+status: draft
 summary: A short welcome messa
 
 

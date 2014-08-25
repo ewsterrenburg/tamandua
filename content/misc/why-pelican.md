@@ -5,11 +5,6 @@ slug: why-pelican
 tags: PYTHON, BLOG
 summary: Short explanation on why this blog is written using pelican
 
-If 
-
-
-##Why pelican?
-
 The idea of a personal website and blog has been floating around in my 
 head for a long long time. Most of this time, I expected the result
 to be powered by [Django](https://www.djangoproject.com/ "Django") /

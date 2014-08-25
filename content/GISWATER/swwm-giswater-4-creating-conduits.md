@@ -3,6 +3,7 @@ author: Erwin Sterrenburg
 title: SWMM GISWATER 4: Creating Conduits
 slug: swmm-giswater-4-creating-conduits
 tags: GISWATER, SWMM
+status: draft
 summary: A short welcome message
 
 #GISWATER tutorial 4: creating conduits:
