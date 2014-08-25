@@ -99,3 +99,19 @@ Welcome
 Who am I?
 
 What to expect?
+
+##Why this name?
+Plan was to use tamandua:
+a name I came up with for .. model developed during my graduation ... fond of ever since.
+
+Dr anteater
+
+Tamandua + meanying + image
+
+However: domains already taken
+One step up: pilosa = ...
+Sloths
+
+Xenartha
+Doodles  .. armadillo-like creature + image
+Many
