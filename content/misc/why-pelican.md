@@ -9,7 +9,6 @@ The idea of a personal website and blog has been floating around in my
 head for a long long time. Most of this time, I expected the result
 to be powered by [Django](https://www.djangoproject.com/ "Django") /
 [Mezzanine](http://mezzanine.jupo.org/ "Mezzanine").
-
 When I finally decided to put thing into action and was almost finished,
 the result felt like overkill for the simple needs. A little internet 
 research provided a whole world of static site generators which seemed
@@ -34,4 +33,4 @@ The only drawback was a severe shortage of bananas, but that was easy
 enough to solve. Bananas improve everything.
 
 [^staticgenerators]: Although good names seem to be common among static site generators: 
-[Nikola Tesla](http://getnikola.com/) and [Octopuses](http://octopress.org/) awesome as well!
+[Nikola Tesla](http://getnikola.com/) and [Octopuses](http://octopress.org/) are awesome as well!
