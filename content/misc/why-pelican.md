@@ -25,7 +25,7 @@ more appropriate for a site like this. Among these, I've chosen
  on how to use and customize Pelican;
 - pelicans are awesome![^staticgenerators]
 
-![awesome pelican](http://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Brown_Pelican_RWD13b.jpg/1024px-Brown_Pelican_RWD13b.jpg "Awesome pelican") 
+![awesome pelican](/images/pelican.jpg "Awesome pelican") 
 <cite>By [DickDaniels](http://carolinabirds.org/ "DickDaniels") (Own work), [CC-BY-SA-3.0](http://creativecommons.org/licenses/by-sa/3.0 "CC-BY-SA-3.0") or [GFDL](http://www.gnu.org/copyleft/fdl.html "GFDL"), via Wikimedia Commons</cite>
 
 <br>
