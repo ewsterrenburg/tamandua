@@ -18,7 +18,7 @@ It’s humans that are the most curious animal on the planet.
 
 <table>
 <tr>
-<td><img width="200" height="200" src="/images/tamandua.png" alt="Smiley" title="What you feel like when blogging with Pelican" />&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td><img src="/images/tamandua.png" alt="Tamandua" title="Wise and curious anteater" />&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td>
     <table>
     <tr><td></td><td><b>T</b>ool for</td></tr>
