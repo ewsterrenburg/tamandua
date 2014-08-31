@@ -1,35 +1,42 @@
-Date: 2014-01-01
+Date: 2014-09-01
 Title: About
 Tags:
 Slug: about
 
-At present I am consultant Geo Information at Royal HaskoningDHV.
+[PILOSA.EU](/) is the personal website and blog of Erwin Sterrenburg, 
+which happens to be me :fa-smile-o:. I am a Civil Engineer with a MSc
+ in [Water Engineering & Management](http://www.utwente.nl/ctw/wem/).
+Currently I am working as a consultant for [Royal HaskoningDHV](http://rhdhv.com)
+ in the department of [Geo Information Management](http://geosolutions.nl/). 
+In this function I contribute to a varied array of projects, with geoinformatics as the leitmotif.
+ 
+Want to know more? Visit my profile on [LinkedIn](https://www.linkedin.com/in/ewsterrenburg),
+ send me an email or start a disqussion under a blog posts that triggers you.
 
-Check out the posts and leave a comment if you feel like it.
+A healthy dose of curiosity has resulted in a long list of professional & personal
+ interest that includes:
 
-Want to know more? Go to my profile on LinkedIn, send me an email or start a disqussion under one of the blog posts.
-
-BSc in Civil Engineering, MSc in water management
-
-Curently working as a consultant for [Royal HaskoningDHV] (link),
-Geo Information Management Department
-... projects ... always an IT component, usually spatial
-
-
-Broad interest, yet not limited to:
-Geo...
-    Spatial Modeling
-Spatial Economics,
-Agent Based Modeling
-Water Allocation,
-Web Technology,
-Open Source,
-Python,
+- Agent Based Modelling
+- Asset Management
+- Geographic Information Systems
+- Game Theory
+- Hydraulics
+- Hydrology
+- Mathematics
+- Python
+- Open Source Software
+- River Basin Management
+- Spatial Modelling
+- Spatial Economics
+- Water Allocation
+- Web Technology
+- ...
 
 
-CV in PDF
 
 
-Why a blog?
-practical excercise
-naslagwerk, zowel voor mijzelf als voor anderen
+
+
+
+
+
