@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>PILOSA.EU</title><link>http://pilosa.eu/</link><description></description><atom:link href="/feeds/erwin-sterrenburg.rss.xml" rel="self"></atom:link><lastBuildDate>Wed, 10 Sep 2014 00:00:00 +0200</lastBuildDate><item><title>SWMM / Giswater tutorial 1: Installation</title><link>http://pilosa.eu/blog/2014/09/10/swmm-giswater-tutorial-1-installation/</link><description>&lt;p&gt;The instructions in the &lt;a href="http://www.giswater.org/print/book/export/html/17"&gt;Giswater documentation&lt;/a&gt; provided sufficient information for installing this software. To install you must download the installer package and execute it. Remember you can choose the &lt;a href="http://download.giswater.org/giswater_stand-alone.exe"&gt;Giswater stand-alone install package&lt;/a&gt; or the &lt;a href="http://download.giswater.org/giswater_all-in-one.exe"&gt;all-in-one install package&lt;/a&gt;. The all-in-one installer package is designed with a portable version of PostgreSQL+PostGIS 2.1. Remember you need to have installed an updated Java Runtime Environment (&lt;span class="caps"&gt;JRE&lt;/span&gt;) on your&amp;nbsp;computer.&lt;/p&gt;
+&lt;p&gt;I took the easy road and used the all-in-one installer. Installation using the installation wizard proved to be straight-forward. When the dust had settled, the following had taken&amp;nbsp;place:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Giswater had been placed in it&amp;#8217;s standard installation path (&lt;strong&gt;C:\Program Files\Giswater\&lt;/strong&gt;, so apparently it&amp;#8217;s a 64-bit application) with the following sub-folders:&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;epa&lt;/strong&gt; - &lt;span class="caps"&gt;EPANET&lt;/span&gt; &lt;span class="amp"&gt;&amp;amp;&lt;/span&gt; &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; command line&amp;nbsp;executables;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;gis&lt;/strong&gt; - templates for gisproject&amp;nbsp;export(?);&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;images&lt;/strong&gt; - images used in the Giswater graphical user&amp;nbsp;interface;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;inp&lt;/strong&gt; - sqlite-databases used in the information exchange between the database and the input / output files of the simulation tools &lt;span class="amp"&gt;&amp;amp;&lt;/span&gt; templates for these&amp;nbsp;files;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;legal&lt;/strong&gt; - &lt;span class="caps"&gt;GPL&lt;/span&gt; v3&amp;nbsp;license;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;lib&lt;/strong&gt; - java libraries used by the Giswater&amp;nbsp;application;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;samples&lt;/strong&gt; - &lt;span class="caps"&gt;SQL&lt;/span&gt;-scripts containing data for sample&amp;nbsp;projects;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;sql&lt;/strong&gt; - &lt;span class="caps"&gt;SQL&lt;/span&gt;-scripts containing database&amp;nbsp;logic.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Some additional folders had been placed in &lt;strong&gt;C:\Users\&amp;lt;username&amp;gt;\Giswater\&lt;/strong&gt;:&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;config&lt;/strong&gt; - some general configuration&amp;nbsp;files;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;log&lt;/strong&gt; - logging directory for giswater&amp;nbsp;application;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;portable&lt;/strong&gt; - portable installation of postgresql + postgis +&amp;nbsp;pgadmin3.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="epa-swwm"&gt;&lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWWM&lt;/span&gt;&lt;/h2&gt;
+&lt;p&gt;Since on of my objectives is to make a comparison between using &lt;span class="caps"&gt;SWMM&lt;/span&gt; toghether with Giswater and a vanilla &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; setup, I also need to have &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; 5.0.022 installed (the only version supported by Giswater). However, this version is not available anymore from the &lt;a href="http://www2.epa.gov/water-research/storm-water-management-model-swmm"&gt;&lt;span class="caps"&gt;EPA&lt;/span&gt; website&lt;/a&gt;. After about 3 years of sleep, the &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; model is actively developed again. Usually this is good news, but when other products depend on older versions that have been taken offline, it is bad news as&amp;nbsp;well&amp;#8230;&lt;/p&gt;
+&lt;p&gt;For this tutorial, it won&amp;#8217;t be a problem, since I already had version 5.0.022 installed on my computer. Yet, there is a bigger issue here: a lot of functionality with regard to the visualization of the simulation results (charts, profiles, animations, etc.) is not possible without the &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; graphical user interface. Following could be done to make this functionality also available to Giswater users (in order of personal&amp;nbsp;preference):&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Giswater developers keep their software compatible with the most recent version of &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;;&lt;/li&gt;
+&lt;li&gt;&lt;span class="caps"&gt;EPA&lt;/span&gt; also makes version 5.0.022 available for download, since this has been the stable version for almost 3&amp;nbsp;years;&lt;/li&gt;
+&lt;li&gt;Giswater developers also supply a download for the full version of &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; 5.0.022, not just the command line&amp;nbsp;version.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Let&amp;#8217;s hope one of the parties involved reads this and takes action to solve this issue &lt;i class="fa fa-smile-o"&gt;&lt;/i&gt;.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Erwin Sterrenburg</dc:creator><pubDate>Wed, 10 Sep 2014 00:00:00 +0200</pubDate><guid>tag:pilosa.eu,2014-09-10:blog/2014/09/10/swmm-giswater-tutorial-1-installation/</guid><category>SWMM</category><category>Giswater</category><category>Water</category></item><item><title>Why Pilosa?</title><link>http://pilosa.eu/blog/2014/09/02/why-pilosa/</link><description>&lt;blockquote&gt;
+&lt;p&gt;I reject holism. I challenge you to tell me, for instance, how a holistic
+description of an ant colony sheds any more light on it than is shed by a
+description of the ants inside it, and their roles, and their interrelationships.
+Any holistic explanation of an ant colony will inevitably fall far short of
+explaining where the consciousness experienced by an ant colony arises from.
+&lt;cite&gt;Dr. Anteater in &amp;#8220;Ant Fugue&amp;#8221;, part of  &amp;#8220;Gödel, Escher, Bach: An Eternal Golden Braid&amp;#8221; by Douglas R. Hofstadter&lt;/cite&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;It’s humans that are the most curious animal on the&amp;nbsp;planet.&lt;/p&gt;
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;img src="/images/tamandua.png" alt="Tamandua" title="Wise and curious anteater" /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;
+    &lt;table&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;b&gt;T&lt;/b&gt;ool for&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;b&gt;A&lt;/b&gt;llocation&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;b&gt;M&lt;/b&gt;anagement&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;u&lt;/td&gt;&lt;td&gt;&lt;b&gt;N&lt;/b&gt;der &lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;b&gt;D&lt;/b&gt;ecentralization&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;b&gt;U&lt;/b&gt;sing&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;b&gt;A&lt;/b&gt;gents&lt;/td&gt;&lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;This thesis addresses the interdependencies between water use and water
+ availability and describes a model that has been developed to increase
+ insight in the potential effects of different decentralization regimes
+ in water allocation management with regard to the spatial and temporal
+ distribution of water availability and agricultural water use in a
+ semi-arid river&amp;nbsp;basin.&lt;/p&gt;
+&lt;p&gt;Relevant processes include physical processes such as hydrological processes,
+ water user responses to variations and changes in water availability and social processes
+ between water users and water&amp;nbsp;managers.&lt;/p&gt;
+&lt;p&gt;The results are relevant for research on relevant initial condition,
+ context factors and design principles for participative river basin management.
+ Water demand, water allocation management and water availability are strongly
+ related in semi-arid environments, where the irrigation sector is responsible
+ for a large part of consumptive water use. Variations in water abstractions
+ for irrigation depend on irrigated area and irrigation requirements per&amp;nbsp;hectare.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;All Tamanduas share a fascination for ants: the usual Tamandua (meaning
+&amp;#8220;anteater&amp;#8221; in both Tupi and Portuguese) tends to see them as a tasty
+snack. This Tamandua however, uses ants - a common metaphor for
+agents - to analyze a complex system. When observing natural ant
+colonies it can easily be seen that the complexity of each single ant is
+rather low. Nonetheless ant colonies exhibit complex behavior and have
+even been able to demonstrate the ability to solve geometric problems.
+Water allocation management in a river catchment is another example
+of such a complex system: relatively simple actions and decisions of
+autonomous stakeholders can lead to complex water scarcity patterns.
+Tamandua aims to increase insight in what is going on in the &amp;#8220;ant colony
+of water&amp;nbsp;allocation&amp;#8221;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="why-this-name"&gt;Why this&amp;nbsp;name?&lt;/h2&gt;
+&lt;p&gt;Plan was to use tamandua:
+a name I came up with for .. model developed during my graduation &amp;#8230; fond of ever&amp;nbsp;since.&lt;/p&gt;
+&lt;p&gt;Dr&amp;nbsp;anteater&lt;/p&gt;
+&lt;p&gt;Tamandua + meanying +&amp;nbsp;image&lt;/p&gt;
+&lt;p&gt;However: domains already taken
+One step up: pilosa = &amp;#8230;&amp;nbsp;Sloths&lt;/p&gt;
+&lt;p&gt;Xenartha
+Doodles  .. armadillo-like creature + image&amp;nbsp;Many&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Erwin Sterrenburg</dc:creator><pubDate>Tue, 02 Sep 2014 00:00:00 +0200</pubDate><guid>tag:pilosa.eu,2014-09-02:blog/2014/09/02/why-pilosa/</guid><category>PYTHON</category><category>BLOG</category></item><item><title>Why Pelican?</title><link>http://pilosa.eu/blog/2014/09/01/why-pelican/</link><description>&lt;p&gt;The idea of a personal website and blog had been floating around in my 
+head for a long long time. Most of this time, I expected the result
+to be powered by &lt;a href="https://www.djangoproject.com/" title="Django"&gt;Django&lt;/a&gt; /
+&lt;a href="http://mezzanine.jupo.org/" title="Mezzanine"&gt;Mezzanine&lt;/a&gt;.
+Some weeks ago, I finally got to work and set things into motion. The result 
+however was not really satisfying. All functionality was there and 
+the looks kept making me happy, yet the approach felt like overkill
+for my simple&amp;nbsp;needs.&lt;/p&gt;
+&lt;p&gt;Some internet research for alternatives opened up
+a whole world of static site generators that seemed much 
+more appropriate for a site like this. Among these, I&amp;#8217;ve chosen
+&lt;a href="http://blog.getpelican.com/" title="Pelican"&gt;Pelican&lt;/a&gt; for the following&amp;nbsp;reasons:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;it is written in familiar language (python) and uses a familiar template system&amp;nbsp;(jinja2);&lt;/li&gt;
+&lt;li&gt;it&amp;#8217;s extensive collection of themes and&amp;nbsp;plugins;&lt;/li&gt;
+&lt;li&gt;the documentation is elaborate and many fellow bloggers have written helpful posts
+ on how to use and customize&amp;nbsp;Pelican;&lt;/li&gt;
+&lt;li&gt;pelicans are awesome!&lt;sup id="fnref:staticgenerators"&gt;&lt;a class="footnote-ref" href="#fn:staticgenerators" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img alt="awesome pelican" src="/images/pelican.jpg" title="Awesome pelican" /&gt; 
+&lt;cite&gt;By &lt;a href="http://carolinabirds.org/" title="DickDaniels"&gt;DickDaniels&lt;/a&gt; (Own work), &lt;a href="http://creativecommons.org/licenses/by-sa/3.0" title="CC-BY-SA-3.0"&gt;&lt;span class="caps"&gt;CC&lt;/span&gt;-&lt;span class="caps"&gt;BY&lt;/span&gt;-&lt;span class="caps"&gt;SA&lt;/span&gt;-3.0&lt;/a&gt; or &lt;a href="http://www.gnu.org/copyleft/fdl.html" title="GFDL"&gt;&lt;span class="caps"&gt;GFDL&lt;/span&gt;&lt;/a&gt;, via Wikimedia Commons&lt;/cite&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;
+The only big con of this approach is the need to use a 3rd party service for comments.&lt;sup id="fnref:staticcomments"&gt;&lt;a class="footnote-ref" href="#fn:staticcomments" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt;
+The most widely used comment hosting service is Disqus, which I implemented here as well since it&amp;#8217;s
+omnipresence suggest they must do something right. After&amp;nbsp;all:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Fifty million Frenchmen can&amp;#8217;t be&amp;nbsp;wrong&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;None-the-less using a service that I have blocked by Ghostery during most of my
+browsing time feels somewhat wrong, so this might change in the&amp;nbsp;future.&lt;/p&gt;
+&lt;h2 id="why-this-theme"&gt;Why this&amp;nbsp;theme?&lt;/h2&gt;
+&lt;p&gt;The theme I created for Mezzanine consisted of a dark color scheme
+with a dynamically generated fractal background.
+After moving to Pelican, I looked at the available themes to see which 
+of these would form the best starting point to re-create this look.
+However, when I encountered the pure theme, this theme seemed to be 
+almost good enough without further modification. 
+The only drawback was a severe shortage of bananas, but that was easy
+enough to solve. Bananas improve&amp;nbsp;everything.&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:staticgenerators"&gt;
+&lt;p&gt;Well-chosen names seem to be common among static site generators: 
+&lt;a href="http://getnikola.com/"&gt;Nikola Tesla&lt;/a&gt; and &lt;a href="http://octopress.org/"&gt;Octopuses&lt;/a&gt;
+ are awesome as well!&amp;#160;&lt;a class="footnote-backref" href="#fnref:staticgenerators" rev="footnote" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:staticcomments"&gt;
+&lt;p&gt;Alternatives do exist like using the
+ &lt;a href="https://github.com/getpelican/pelican-plugins/tree/master/pelican_comment_system"&gt;Pelican comment system&lt;/a&gt;
+ plugin or hosting your own comment service using
+ &lt;a href="http://posativ.org/isso/"&gt;Isso&lt;/a&gt;, yet would take some of the simplicity of a static site generator approach away.&amp;#160;&lt;a class="footnote-backref" href="#fnref:staticcomments" rev="footnote" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Erwin Sterrenburg</dc:creator><pubDate>Mon, 01 Sep 2014 00:00:00 +0200</pubDate><guid>tag:pilosa.eu,2014-09-01:blog/2014/09/01/why-pelican/</guid><category>PYTHON</category><category>BLOG</category></item><item><title>Hello World</title><link>http://pilosa.eu/blog/2014/08/28/hello-world/</link><description>&lt;p&gt;Welcome&lt;/p&gt;
+&lt;p&gt;Who am&amp;nbsp;I?&lt;/p&gt;
+&lt;p&gt;Why a&amp;nbsp;blog?&lt;/p&gt;
+&lt;p&gt;What to expect&amp;nbsp;here?&lt;/p&gt;
+&lt;p&gt;practical excercise
+naslagwerk, zowel voor mijzelf als voor&amp;nbsp;anderen&lt;/p&gt;
+&lt;p&gt;Both professional  and .. projects, valuable addition to&amp;nbsp;documentation&lt;/p&gt;
+&lt;p&gt;Check out the posts and leave a comment if you feel like&amp;nbsp;it.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Erwin Sterrenburg</dc:creator><pubDate>Thu, 28 Aug 2014 00:00:00 +0200</pubDate><guid>tag:pilosa.eu,2014-08-28:blog/2014/08/28/hello-world/</guid><category>BLOG</category></item></channel></rss>

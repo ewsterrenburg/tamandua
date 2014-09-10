@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PILOSA.EU, Scribblings of World's Most Curious Anteater">
+
+
+        <link rel="alternate" href="/feed.xml" type="application/rss+xml" title="PILOSA.EU Full RSS Feed"/>
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+        <title>SWMM / Giswater tutorial 0: Introduction // PILOSA.EU // Scribblings of World's Most Curious Anteater</title>
+
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://pilosa.eu/theme/css/pure.css">
+    <link rel="stylesheet" href="http://pilosa.eu/theme/css/pygments.css">
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".content").fitVids();
+        });
+    </script>
+</head>
+
+<body>
+    <div class="pure-g-r" id="layout">
+        <div class="sidebar pure-u">
+            <div class="cover-img" style="background-image: url('/images/bananas.jpeg')">
+                <div class="cover-body">
+                    <header class="header">
+                        <hgroup>
+                            <h1 class="brand-main"><a href="http://pilosa.eu">PILOSA.EU</a></h1>
+                            <p class="tagline">Scribblings of World's Most Curious Anteater</p>
+                                <p class="links"><a href="http://pilosa.eu/archives.html">Archive</a></p>
+                                <p class="links"><a href="http://pilosa.eu/about.html">About</a></p>
+                                <p class="social">
+                                    <a href="mailto:ewsterrenburg@gmail.com">
+                                        <i class="fa fa-envelope-o fa-3x"></i>
+                                    </a>
+                                    <a href="https://github.com/ewsterrenburg/">
+                                        <i class="fa fa-github fa-3x"></i>
+                                    </a>
+                                    <a href="https://www.linkedin.com/in/ewsterrenburg">
+                                        <i class="fa fa-linkedin fa-3x"></i>
+                                    </a>
+                                    <a href="feed.xml">
+                                        <i class="fa fa-rss fa-3x"></i>
+                                    </a>
+                                <p>
+                        </hgroup>
+                    </header>
+                </div>
+            </div>
+        </div>
+    <div class="pure-u">
+        <div class="content">
+            <section class="post">
+                <header class="post-header">
+                    <h1>SWMM / Giswater tutorial 0: Introduction</h1>
+                        <p class="post-meta">
+                            // under                                 <a class="post-category" href="http://pilosa.eu/tag/giswater.html">GISWATER</a>
+                                <a class="post-category" href="http://pilosa.eu/tag/swmm.html">SWMM</a>
+                        </p>
+                </header>
+            </section>
+            <p>This is the first post in a &#8230; tutorial for using 
+Currently studying &#8230; on using <span class="caps">SWMM</span> .
+Since doing the research anyway, documenting in a series of blog post, for myself and all others interested
+focus on swmm&#8230; for epanet i expect the processes to be similar. &#8230; with hecras &#8230;, yet my &#8230; with hecras is not sufficient to &#8230;
+will be finding out along the way ;) Expect to be running into some issues and there is a risk i&#8217;ll write down stuff that is &#8230;
+If you notice, please notify me so I can correct these&nbsp;mistakes. </p>
+<ul>
+<li>functionally: how to&nbsp;&#8230; </li>
+<li>what is happening &#8220;under the&nbsp;hood&#8221;</li>
+</ul>
+<p>Though I&#8217;m not familiar with <span class="caps">JAVA</span> (and currently don&#8217;t have any intention to change this), I might be able to assist in the
+parts <span class="caps">SQL</span> and &#8230; functional&nbsp;&#8230;</p>
+<p>The <span class="caps">EPA</span> Storm Water Management Model (<span class="caps">SWMM</span>) is a dynamic rainfall-runoff simulation model used for single event or long-term (continuous) simulation of runoff quantity and quality from primarily urban areas. The runoff component of <span class="caps">SWMM</span> operates on a collection of subcatchment areas that receive precipitation and generate runoff and pollutant loads. The routing portion of <span class="caps">SWMM</span> transports this runoff through a system of pipes, channels, storage/treatment devices, pumps, and regulators. <span class="caps">SWMM</span> tracks the quantity and quality of runoff generated within each subcatchment, and the flow rate, flow depth, and quality of water in each pipe and channel during a simulation period comprised of multiple time&nbsp;steps.</p>
+<h1 id="swmm"><span class="caps">SWMM</span></h1>
+<p>The <span class="caps">EPA</span> Storm Water Management Model (<span class="caps">SWMM</span>) is a dynamic rainfall-runoff simulation model used for single event or long-term (continuous) simulation of runoff quantity and quality from primarily urban areas. The runoff component of <span class="caps">SWMM</span> operates on a collection of subcatchment areas that receive precipitation and generate runoff and pollutant loads. The routing portion of <span class="caps">SWMM</span> transports this runoff through a system of pipes, channels, storage/treatment devices, pumps, and regulators. <span class="caps">SWMM</span> tracks the quantity and quality of runoff generated within each subcatchment, and the flow rate, flow depth, and quality of water in each pipe and channel during a simulation period comprised of multiple time&nbsp;steps. </p>
+<p><span class="caps">SWMM</span> was first developed in 1971 and has undergone several major upgrades since then. It continues to be widely used throughout the world for planning, analysis and design related to storm water runoff, combined sewers, sanitary sewers, and other drainage systems in urban areas, with many applications in non-urban areas as well. The current edition, Version 5, is a complete re-write of the previous release. Running under Windows, <span class="caps">SWMM</span> 5 provides an integrated environment for editing study area input data, running hydrologic, hydraulic and water quality simulations, and viewing the results in a variety of formats. These include color-coded drainage area and conveyance system maps, time series graphs and tables, profile plots, and statistical frequency&nbsp;analyses. </p>
+<h2 id="documentation">Documentation</h2>
+<p>Extensive help, both on the relation to the physical world and&nbsp;technology</p>
+<h2 id="development">Development</h2>
+<p><span class="caps">SWMM</span> really mature, no active development for some years, yet recently new versions are released&nbsp;&#8230;ly</p>
+<h2 id="shortcomings">Shortcomings:</h2>
+<ul>
+<li>either write your own tools to &#8230; or draw in the swmm&nbsp;gui</li>
+<li>The sewer system is maintained in &#8220;inp-files&#8221;, which are isolated: not available in other&nbsp;applications</li>
+<li>Other spatial data is not available in the <span class="caps">SWMM</span> <span class="caps">GUI</span> for spatial reference (Utilizing a Backdrop Image makes you&nbsp;cry)</li>
+<li>easier switching between simulation&nbsp;conditions</li>
+</ul>
+<h1 id="giswater">Giswater</h1>
+<p>Giswater is an open software project which facilitates communication between water simulation programs and  Geographic Information Systems (<span class="caps">GIS</span>). Currently supported simulation tools are <span class="caps">EPANET</span> and <span class="caps">EPA</span> <span class="caps">SWMM</span>. In addition it&#8217;s also possible to create a <span class="caps">SDF</span> file (a standard <span class="caps">DEM</span> file) which it&#8217;s possible to use in order to import terrain data from <span class="caps">GIS</span> to other <span class="caps">GIS</span> tools or analisys tools such as <span class="caps">HEC</span>-<span class="caps">RAS</span>. In some cases the communication could be bi-directional and by this way, the result data modeled from this programs could be stored, indexed and consulted into the spatial&nbsp;database.</p>
+<p>picture
+    store .. network in a postgis database
+    &#8212;&gt; editing from giswater (adminstrative data) and <span class="caps">QGIS</span>&nbsp;&#8212;&gt;</p>
+<h2 id="documentation_1">Documentation</h2>
+<p>documentation: not complete, yet improving. <span class="caps">HTML</span> really annoying: each section is short and there is no table of contents for quick switching. Solution: printable version:&nbsp;http://www.giswater.org/print/book/export/html/17</p>
+<h1 id="randvoorwaarden">Randvoorwaarden</h1>
+<ul>
+<li>For data &#8230; I will use <span class="caps">QGIS</span> ()<ul>
+<li>recommended, most mature open gis&nbsp;system</li>
+<li>familiar with this piece of&nbsp;software</li>
+<li></li>
+</ul>
+</li>
+<li>For data storage I will use postgis<ul>
+<li>(full functionality, Not all capabilities of Giswater are allowed in <span class="caps">DBF</span>&nbsp;mode.)</li>
+<li>familiar with&nbsp;postgis</li>
+<li>able to inspect logic (constraints, relations, triggers, etc.) in&nbsp;database</li>
+<li></li>
+</ul>
+</li>
+</ul>
+<h1 id="structure">Structure</h1>
+<p>Most episodes will have the following&nbsp;structure:</p>
+<ol>
+<li>Theory + Underlying physical background of the&nbsp;subject</li>
+<li>How is .. performed in <span class="caps">EPANET</span> <span class="caps">SWMM</span></li>
+<li>What &#8230; differences:<ul>
+<li>what functions in <span class="caps">SWMM</span> does giswater not&nbsp;support?</li>
+<li>what extra functionality does giswater&nbsp;provide?</li>
+</ul>
+</li>
+<li>Conclusions <span class="amp">&amp;</span> open&nbsp;ends</li>
+</ol>
+            <a href="#" class="go-top">Go Top</a>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = "pilosa"; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+<footer class="footer">
+    <p>&copy; Erwin Sterrenburg &ndash;
+        Built with <a href="https://github.com/PurePelicanTheme/pure-single">Pure Theme</a>
+        for <a href="http://blog.getpelican.com/">Pelican</a>
+    </p>
+</footer>        </div>
+    </div>
+    </div>
+    <script>
+        var $top = $('.go-top');
+
+        // Show or hide the sticky footer button
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                $top.fadeIn(200);
+            } else {
+                $top.fadeOut(200);
+            }
+        });
+
+        // Animate the scroll to top
+        $top.click(function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop: 0}, 300);
+        })
+
+        // Makes sure that the href="#" attached to the <a> elements
+        // don't scroll you back up the page.
+        $('body').on('click', 'a[href="#"]', function(event) {
+            event.preventDefault();
+        });
+    </script>
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+            var pageTracker = _gat._getTracker("UA-53900294-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+    </script>
+
+</body>
+</html>

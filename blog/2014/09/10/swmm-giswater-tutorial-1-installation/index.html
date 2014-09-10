@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PILOSA.EU, Scribblings of World's Most Curious Anteater">
+
+
+        <link rel="alternate" href="/feed.xml" type="application/rss+xml" title="PILOSA.EU Full RSS Feed"/>
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+        <title>SWMM / Giswater tutorial 1: Installation // PILOSA.EU // Scribblings of World's Most Curious Anteater</title>
+
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://pilosa.eu/theme/css/pure.css">
+    <link rel="stylesheet" href="http://pilosa.eu/theme/css/pygments.css">
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".content").fitVids();
+        });
+    </script>
+</head>
+
+<body>
+    <div class="pure-g-r" id="layout">
+        <div class="sidebar pure-u">
+            <div class="cover-img" style="background-image: url('/images/bananas.jpeg')">
+                <div class="cover-body">
+                    <header class="header">
+                        <hgroup>
+                            <h1 class="brand-main"><a href="http://pilosa.eu">PILOSA.EU</a></h1>
+                            <p class="tagline">Scribblings of World's Most Curious Anteater</p>
+                                <p class="links"><a href="http://pilosa.eu/archives.html">Archive</a></p>
+                                <p class="links"><a href="http://pilosa.eu/about.html">About</a></p>
+                                <p class="social">
+                                    <a href="mailto:ewsterrenburg@gmail.com">
+                                        <i class="fa fa-envelope-o fa-3x"></i>
+                                    </a>
+                                    <a href="https://github.com/ewsterrenburg/">
+                                        <i class="fa fa-github fa-3x"></i>
+                                    </a>
+                                    <a href="https://www.linkedin.com/in/ewsterrenburg">
+                                        <i class="fa fa-linkedin fa-3x"></i>
+                                    </a>
+                                    <a href="feed.xml">
+                                        <i class="fa fa-rss fa-3x"></i>
+                                    </a>
+                                <p>
+                        </hgroup>
+                    </header>
+                </div>
+            </div>
+        </div>
+    <div class="pure-u">
+        <div class="content">
+            <section class="post">
+                <header class="post-header">
+                    <h1>SWMM / Giswater tutorial 1: Installation</h1>
+                        <p class="post-meta">
+                            // under                                 <a class="post-category" href="http://pilosa.eu/tag/swmm.html">SWMM</a>
+                                <a class="post-category" href="http://pilosa.eu/tag/giswater.html">Giswater</a>
+                                <a class="post-category" href="http://pilosa.eu/tag/water.html">Water</a>
+                        </p>
+                </header>
+            </section>
+            <p>The instructions in the <a href="http://www.giswater.org/print/book/export/html/17">Giswater documentation</a> provided sufficient information for installing this software. To install you must download the installer package and execute it. Remember you can choose the <a href="http://download.giswater.org/giswater_stand-alone.exe">Giswater stand-alone install package</a> or the <a href="http://download.giswater.org/giswater_all-in-one.exe">all-in-one install package</a>. The all-in-one installer package is designed with a portable version of PostgreSQL+PostGIS 2.1. Remember you need to have installed an updated Java Runtime Environment (<span class="caps">JRE</span>) on your&nbsp;computer.</p>
+<p>I took the easy road and used the all-in-one installer. Installation using the installation wizard proved to be straight-forward. When the dust had settled, the following had taken&nbsp;place:</p>
+<ol>
+<li>Giswater had been placed in it&#8217;s standard installation path (<strong>C:\Program Files\Giswater\</strong>, so apparently it&#8217;s a 64-bit application) with the following sub-folders:<ul>
+<li><strong>epa</strong> - <span class="caps">EPANET</span> <span class="amp">&amp;</span> <span class="caps">EPA</span> <span class="caps">SWMM</span> command line&nbsp;executables;</li>
+<li><strong>gis</strong> - templates for gisproject&nbsp;export(?);</li>
+<li><strong>images</strong> - images used in the Giswater graphical user&nbsp;interface;</li>
+<li><strong>inp</strong> - sqlite-databases used in the information exchange between the database and the input / output files of the simulation tools <span class="amp">&amp;</span> templates for these&nbsp;files;</li>
+<li><strong>legal</strong> - <span class="caps">GPL</span> v3&nbsp;license;</li>
+<li><strong>lib</strong> - java libraries used by the Giswater&nbsp;application;</li>
+<li><strong>samples</strong> - <span class="caps">SQL</span>-scripts containing data for sample&nbsp;projects;</li>
+<li><strong>sql</strong> - <span class="caps">SQL</span>-scripts containing database&nbsp;logic.</li>
+</ul>
+</li>
+<li>Some additional folders had been placed in <strong>C:\Users\&lt;username&gt;\Giswater\</strong>:<ul>
+<li><strong>config</strong> - some general configuration&nbsp;files;</li>
+<li><strong>log</strong> - logging directory for giswater&nbsp;application;</li>
+<li><strong>portable</strong> - portable installation of postgresql + postgis +&nbsp;pgadmin3.</li>
+</ul>
+</li>
+</ol>
+<h2 id="epa-swwm"><span class="caps">EPA</span> <span class="caps">SWWM</span></h2>
+<p>Since on of my objectives is to make a comparison between using <span class="caps">SWMM</span> toghether with Giswater and a vanilla <span class="caps">EPA</span> <span class="caps">SWMM</span> setup, I also need to have <span class="caps">EPA</span> <span class="caps">SWMM</span> 5.0.022 installed (the only version supported by Giswater). However, this version is not available anymore from the <a href="http://www2.epa.gov/water-research/storm-water-management-model-swmm"><span class="caps">EPA</span> website</a>. After about 3 years of sleep, the <span class="caps">EPA</span> <span class="caps">SWMM</span> model is actively developed again. Usually this is good news, but when other products depend on older versions that have been taken offline, it is bad news as&nbsp;well&#8230;</p>
+<p>For this tutorial, it won&#8217;t be a problem, since I already had version 5.0.022 installed on my computer. Yet, there is a bigger issue here: a lot of functionality with regard to the visualization of the simulation results (charts, profiles, animations, etc.) is not possible without the <span class="caps">EPA</span> <span class="caps">SWMM</span> graphical user interface. Following could be done to make this functionality also available to Giswater users (in order of personal&nbsp;preference):</p>
+<ol>
+<li>Giswater developers keep their software compatible with the most recent version of <span class="caps">EPA</span> <span class="caps">SWMM</span>;</li>
+<li><span class="caps">EPA</span> also makes version 5.0.022 available for download, since this has been the stable version for almost 3&nbsp;years;</li>
+<li>Giswater developers also supply a download for the full version of <span class="caps">EPA</span> <span class="caps">SWMM</span> 5.0.022, not just the command line&nbsp;version.</li>
+</ol>
+<p>Let&#8217;s hope one of the parties involved reads this and takes action to solve this issue <i class="fa fa-smile-o"></i>.</p>
+            <a href="#" class="go-top">Go Top</a>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = "pilosa"; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+<footer class="footer">
+    <p>&copy; Erwin Sterrenburg &ndash;
+        Built with <a href="https://github.com/PurePelicanTheme/pure-single">Pure Theme</a>
+        for <a href="http://blog.getpelican.com/">Pelican</a>
+    </p>
+</footer>        </div>
+    </div>
+    </div>
+    <script>
+        var $top = $('.go-top');
+
+        // Show or hide the sticky footer button
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                $top.fadeIn(200);
+            } else {
+                $top.fadeOut(200);
+            }
+        });
+
+        // Animate the scroll to top
+        $top.click(function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop: 0}, 300);
+        })
+
+        // Makes sure that the href="#" attached to the <a> elements
+        // don't scroll you back up the page.
+        $('body').on('click', 'a[href="#"]', function(event) {
+            event.preventDefault();
+        });
+    </script>
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+            var pageTracker = _gat._getTracker("UA-53900294-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PILOSA.EU, Scribblings of World's Most Curious Anteater">
+
+
+        <link rel="alternate" href="/feed.xml" type="application/rss+xml" title="PILOSA.EU Full RSS Feed"/>
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+        <title>Why Pelican? // PILOSA.EU // Scribblings of World's Most Curious Anteater</title>
+
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://pilosa.eu/theme/css/pure.css">
+    <link rel="stylesheet" href="http://pilosa.eu/theme/css/pygments.css">
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".content").fitVids();
+        });
+    </script>
+</head>
+
+<body>
+    <div class="pure-g-r" id="layout">
+        <div class="sidebar pure-u">
+            <div class="cover-img" style="background-image: url('/images/bananas.jpeg')">
+                <div class="cover-body">
+                    <header class="header">
+                        <hgroup>
+                            <h1 class="brand-main"><a href="http://pilosa.eu">PILOSA.EU</a></h1>
+                            <p class="tagline">Scribblings of World's Most Curious Anteater</p>
+                                <p class="links"><a href="http://pilosa.eu/archives.html">Archive</a></p>
+                                <p class="links"><a href="http://pilosa.eu/about.html">About</a></p>
+                                <p class="social">
+                                    <a href="mailto:ewsterrenburg@gmail.com">
+                                        <i class="fa fa-envelope-o fa-3x"></i>
+                                    </a>
+                                    <a href="https://github.com/ewsterrenburg/">
+                                        <i class="fa fa-github fa-3x"></i>
+                                    </a>
+                                    <a href="https://www.linkedin.com/in/ewsterrenburg">
+                                        <i class="fa fa-linkedin fa-3x"></i>
+                                    </a>
+                                    <a href="feed.xml">
+                                        <i class="fa fa-rss fa-3x"></i>
+                                    </a>
+                                <p>
+                        </hgroup>
+                    </header>
+                </div>
+            </div>
+        </div>
+    <div class="pure-u">
+        <div class="content">
+            <section class="post">
+                <header class="post-header">
+                    <h1>Why Pelican?</h1>
+                        <p class="post-meta">
+                            // under                                 <a class="post-category" href="http://pilosa.eu/tag/python.html">PYTHON</a>
+                                <a class="post-category" href="http://pilosa.eu/tag/blog.html">BLOG</a>
+                        </p>
+                </header>
+            </section>
+            <p>The idea of a personal website and blog had been floating around in my 
+head for a long long time. Most of this time, I expected the result
+to be powered by <a href="https://www.djangoproject.com/" title="Django">Django</a> /
+<a href="http://mezzanine.jupo.org/" title="Mezzanine">Mezzanine</a>.
+Some weeks ago, I finally got to work and set things into motion. The result 
+however was not really satisfying. All functionality was there and 
+the looks kept making me happy, yet the approach felt like overkill
+for my simple&nbsp;needs.</p>
+<p>Some internet research for alternatives opened up
+a whole world of static site generators that seemed much 
+more appropriate for a site like this. Among these, I&#8217;ve chosen
+<a href="http://blog.getpelican.com/" title="Pelican">Pelican</a> for the following&nbsp;reasons:</p>
+<ul>
+<li>it is written in familiar language (python) and uses a familiar template system&nbsp;(jinja2);</li>
+<li>it&#8217;s extensive collection of themes and&nbsp;plugins;</li>
+<li>the documentation is elaborate and many fellow bloggers have written helpful posts
+ on how to use and customize&nbsp;Pelican;</li>
+<li>pelicans are awesome!<sup id="fnref:staticgenerators"><a class="footnote-ref" href="#fn:staticgenerators" rel="footnote">1</a></sup></li>
+</ul>
+<p><img alt="awesome pelican" src="/images/pelican.jpg" title="Awesome pelican" /> 
+<cite>By <a href="http://carolinabirds.org/" title="DickDaniels">DickDaniels</a> (Own work), <a href="http://creativecommons.org/licenses/by-sa/3.0" title="CC-BY-SA-3.0"><span class="caps">CC</span>-<span class="caps">BY</span>-<span class="caps">SA</span>-3.0</a> or <a href="http://www.gnu.org/copyleft/fdl.html" title="GFDL"><span class="caps">GFDL</span></a>, via Wikimedia Commons</cite></p>
+<p><br>
+The only big con of this approach is the need to use a 3rd party service for comments.<sup id="fnref:staticcomments"><a class="footnote-ref" href="#fn:staticcomments" rel="footnote">2</a></sup>
+The most widely used comment hosting service is Disqus, which I implemented here as well since it&#8217;s
+omnipresence suggest they must do something right. After&nbsp;all:</p>
+<blockquote>
+<p>Fifty million Frenchmen can&#8217;t be&nbsp;wrong</p>
+</blockquote>
+<p>None-the-less using a service that I have blocked by Ghostery during most of my
+browsing time feels somewhat wrong, so this might change in the&nbsp;future.</p>
+<h2 id="why-this-theme">Why this&nbsp;theme?</h2>
+<p>The theme I created for Mezzanine consisted of a dark color scheme
+with a dynamically generated fractal background.
+After moving to Pelican, I looked at the available themes to see which 
+of these would form the best starting point to re-create this look.
+However, when I encountered the pure theme, this theme seemed to be 
+almost good enough without further modification. 
+The only drawback was a severe shortage of bananas, but that was easy
+enough to solve. Bananas improve&nbsp;everything.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:staticgenerators">
+<p>Well-chosen names seem to be common among static site generators: 
+<a href="http://getnikola.com/">Nikola Tesla</a> and <a href="http://octopress.org/">Octopuses</a>
+ are awesome as well!&#160;<a class="footnote-backref" href="#fnref:staticgenerators" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:staticcomments">
+<p>Alternatives do exist like using the
+ <a href="https://github.com/getpelican/pelican-plugins/tree/master/pelican_comment_system">Pelican comment system</a>
+ plugin or hosting your own comment service using
+ <a href="http://posativ.org/isso/">Isso</a>, yet would take some of the simplicity of a static site generator approach away.&#160;<a class="footnote-backref" href="#fnref:staticcomments" rev="footnote" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+            <a href="#" class="go-top">Go Top</a>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = "pilosa"; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+<footer class="footer">
+    <p>&copy; Erwin Sterrenburg &ndash;
+        Built with <a href="https://github.com/PurePelicanTheme/pure-single">Pure Theme</a>
+        for <a href="http://blog.getpelican.com/">Pelican</a>
+    </p>
+</footer>        </div>
+    </div>
+    </div>
+    <script>
+        var $top = $('.go-top');
+
+        // Show or hide the sticky footer button
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                $top.fadeIn(200);
+            } else {
+                $top.fadeOut(200);
+            }
+        });
+
+        // Animate the scroll to top
+        $top.click(function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop: 0}, 300);
+        })
+
+        // Makes sure that the href="#" attached to the <a> elements
+        // don't scroll you back up the page.
+        $('body').on('click', 'a[href="#"]', function(event) {
+            event.preventDefault();
+        });
+    </script>
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+            var pageTracker = _gat._getTracker("UA-53900294-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+    </script>
+
+</body>
+</html>
