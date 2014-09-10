@@ -25,7 +25,7 @@ def clean():
         local('mkdir {deploy_path}'.format(**env))
 
 def build():
-    local('pelican -s pelicanconf.py')
+    local('pelican content --debug --autoreload  --output output --settings pelicanconf.py')
 
 def rebuild():
     clean()
@@ -60,6 +60,15 @@ def cf_upload():
           '-U {cloudfiles_username} '
           '-K {cloudfiles_api_key} '
           'upload -c {cloudfiles_container} .'.format(**env))
+
+def gh_publish():
+    clean()
+    local('pelican content --output output --settings publishconf.py')
+
+def gh_upload():
+    gh_publish()
+    local('ghp-import.py output')
+    local('git push origin gh-pages')
 
 @hosts(production)
 def publish():

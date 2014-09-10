@@ -62,7 +62,7 @@ for f in os.listdir('content/extras'):
 
 
 #Theme
-THEME = './themes/pure-single-master'
+THEME = os.path.join(os.getcwd(), "themes", "pure-single-master")
 COVER_IMG_URL = "/images/bananas.jpeg"
 SINGLE_AUTHOR = True
 # Sole author and don't use categories ... disable these features
@@ -84,7 +84,7 @@ PAGE_LANG_SAVE_AS = '{slug}-{lang}.html'
 ARTICLE_URL = 'blog/{date:%Y}/{date:%m}/{date:%d}/{slug}/'
 ARTICLE_SAVE_AS = 'blog/{date:%Y}/{date:%m}/{date:%d}/{slug}/index.html'
 
-PLUGIN_PATHS = ["/home/erwin/pelican/pelican-plugins"]
+PLUGIN_PATHS = [os.path.join(os.getcwd(), "..", "pelican-plugins")]
 PLUGINS = ['render_math', 'extended_sitemap']
 
 TAG_CLOUD_STEPS = 4
