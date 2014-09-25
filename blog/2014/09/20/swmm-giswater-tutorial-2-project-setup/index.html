@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PILOSA.EU, Scribblings of World's Most Curious Anteater">
+
+
+        <link rel="alternate" href="/feed.xml" type="application/rss+xml" title="PILOSA.EU Full RSS Feed"/>
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+        <title>EPA SWMM / Giswater Tutorial 2: Project Setup // PILOSA.EU // Scribblings of World's Most Curious Anteater</title>
+
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://pilosa.eu/theme/css/pure.css">
+    <link rel="stylesheet" href="http://pilosa.eu/theme/css/pygments.css">
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".content").fitVids();
+        });
+    </script>
+</head>
+
+<body>
+    <div class="pure-g-r" id="layout">
+        <div class="sidebar pure-u">
+            <div class="cover-img" style="background-image: url('/images/bananas.jpeg')">
+                <div class="cover-body">
+                    <header class="header">
+                        <hgroup>
+                            <h1 class="brand-main"><a href="http://pilosa.eu">PILOSA.EU</a></h1>
+                            <p class="tagline">Scribblings of World's Most Curious Anteater</p>
+                                <p class="links"><a href="http://pilosa.eu/archives.html">Archive</a></p>
+                                <p class="links"><a href="http://pilosa.eu/about.html">About</a></p>
+                                <p class="social">
+                                    <a href="mailto:ewsterrenburg@gmail.com">
+                                        <i class="fa fa-envelope-o fa-3x"></i>
+                                    </a>
+                                    <a href="https://github.com/ewsterrenburg/">
+                                        <i class="fa fa-github fa-3x"></i>
+                                    </a>
+                                    <a href="https://www.linkedin.com/in/ewsterrenburg">
+                                        <i class="fa fa-linkedin fa-3x"></i>
+                                    </a>
+                                    <a href="feed.xml">
+                                        <i class="fa fa-rss fa-3x"></i>
+                                    </a>
+                                <p>
+                        </hgroup>
+                    </header>
+                </div>
+            </div>
+        </div>
+    <div class="pure-u">
+        <div class="content">
+            <section class="post">
+                <header class="post-header">
+                    <h1>EPA SWMM / Giswater Tutorial 2: Project Setup</h1>
+                        <p class="post-meta">
+                            // under                                 <a class="post-category" href="http://pilosa.eu/tag/swmm.html">SWMM</a>
+                                <a class="post-category" href="http://pilosa.eu/tag/giswater.html">Giswater</a>
+                                <a class="post-category" href="http://pilosa.eu/tag/water.html">Water</a>
+                        </p>
+                </header>
+            </section>
+            <p>This is the 2<sup>nd</sup>  episode in my tutorial on the using <span class="caps">EPA</span> Storm Water Management Model (<span class="caps">EPA</span> <span class="caps">SWMM</span>) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes how to create new project in <span class="caps">EPA</span> <span class="caps">SWMM</span>, how to create a project using Giswater and the initial options that need to be set before we can start creating our&nbsp;network. </p>
+<h1 id="epa-swwm"><span class="caps">EPA</span> <span class="caps">SWWM</span></h1>
+<p>Starting a new project in <span class="caps">EPA</span> <span class="caps">SWMM</span> is a simple as starting up the program. A new project is opened and you can directly start drawing a sewer network. A project can be saved as a <span class="caps">SWMM</span>-input file (<strong><span class="caps">INP</span>-file</strong>). Such an input-file contains both all objects in a project&#8217;s network and all options set by the user. Since a standard set of default values is provided, we could start drawing the network without further preparation. Most options deal with the look-and-feel of the program and the simulation parameters. For these options, we will keep the default values for now. Some options however do affect the drawing of the network and will need to be set&nbsp;beforehand:</p>
+<p><img alt="SWMM_Defaults" src="/images/SWMM_defaults.png" title="Default prefixes for EPA SWMM objects." /> </p>
+<ol>
+<li>Specify whether the automatic computation of conduit lengths and subcatchment areas is turned on or&nbsp;off.</li>
+<li>Choose whether the positions of links above the invert of their connecting nodes are expressed as a Depth above the node invert or as the Elevation of the&nbsp;offset.</li>
+<li>Select flow units that makes sense (i.e. change the default Cubic Feet per Second to Cubic Metres per Second).
+<li>Change the map dimensions and extent to appropriate values (available from the menu: <strong>View <i class="fa fa-long-arrow-right"></i> Dimensions</strong>).
+<li>On the <span class="caps">ID</span> Labels page of the defaults menu (<strong>Project <i class="fa fa-long-arrow-right"></i> Defaults</strong>), set the <span class="caps">ID</span> Prefixes as follows (leave the others blank):
+<ul>
+<li>Rain Gages: <strong>Gage</strong></li>
+<li>Subcatchments: <strong>S</strong></li>
+<li>Junctions: <strong>J</strong></li>
+<li>Outfalls:  <strong>Out</strong></li>
+<li>Conduits: <strong>C</strong></li>
+<li><span class="caps">ID</span> Increment: <strong>1</strong></li>
+</ul>
+</li>
+</ol>
+
+<p>This will make <span class="caps">EPA</span> <span class="caps">SWMM</span> automatically label new objects with consecutive numbers following the  designated&nbsp;prefix.</p>
+<h1 id="giswater"><span class="caps">GISWATER</span></h1>
+<h3 id="software-configuration">Software&nbsp;configuration</h3>
+<p>The software configuration window can be opened from the menu (<strong>Configuration</strong> <i class="fa fa-long-arrow-right"></i> <strong>Software configuration</strong>). The options that can be set here determine how Giswater deals with inputfiles, outputfiles and the database. For these options, we keep the default values. If you would use your own database, this is the place where you can set up the location of the database administration program (<span class="caps">PGADMIN3</span>).</p>
+<h3 id="database-connection">Database&nbsp;connection</h3>
+<p>The software configuration window can be opened from the menu (<strong>Configuration</strong> <i class="fa fa-long-arrow-right"></i> <strong>Database configuration</strong>). If I remember correctly, this was all working correctly without alterations for the included portable postgis database. If you would use your own database, this is the place where you can set up the&nbsp;connection.</p>
+<h3 id="creating-a-epa-swmm-project">Creating a <span class="caps">EPA</span> <span class="caps">SWMM</span>&nbsp;project</h3>
+<p>The easiest way to start a project in Giswater is to load the <span class="caps">EPA</span> <span class="caps">SWMM</span> <span class="caps">DB</span> Sample project.
+The corresponding option in the project menu loads a sample project into the db using the sql files in the installation directory. You can do this an play around for a while. The goal for this episode in my tutorial is to create an empty project, so we&#8217;ll take a different&nbsp;track:</p>
+<ul>
+<li>Open the <span class="caps">EPA</span> <span class="caps">SWMM</span> window (<strong>Software</strong> <i class="fa fa-long-arrow-right"></i> <strong><span class="caps">EPA</span> <span class="caps">SWMM</span></strong>):</li>
+</ul>
+<p><img alt="Giswater_EPA_SWMM" src="/images/Giswater_EPA_SWMM.png" title="Giswater EPA SWMM window." /></p>
+<ul>
+<li>Create a project and supply the following characteristics:<ul>
+<li>Name of the&nbsp;project</li>
+<li>Title of the&nbsp;project</li>
+<li>Author of the&nbsp;project</li>
+<li>Date&nbsp;create</li>
+<li><span class="caps">SRID</span> of the coordinate system to be&nbsp;used</li>
+</ul>
+</li>
+</ul>
+<p><img alt="Giswater_create_project" src="/images/Giswater_create_project.png" title="Giswater create project window." /></p>
+<ul>
+<li>Pressing the options button would open en windows in which we can set a broad array of options. A few of the affect  our system have sensible defaults Options: sensible defaults, so we keep them as&nbsp;is.</li>
+</ul>
+<h3 id="creating-a-gis-project">Creating a <span class="caps">GIS</span>-project</h3>
+<p>After we created the project, all necessary tables are present so theoretically we could start filling these tables with information about our system. However, these tables are not yet easy accessible for the <span class="caps">GIS</span> superpowers yet. In order to facilitate this, Giswater contains a function to create a <span class="caps">GIS</span>-project that can be opened and modified using <span class="caps">QGIS</span>. During this process, a <span class="caps">QGIS</span>-project is created with the <span class="caps">EPA</span> <span class="caps">SWMM</span> data (i.e. the objects in the system and input tables) and simulation analysis in its table of&nbsp;contents. </p>
+<p><img alt="Giswater_create_gisproject" src="/images/Giswater_create_gisproject.png" title="Giswater create GIS-project window." /></p>
+<p>Now I could should you our tutorial project in <span class="caps">QGIS</span>, yet that would look somewhat empty in it&#8217;s current state. Therefore I&#8217;ll provide a screenshot of the <span class="caps">GIS</span>-project created based on the sample&nbsp;project:</p>
+<p><img alt="QGIS_sample_epaswmm" src="/images/QGIS_sample_epaswmm.png" title="Sample EPA SWMM project in QGIS." /></p>
+<h1 id="conclusions"><span class="caps">CONCLUSIONS</span>:</h1>
+<p>Starting a new project in Giswater is a little more work than in vanilla <span class="caps">EPA</span> <span class="caps">SWMM</span>. This amount of work however is still very small. Creating a <span class="caps">GIS</span>-project is trivial and gives us the opportunity to visualize and edit our system in a proper <span class="caps">GIS</span>-environment with the possibility to add our own data. background maps, web services etc.&nbsp;etc.</p>
+            <a href="#" class="go-top">Go Top</a>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = "pilosa"; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+<footer class="footer">
+    <p>&copy; Erwin Sterrenburg &ndash;
+        Built with <a href="https://github.com/PurePelicanTheme/pure-single">Pure Theme</a>
+        for <a href="http://blog.getpelican.com/">Pelican</a>
+    </p>
+</footer>        </div>
+    </div>
+    </div>
+    <script>
+        var $top = $('.go-top');
+
+        // Show or hide the sticky footer button
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                $top.fadeIn(200);
+            } else {
+                $top.fadeOut(200);
+            }
+        });
+
+        // Animate the scroll to top
+        $top.click(function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop: 0}, 300);
+        })
+
+        // Makes sure that the href="#" attached to the <a> elements
+        // don't scroll you back up the page.
+        $('body').on('click', 'a[href="#"]', function(event) {
+            event.preventDefault();
+        });
+    </script>
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+            var pageTracker = _gat._getTracker("UA-53900294-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+    </script>
+
+</body>
+</html>

@@ -20,7 +20,7 @@
     <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
-        <title>SWMM / Giswater tutorial 1: Installation // PILOSA.EU // Scribblings of World's Most Curious Anteater</title>
+        <title>EPA SWMM / Giswater Tutorial 1: Installation // PILOSA.EU // Scribblings of World's Most Curious Anteater</title>
 
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
@@ -70,7 +70,7 @@
         <div class="content">
             <section class="post">
                 <header class="post-header">
-                    <h1>SWMM / Giswater tutorial 1: Installation</h1>
+                    <h1>EPA SWMM / Giswater Tutorial 1: Installation</h1>
                         <p class="post-meta">
                             // under                                 <a class="post-category" href="http://pilosa.eu/tag/swmm.html">SWMM</a>
                                 <a class="post-category" href="http://pilosa.eu/tag/giswater.html">Giswater</a>
@@ -78,7 +78,8 @@
                         </p>
                 </header>
             </section>
-            <p>The instructions in the <a href="http://www.giswater.org/print/book/export/html/17">Giswater documentation</a> provided sufficient information for installing this software. To install you must download the installer package and execute it. Remember you can choose the <a href="http://download.giswater.org/giswater_stand-alone.exe">Giswater stand-alone install package</a> or the <a href="http://download.giswater.org/giswater_all-in-one.exe">all-in-one install package</a>. The all-in-one installer package is designed with a portable version of PostgreSQL+PostGIS 2.1. Remember you need to have installed an updated Java Runtime Environment (<span class="caps">JRE</span>) on your&nbsp;computer.</p>
+            <p>This is the 1<sup>st</sup> episode in my tutorial on the using <span class="caps">EPA</span> Storm Water Management Model (<span class="caps">EPA</span> <span class="caps">SWMM</span>) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes the installation&nbsp;process.</p>
+<p>The instructions in the <a href="http://www.giswater.org/print/book/export/html/17">Giswater documentation</a> provided sufficient information for installing this software. To install you must download the installer package and execute it. Remember you can choose the <a href="http://download.giswater.org/giswater_stand-alone.exe">Giswater stand-alone install package</a> or the <a href="http://download.giswater.org/giswater_all-in-one.exe">all-in-one install package</a>. The all-in-one installer package is designed with a portable version of PostgreSQL+PostGIS 2.1. Remember you need to have installed an updated Java Runtime Environment (<span class="caps">JRE</span>) on your&nbsp;computer.</p>
 <p>I took the easy road and used the all-in-one installer. Installation using the installation wizard proved to be straight-forward. When the dust had settled, the following had taken&nbsp;place:</p>
 <ol>
 <li>Giswater had been placed in it&#8217;s standard installation path (<strong>C:\Program Files\Giswater\</strong>, so apparently it&#8217;s a 64-bit application) with the following sub-folders:<ul>
@@ -100,7 +101,7 @@
 </li>
 </ol>
 <h2 id="epa-swwm"><span class="caps">EPA</span> <span class="caps">SWWM</span></h2>
-<p>Since on of my objectives is to make a comparison between using <span class="caps">SWMM</span> toghether with Giswater and a vanilla <span class="caps">EPA</span> <span class="caps">SWMM</span> setup, I also need to have <span class="caps">EPA</span> <span class="caps">SWMM</span> 5.0.022 installed (the only version supported by Giswater). However, this version is not available anymore from the <a href="http://www2.epa.gov/water-research/storm-water-management-model-swmm"><span class="caps">EPA</span> website</a>. After about 3 years of sleep, the <span class="caps">EPA</span> <span class="caps">SWMM</span> model is actively developed again. Usually this is good news, but when other products depend on older versions that have been taken offline, it is bad news as&nbsp;well&#8230;</p>
+<p>Since one of my objectives is to make a comparison between using <span class="caps">SWMM</span> toghether with Giswater and a vanilla <span class="caps">EPA</span> <span class="caps">SWMM</span> setup, I also need to have <span class="caps">EPA</span> <span class="caps">SWMM</span> 5.0.022 installed (the only version supported by Giswater). However, this version is not available anymore from the <a href="http://www2.epa.gov/water-research/storm-water-management-model-swmm"><span class="caps">EPA</span> website</a>. After about 3 years of sleep, the <span class="caps">EPA</span> <span class="caps">SWMM</span> model is actively developed again. Usually this is good news, but when other products depend on older versions that have been taken offline, it is bad news as&nbsp;well&#8230;</p>
 <p>For this tutorial, it won&#8217;t be a problem, since I already had version 5.0.022 installed on my computer. Yet, there is a bigger issue here: a lot of functionality with regard to the visualization of the simulation results (charts, profiles, animations, etc.) is not possible without the <span class="caps">EPA</span> <span class="caps">SWMM</span> graphical user interface. Following could be done to make this functionality also available to Giswater users (in order of personal&nbsp;preference):</p>
 <ol>
 <li>Giswater developers keep their software compatible with the most recent version of <span class="caps">EPA</span> <span class="caps">SWMM</span>;</li>
