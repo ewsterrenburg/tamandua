@@ -1,10 +1,12 @@
 date: 2014-09-03
 author: Erwin Sterrenburg
-title: SWMM GISWATER 3: Creating Junctions
-slug: swmm-giswater-3-creating-junctions
+title: EPA SWMM / Giswater Tutorial 3: Creating Junctions
+slug: swmm-giswater-tutorial-3-creating-junctions
 status: draft
-tags: GISWATER, SWMM
-summary: A short welcome message
+tags: SWMM, Giswater, Water
+summary: This is the 1<sup>st</sup> episode in my tutorial on the using EPA Storm Water Management Model (EPA SWMM) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes the installation process.
+
+This is the 3<sup>rd</sup> episode in my tutorial on the using EPA Storm Water Management Model (EPA SWMM) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes how to create junctions in EPA SWMM, using QGIS and using SQL insert statements. 
 
 The (... elaborate) SWMM help provides us with the following information on junctions:
 >   Junctions are drainage system nodes where links join together.
@@ -21,53 +23,55 @@ The (... elaborate) SWMM help provides us with the following information on junc
 >   * height to ground surface (Maximum depth at the junction (i.e., the distance from the invert to the ground surface) (feet or meters). If zero, then the distance from the invert to the top of the highest connecting link will be used. ).
 >   - ponded surface area when flooded (optional).
 >   - external inflow data (optional).
->
->    <cite>Dr. Anteater in "Ant Fugue" in Godel Escher Bach by Douglas R. Hofstadter</cite>
 
-For now, we keep it as simple as possible and leave the two optional attributes for later. However, there are some other
-attributes that may seem trivial, yet still require attention:
+For now, we keep it as simple as possible and leave the two optional attributes for later. However, there are some other attributes that may seem trivial, yet still require attention:
 
 *   Geometry
 *   X-coordinate
 *   Y-coordinate
 *   NodeID
 
-##SWMM GUI
+#EPA SWMM
 
-The GUI of EPA SWMM prodides two ways to create a new node.
-It is possible to draw a new node on the map (which )
-The other way .
-If you supp
-(which in its turn is placed on the map based on the coordinates supplied).
-A nodeID is automatically generated using an autoincrementor,
-yet can be replaced manually with any alphanumeric value.
-The constraint of unique nodeIDs is enforced by the software
+The graphical user interface of EPA SWMM prodides two ways to create a new node.
+It is possible to draw a new node on the map, in which case the location where you click the map is used to determine the X- and Y-coordinate.
+The other way around is to ..., in which case the location on the map where the junction is placed is determined based on the values supplied for the X- and Y-coordinate.
+In both cases, a nodeID is automatically generated using an autoincrementor, with the prefixes and increment supplied in the project defaults (zie deel 2!). 
+It is possible to replace the automatically generated NodeID with your own value, yet each node should have an unique ID. This constrained is enforced by the software.
 
+#GISWATER: QGIS AS FRONTDOOR
 
-##GISWATER: QGIS as frontdoor
+The Giswater equivalent of drawing a junction in EPA SWMM directly, would be to draw a new feature in in the junction layer of the corresponding GIS-project.
+advantages over ...:
 
-The GISWATER equivalent of drawing a junction in EPA SWMM directly, would b
-to add a feature to the junction layer of the created gis-project.
+- Possibility to add basemaps (voetnoot: EPA basemaps make you cry);
+- Possibility to add your own geospatial data as a reference, snap new objects on these features and paste the geometry of these features in your SWMM layers;
+- More power full drawing tools. Standard already ..., for more CAD-like functionality, tracing etc, there are plugins available;
+- A field calculator to update attributes in bulk.
 
-basemaps,
-own data (snapping, copy/paste),
-more powerful drawing tools. Standard already ..., for more CAD-like functionality,
-tracing etc, there are plugins available.
-Copy paste / join / Field calculator
+[PLAATJE?]
 
--   **do NOT mess around in the nodes layer or in the results layers!!!**
--   **Make sure your postgres server is running when starting the QGIS project. server sluiten: huilen**
+###Sectors
 
-
-###Drawing new junctions
+***SECTORS***
 
 1.  toggle editing of ... layers
 2.  draw new feature
-3.  NODEID, sector_ID, ..., ...,
+3.  NODEID, sector_ID, ..., ..., handmatig (or field calculator :))
 4.  save edits.
 
+###Drawing new junctions
+
+[plaatje?]
+
+1.  toggle editing of ... layers
+2.  draw new feature
+3.  NODEID, sector_ID, ..., ..., handmatig (or field calculator :))
+4.  save edits.
 
 ###Copy - Paste new junctions:
+
+[plaatje?]
 
 1.  make source layer active (click)
 1.  toggle editing of source layers (nodig?)
@@ -79,31 +83,38 @@ Copy paste / join / Field calculator
 1.  NODEID, sector_ID, ..., ...,
 1.  save edits
 
-Geometrie --> X/Y, niet andersom!
-NODEID: handmatig!
+###Important DON'Ts
 
+-   **do *++NOT++* mess around in the nodes layer or in the results layers!!! Drawing in these layers will not activate the required database functions to ... the new objects in the correct way.**
+-   **Make sure your Postgres server is running when starting the QGIS project (i.e. do not close the ... of the portable postgres). server sluiten: huilen**
 
-##GISWATER: sql as backdoor
+#GISWATER: SQL AS BACKDOOR
+Drawing a new system: QGIS (or other GIS software configured for editing the correct tables). However, in many cases information already available from other sources (CAD-drawings, geodatabases, ..., etc.). In these case, you could use scripting to .. this information and ... into the database. The insert queries could directly be executed by your code, yet I like to keep insight in what is happening. Therefore, my approach was to use python scripts which write the insert queries to a file. 
 
-When ... insert queries,
-ppygis can be helpful
+For the geometry: ppygis can be helpful
 
 node.node_id, node.top_elev, node.ymax, inp_junction.y0,
     inp_junction.ysur, inp_junction.apond, node.sector_id, node.the_geom
 
-- directly inserting into the database
-    - make sure you use v_edit_inp_junction
-        - triggers op nieuwe putten
-            - wat gebeurt er bij update/delete (en wat met gekoppelde strengen?)
 
-##Conclusions:
+```SQL
+INSERT INTO "test_zanderij_31121"."v_inp_edit_junction" VALUES ('C3422736', 2.23, 0, 0, 0, 0, 'sector_01', '010100002091790000f853e3655a0f2141ec51b81ebbbb2341');
+```
+
+
+- directly inserting into the database
+- make sure you use v_edit_inp_junction
+- triggers op nieuwe putten
+- wat gebeurt er bij update/delete (en wat met gekoppelde strengen?)
+
+
+#Conclusions:
 
 much more powerful ways to ... and keep them up-to-date
 
+###Open ends:
+Geometrie --> X/Y, niet andersom! (wat bedoel ik hier in vredesnaam mee?)
 
-
-
-##Open ends:
 Description / TAG missing in GISWATER?
 GISWATER introduces the concepts of Sectors
 Initial depth is not explicitly mentioned, what to do with this?

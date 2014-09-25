@@ -13,6 +13,8 @@ summary: Short explanation on why this website is called pilosa.eu.
 > explaining where the consciousness experienced by an ant colony arises from.
 > <cite>Dr. Anteater in "Ant Fugue", part of  "Gödel, Escher, Bach: An Eternal Golden Braid" by Douglas R. Hofstadter</cite>
 
+<br>
+
 It’s humans that are the most curious animal on the planet.
 
 
@@ -31,7 +33,7 @@ It’s humans that are the most curious animal on the planet.
     </table>
 </td>
 </tr>
-</table> 
+</table>
 
 This thesis addresses the interdependencies between water use and water
  availability and describes a model that has been developed to increase
