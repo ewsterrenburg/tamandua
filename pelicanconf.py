@@ -14,7 +14,7 @@ DEFAULT_LANG = u'en'
 DEFAULT_PAGINATION = 5
 
 # By default we enable pretty highlighing in markdown:
-MD_EXTENSIONS = [FontAwesomeExtension(), 'codehilite(css_class=highlight)', 'extra', 'toc']
+MD_EXTENSIONS = [FontAwesomeExtension(), 'codehilite(css_class=highlight,linenums=False)', 'extra', 'toc']
 
 # Leave this blank for local development, publishconf.py has the "real" value:
 SITEURL = ''
@@ -47,7 +47,7 @@ FAVICON_FILENAME = 'favicon.ico'
 #STATIC_PATHS = ['images', 'extra/CNAME']
 STATIC_PATHS = [
     'images',
-    'extras/robots.txt',
+    os.path.join('extras','robots.txt'),
     'extras/CNAME',
     'extras/favicon.ico',
     'extras/apple-touch-icon.png'
@@ -56,8 +56,8 @@ STATIC_PATHS = [
 # Here's a sample EXTRA_PATH_METADATA that adds the favicon, an iOS touch icon and a GPG key:
 EXTRA_PATH_METADATA = dict()
 for f in os.listdir('content/extras'):
-    STATIC_PATHS.append('extras/{0}'.format(f))
-    EXTRA_PATH_METADATA['extras/{0}'.format(f)]={'path': f}
+    STATIC_PATHS.append('extras' + os.sep + '{0}'.format(f))
+    EXTRA_PATH_METADATA['extras' + os.sep + '{0}'.format(f)]={'path': f}
 
 
 
@@ -85,6 +85,9 @@ ARTICLE_URL = 'blog/{date:%Y}/{date:%m}/{date:%d}/{slug}/'
 ARTICLE_SAVE_AS = 'blog/{date:%Y}/{date:%m}/{date:%d}/{slug}/index.html'
 
 PLUGIN_PATHS = [os.path.join(os.getcwd(), "..", "pelican-plugins")]
-PLUGINS = ['render_math', 'extended_sitemap']
+PLUGINS = ['render_math', 'extended_sitemap', 'better_codeblock_line_numbering']
 
 TAG_CLOUD_STEPS = 4
+
+# Setting for the better_figures_and_images plugin
+RESPONSIVE_IMAGES = True
