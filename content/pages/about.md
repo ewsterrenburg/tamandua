@@ -14,7 +14,7 @@ Want to know more? Visit my profile on [LinkedIn](https://www.linkedin.com/in/ew
  send me an email or start a disqussion under a blog posts that triggers you.
 
 A healthy dose of curiosity has resulted in a long list of professional & personal
- interest that includes:
+ interests that includes:
 
 - Agent Based Modelling
 - Asset Management
