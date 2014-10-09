@@ -4,6 +4,7 @@ output
 cache
 publishconf.py
 *.pid
+build.log
 
 #Python
 *.py[cod]
