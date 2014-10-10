@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>PILOSA.EU</title><link>http://pilosa.eu/</link><description></description><atom:link href="/feeds/erwin-sterrenburg.rss.xml" rel="self"></atom:link><lastBuildDate>Thu, 09 Oct 2014 00:00:00 +0200</lastBuildDate><item><title>EPA SWMM / Giswater Tutorial 3: Creating Junctions</title><link>http://pilosa.eu/blog/2014/10/09/swmm-giswater-tutorial-3-creating-junctions/</link><description>&lt;p&gt;This is the 3&lt;sup&gt;rd&lt;/sup&gt; episode in my tutorial on the using &lt;span class="caps"&gt;EPA&lt;/span&gt; Storm Water Management Model (&lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes how to create junctions in &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;, using &lt;span class="caps"&gt;QGIS&lt;/span&gt; and using &lt;span class="caps"&gt;SQL&lt;/span&gt; insert&amp;nbsp;statements. &lt;/p&gt;
-&lt;p&gt;The wonderful &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; help provides us with the following information on&amp;nbsp;junctions:&lt;/p&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>PILOSA.EU</title><link>http://pilosa.eu/</link><description></description><atom:link href="/feeds%5Cerwin-sterrenburg.rss.xml" rel="self"></atom:link><lastBuildDate>Thu, 09 Oct 2014 00:00:00 +0200</lastBuildDate><item><title>EPA SWMM / Giswater Tutorial 3: Creating Junctions</title><link>http://pilosa.eu/blog/2014/10/09/swmm-giswater-tutorial-3-creating-junctions/</link><description>&lt;p&gt;This is the 3&lt;sup&gt;rd&lt;/sup&gt; episode in my tutorial on the using EPA Storm Water Management Model (EPA SWMM) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes how to create junctions in EPA SWMM, using QGIS and using SQL insert statements. &lt;/p&gt;
+&lt;p&gt;The wonderful EPA SWMM help provides us with the following information on junctions:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Junctions are drainage system nodes where links join together.
   Physically they can represent the confluence of natural surface channels,
@@ -8,96 +8,96 @@
   External inflows can enter the system at junctions.
   Excess water at a junction can become partially pressurized while
   connecting conduits are surcharged and can either be lost from the system
-  or be allowed to pond atop the junction and subsequently drain back into the&amp;nbsp;junction.&lt;/p&gt;
-&lt;p&gt;The principal input parameters for a junction&amp;nbsp;are:&lt;/p&gt;
+  or be allowed to pond atop the junction and subsequently drain back into the junction.&lt;/p&gt;
+&lt;p&gt;The principal input parameters for a junction are:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;invert&amp;nbsp;elevation;&lt;/li&gt;
-&lt;li&gt;height to ground surface (Maximum depth at the junction (i.e., the distance from the invert to the ground surface) (feet or meters). If zero, then the distance from the invert to the top of the highest connecting link will be&amp;nbsp;used;&lt;/li&gt;
-&lt;li&gt;ponded surface area when flooded&amp;nbsp;(optional);&lt;/li&gt;
-&lt;li&gt;external inflow data&amp;nbsp;(optional).&lt;/li&gt;
+&lt;li&gt;invert elevation;&lt;/li&gt;
+&lt;li&gt;height to ground surface (Maximum depth at the junction (i.e., the distance from the invert to the ground surface) (feet or meters). If zero, then the distance from the invert to the top of the highest connecting link will be used;&lt;/li&gt;
+&lt;li&gt;ponded surface area when flooded (optional);&lt;/li&gt;
+&lt;li&gt;external inflow data (optional).&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;For now, we keep it as simple as possible and leave the two optional attributes for later. However, there are some other attributes that may seem trivial, yet still require&amp;nbsp;attention:&lt;/p&gt;
+&lt;p&gt;For now, we keep it as simple as possible and leave the two optional attributes for later. However, there are some other attributes that may seem trivial, yet still require attention:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Geometry;&lt;/li&gt;
 &lt;li&gt;X-coordinate;&lt;/li&gt;
 &lt;li&gt;Y-coordinate;&lt;/li&gt;
 &lt;li&gt;NodeID.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1 id="epa-swmm"&gt;&lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;&lt;/h1&gt;
-&lt;p&gt;The graphical user interface of &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; provides two ways to create a new&amp;nbsp;node:&lt;/p&gt;
+&lt;h1 id="epa-swmm"&gt;EPA SWMM&lt;/h1&gt;
+&lt;p&gt;The graphical user interface of EPA SWMM provides two ways to create a new node:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;It is possible to draw a new node on the map, in which case the location where you click the map is used to determine the X- and&amp;nbsp;Y-coordinate;&lt;/li&gt;
-&lt;li&gt;The other way around is to navigate to junctions in the tree view in the tree view, select &amp;#8220;junctions&amp;#8221; by using the left mouse button, followed by pressing the &amp;#8220;Add new&amp;#8221; button. Using this approach, the location on the map where the junction is placed is determined based on the values supplied for the X- and&amp;nbsp;Y-coordinate.&lt;/li&gt;
+&lt;li&gt;It is possible to draw a new node on the map, in which case the location where you click the map is used to determine the X- and Y-coordinate;&lt;/li&gt;
+&lt;li&gt;The other way around is to navigate to junctions in the tree view in the tree view, select "junctions" by using the left mouse button, followed by pressing the "Add new" button. Using this approach, the location on the map where the junction is placed is determined based on the values supplied for the X- and Y-coordinate.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;&lt;img alt="SWMM_create_junction" src="/images/SWMM_create_junction.png" title="Creating a junction in EPA SWMM." /&gt; &lt;/p&gt;
 &lt;p&gt;In both cases, a NodeID is automatically generated using an autoincrementor, with the prefixes and increment supplied in the project defaults (see &lt;a href="/blog/2014/09/20/swmm-giswater-tutorial-2-project-setup/"&gt;Episode 2: Project Setup&lt;/a&gt;). 
-It is possible to replace this automatically generated NodeID with your own value, yet each node should have an unique &lt;span class="caps"&gt;ID&lt;/span&gt;. This constrained is enforced by the&amp;nbsp;software.&lt;/p&gt;
-&lt;p&gt;Double-clicking on a node opens it&amp;#8217;s attritute form in which the attributes can be modified.
-The location of a junction can be changed by dragging the junction to a new location, or by changing the X- and Y-attributes. A selected node can be removed by pressing the &amp;#8220;Delete&amp;#8221; key on your keyboard, or by using the &amp;#8220;Delete object&amp;#8221; button next to the &amp;#8220;Add new&amp;#8221;&amp;nbsp;button.&lt;/p&gt;
-&lt;h1 id="giswater-qgis-as-frontdoor"&gt;&lt;span class="caps"&gt;GISWATER&lt;/span&gt;: &lt;span class="caps"&gt;QGIS&lt;/span&gt; &lt;span class="caps"&gt;AS&lt;/span&gt; &lt;span class="caps"&gt;FRONTDOOR&lt;/span&gt;&lt;/h1&gt;
-&lt;p&gt;The Giswater equivalent of drawing a junction in &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; directly, would be to draw a new feature in in the junction layer of the corresponding &lt;span class="caps"&gt;GIS&lt;/span&gt;-project. This approach offers the following&amp;nbsp;advantages:&lt;/p&gt;
+It is possible to replace this automatically generated NodeID with your own value, yet each node should have an unique ID. This constrained is enforced by the software.&lt;/p&gt;
+&lt;p&gt;Double-clicking on a node opens it's attritute form in which the attributes can be modified.
+The location of a junction can be changed by dragging the junction to a new location, or by changing the X- and Y-attributes. A selected node can be removed by pressing the "Delete" key on your keyboard, or by using the "Delete object" button next to the "Add new" button.&lt;/p&gt;
+&lt;h1 id="giswater-qgis-as-frontdoor"&gt;GISWATER: QGIS AS FRONTDOOR&lt;/h1&gt;
+&lt;p&gt;The Giswater equivalent of drawing a junction in EPA SWMM directly, would be to draw a new feature in in the junction layer of the corresponding GIS-project. This approach offers the following advantages:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Adding basemaps;&lt;sup id="fnref:backdrop_image"&gt;&lt;a class="footnote-ref" href="#fn:backdrop_image" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
-&lt;li&gt;Adding your own geo-spatial data as a reference, to snap new objects on or to copy-paste the geometry into the &lt;span class="caps"&gt;SWMM&lt;/span&gt;&amp;nbsp;layers;&lt;/li&gt;
-&lt;li&gt;Sophisticated drawing tools (cadtools, Autotrace, &lt;span class="caps"&gt;GPS&lt;/span&gt;) availabe as&amp;nbsp;plugins;&lt;/li&gt;
-&lt;li&gt;A field calculator to update attributes in&amp;nbsp;bulk.&lt;/li&gt;
+&lt;li&gt;Adding your own geo-spatial data as a reference, to snap new objects on or to copy-paste the geometry into the SWMM layers;&lt;/li&gt;
+&lt;li&gt;Sophisticated drawing tools (cadtools, Autotrace, GPS) availabe as plugins;&lt;/li&gt;
+&lt;li&gt;A field calculator to update attributes in bulk.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="sectors"&gt;Sectors&lt;/h3&gt;
-&lt;p&gt;Giswater introduces the concept of sectors. I haven&amp;#8217;t found out yet whether using sectors in your data is required or not. I&amp;#8217;ll ignore them for now and come back to this either when I&amp;#8217;ll make an episode on the function of sectors or when the calculation refuses to run &lt;i class="fa fa-smile-o"&gt;&lt;/i&gt;.&lt;/p&gt;
-&lt;h3 id="drawing-new-junctions"&gt;Drawing new&amp;nbsp;junctions&lt;/h3&gt;
+&lt;p&gt;Giswater introduces the concept of sectors. I haven't found out yet whether using sectors in your data is required or not. I'll ignore them for now and come back to this either when I'll make an episode on the function of sectors or when the calculation refuses to run &lt;i class="fa fa-smile-o"&gt;&lt;/i&gt;.&lt;/p&gt;
+&lt;h3 id="drawing-new-junctions"&gt;Drawing new junctions&lt;/h3&gt;
 &lt;p&gt;&lt;img alt="QGIS_create_junctions" src="/images/QGIS_create_junctions.png" title="Creating junctions in QGIS." /&gt; &lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;Make the Junctions layer (&lt;strong&gt;&lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; &lt;span class="caps"&gt;DATA&lt;/span&gt;&lt;/strong&gt; &lt;i class="fa fa-long-arrow-right"&gt;&lt;/i&gt; &lt;strong&gt;Hydraulics&lt;/strong&gt; &lt;i class="fa fa-long-arrow-right"&gt;&lt;/i&gt; &lt;strong&gt;Node&lt;/strong&gt; &lt;i class="fa fa-long-arrow-right"&gt;&lt;/i&gt; &lt;strong&gt;Junctions&lt;/strong&gt; ) active by clicking on this layer in the content tree of the&amp;nbsp;map;&lt;/li&gt;
+&lt;li&gt;Make the Junctions layer (&lt;strong&gt;EPA SWMM DATA&lt;/strong&gt; &lt;i class="fa fa-long-arrow-right"&gt;&lt;/i&gt; &lt;strong&gt;Hydraulics&lt;/strong&gt; &lt;i class="fa fa-long-arrow-right"&gt;&lt;/i&gt; &lt;strong&gt;Node&lt;/strong&gt; &lt;i class="fa fa-long-arrow-right"&gt;&lt;/i&gt; &lt;strong&gt;Junctions&lt;/strong&gt; ) active by clicking on this layer in the content tree of the map;&lt;/li&gt;
 &lt;li&gt;Toggle editing (&lt;strong&gt;a&lt;/strong&gt;);&lt;/li&gt;
 &lt;li&gt;Add new features (&lt;strong&gt;b&lt;/strong&gt;);&lt;/li&gt;
 &lt;li&gt;In the attribute form, supply values for node_id, top_elev, ymax and optionally for the other attributes (&lt;strong&gt;c&lt;/strong&gt;);&lt;/li&gt;
 &lt;li&gt;Save layer edits (&lt;strong&gt;d&lt;/strong&gt;).&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3 id="copy-paste-new-junctions"&gt;Copy - Paste new&amp;nbsp;junctions&lt;/h3&gt;
+&lt;h3 id="copy-paste-new-junctions"&gt;Copy - Paste new junctions&lt;/h3&gt;
 &lt;ol&gt;
-&lt;li&gt;Make the source layer for the junctions to be pasted&amp;nbsp;active;&lt;/li&gt;
+&lt;li&gt;Make the source layer for the junctions to be pasted active;&lt;/li&gt;
 &lt;li&gt;Toggle editing of this layer (&lt;strong&gt;a&lt;/strong&gt;);&lt;/li&gt;
-&lt;li&gt;Select the features to be copied using the selection tools provided by &lt;span class="caps"&gt;QGIS&lt;/span&gt;;&lt;/li&gt;
-&lt;li&gt;Click &amp;#8220;Copy features&amp;#8221; button (&lt;strong&gt;e&lt;/strong&gt;);&lt;/li&gt;
-&lt;li&gt;Make the Junctions layer&amp;nbsp;active;&lt;/li&gt;
+&lt;li&gt;Select the features to be copied using the selection tools provided by QGIS;&lt;/li&gt;
+&lt;li&gt;Click "Copy features" button (&lt;strong&gt;e&lt;/strong&gt;);&lt;/li&gt;
+&lt;li&gt;Make the Junctions layer active;&lt;/li&gt;
 &lt;li&gt;Toggle editing (&lt;strong&gt;a&lt;/strong&gt;);&lt;/li&gt;
 &lt;li&gt;Paste features (&lt;strong&gt;f&lt;/strong&gt;);&lt;/li&gt;
 &lt;li&gt;If attributes with the same name were present in the source layer, they will be transferred over. Otherwise, supply values for node_id, top_elev, ymax and optionally for the other attributes (&lt;strong&gt;c&lt;/strong&gt;);&lt;/li&gt;
 &lt;li&gt;Save layer edits (&lt;strong&gt;d&lt;/strong&gt;).&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3 id="modify-the-location-of-a-junction"&gt;Modify the location of a&amp;nbsp;junction&lt;/h3&gt;
+&lt;h3 id="modify-the-location-of-a-junction"&gt;Modify the location of a junction&lt;/h3&gt;
 &lt;ol&gt;
-&lt;li&gt;Make the Junctions layer&amp;nbsp;active;&lt;/li&gt;
+&lt;li&gt;Make the Junctions layer active;&lt;/li&gt;
 &lt;li&gt;Toggle editing (&lt;strong&gt;a&lt;/strong&gt;);&lt;/li&gt;
 &lt;li&gt;Move features (&lt;strong&gt;g&lt;/strong&gt;);&lt;/li&gt;
-&lt;li&gt;Drag junction to new&amp;nbsp;location;&lt;/li&gt;
+&lt;li&gt;Drag junction to new location;&lt;/li&gt;
 &lt;li&gt;Save layer edits (&lt;strong&gt;d&lt;/strong&gt;).&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3 id="modify-the-attributes-of-a-junction"&gt;Modify the attributes of a&amp;nbsp;junction&lt;/h3&gt;
+&lt;h3 id="modify-the-attributes-of-a-junction"&gt;Modify the attributes of a junction&lt;/h3&gt;
 &lt;ol&gt;
-&lt;li&gt;Make the Junctions layer&amp;nbsp;active;&lt;/li&gt;
+&lt;li&gt;Make the Junctions layer active;&lt;/li&gt;
 &lt;li&gt;Toggle editing (&lt;strong&gt;a&lt;/strong&gt;);&lt;/li&gt;
-&lt;li&gt;Open the attribute form using the &amp;#8220;Identify Features&amp;#8221; button (&lt;strong&gt;i&lt;/strong&gt;) or open the attribute table (&lt;strong&gt;j&lt;/strong&gt;);&lt;/li&gt;
+&lt;li&gt;Open the attribute form using the "Identify Features" button (&lt;strong&gt;i&lt;/strong&gt;) or open the attribute table (&lt;strong&gt;j&lt;/strong&gt;);&lt;/li&gt;
 &lt;li&gt;Fill in the new attribute values (&lt;strong&gt;c&lt;/strong&gt;);    &lt;/li&gt;
 &lt;li&gt;Save layer edits (&lt;strong&gt;d&lt;/strong&gt;).&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3 id="delete-a-junction"&gt;Delete a&amp;nbsp;junction&lt;/h3&gt;
+&lt;h3 id="delete-a-junction"&gt;Delete a junction&lt;/h3&gt;
 &lt;ol&gt;
-&lt;li&gt;Make the Junctions layer&amp;nbsp;active;&lt;/li&gt;
+&lt;li&gt;Make the Junctions layer active;&lt;/li&gt;
 &lt;li&gt;Toggle editing (&lt;strong&gt;a&lt;/strong&gt;);&lt;/li&gt;
-&lt;li&gt;Select&amp;nbsp;features;&lt;/li&gt;
-&lt;li&gt;Delete selected using the &amp;#8220;Delete selected&amp;#8221; button (&lt;strong&gt;h&lt;/strong&gt;) or pressing the &amp;#8220;Delete&amp;#8221;&amp;nbsp;key;&lt;/li&gt;
+&lt;li&gt;Select features;&lt;/li&gt;
+&lt;li&gt;Delete selected using the "Delete selected" button (&lt;strong&gt;h&lt;/strong&gt;) or pressing the "Delete" key;&lt;/li&gt;
 &lt;li&gt;Save layer edits (&lt;strong&gt;d&lt;/strong&gt;).&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3 id="important-donts"&gt;Important &lt;span class="caps"&gt;DON&lt;/span&gt;&amp;#8217;Ts&lt;/h3&gt;
+&lt;h3 id="important-donts"&gt;Important DON'Ts&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Do ++&lt;span class="caps"&gt;NOT&lt;/span&gt;++ mess around in the nodes layer or in the results layers!!! Drawing in these layers will not activate the required database functions to &amp;#8230; the new objects in the correct&amp;nbsp;way.&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Make sure your Postgres server is running when starting the &lt;span class="caps"&gt;QGIS&lt;/span&gt; project (i.e. do not close the command prompt window of the portable Postgres). If the server stops with your &lt;span class="caps"&gt;GIS&lt;/span&gt;-project open, &lt;span class="caps"&gt;QGIS&lt;/span&gt; will spit out a endless loop of pop-ups stating that it is not able to reach the server. &lt;span class="caps"&gt;QGIS&lt;/span&gt; can now only be stopped with&amp;nbsp;violence.&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Do ++NOT++ mess around in the nodes layer or in the results layers!!! Drawing in these layers will not activate the required database functions to ... the new objects in the correct way.&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Make sure your Postgres server is running when starting the QGIS project (i.e. do not close the command prompt window of the portable Postgres). If the server stops with your GIS-project open, QGIS will spit out a endless loop of pop-ups stating that it is not able to reach the server. QGIS can now only be stopped with violence.&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1 id="giswater-sql-as-backdoor"&gt;&lt;span class="caps"&gt;GISWATER&lt;/span&gt;: &lt;span class="caps"&gt;SQL&lt;/span&gt; &lt;span class="caps"&gt;AS&lt;/span&gt; &lt;span class="caps"&gt;BACKDOOR&lt;/span&gt;&lt;/h1&gt;
-&lt;p&gt;When you are drawing a drainage system from scratch, &lt;span class="caps"&gt;QGIS&lt;/span&gt; (or other &lt;span class="caps"&gt;GIS&lt;/span&gt; software configured for editing the correct tables) would be the way to go. However, in many cases information is already available from other sources (&lt;span class="caps"&gt;CAD&lt;/span&gt;-drawings, geodatabases, Excel-files, etc.). In these cases, you could also use scripting to interpret this information and insert it into the database. These insert queries could directly be executed from your code, yet I like to keep insight in what is happening. Therefore, my approach was to use python scripts which write the insert queries to a &lt;span class="caps"&gt;SQL&lt;/span&gt;-file. &lt;/p&gt;
-&lt;p&gt;If X- and Y-coordinates are available, the value to be inserted in the geometry field can be generated using &lt;a href="http://www.fabianowski.eu/projects/ppygis/"&gt;PPyGIS&lt;/a&gt;. Although in the documentation is stated that PPyGIS is young and has several limitations, it does this job really well. The following python code generates insert statements for 4 junctions in a strictly random street somewhere in the east of the&amp;nbsp;Netherlands:&lt;/p&gt;
+&lt;h1 id="giswater-sql-as-backdoor"&gt;GISWATER: SQL AS BACKDOOR&lt;/h1&gt;
+&lt;p&gt;When you are drawing a drainage system from scratch, QGIS (or other GIS software configured for editing the correct tables) would be the way to go. However, in many cases information is already available from other sources (CAD-drawings, geodatabases, Excel-files, etc.). In these cases, you could also use scripting to interpret this information and insert it into the database. These insert queries could directly be executed from your code, yet I like to keep insight in what is happening. Therefore, my approach was to use python scripts which write the insert queries to a SQL-file. &lt;/p&gt;
+&lt;p&gt;If X- and Y-coordinates are available, the value to be inserted in the geometry field can be generated using &lt;a href="http://www.fabianowski.eu/projects/ppygis/"&gt;PPyGIS&lt;/a&gt;. Although in the documentation is stated that PPyGIS is young and has several limitations, it does this job really well. The following python code generates insert statements for 4 junctions in a strictly random street somewhere in the east of the Netherlands:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="code-line"&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;ppygis&lt;/span&gt;&lt;/span&gt;
 &lt;span class="code-line"&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;psycopg2&lt;/span&gt;&lt;/span&gt;
 &lt;span class="code-line"&gt;&lt;/span&gt;
@@ -154,7 +154,7 @@ The location of a junction can be changed by dragging the junction to a new loca
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Which results in the following &lt;span class="caps"&gt;SQL&lt;/span&gt;-statement:&lt;/p&gt;
+&lt;p&gt;Which results in the following SQL-statement:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="code-line"&gt;&lt;span class="n"&gt;INSERT&lt;/span&gt; &lt;span class="n"&gt;INTO&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;tutorial&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;v_inp_edit_junction&amp;quot;&lt;/span&gt; &lt;span class="n"&gt;VALUES&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;J1&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;33.11&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;None&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="mo"&gt;010100002040710000&lt;/span&gt;&lt;span class="n"&gt;cdccccccc22a0f410000000051d31c41&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;/span&gt;
 &lt;span class="code-line"&gt;&lt;span class="n"&gt;INSERT&lt;/span&gt; &lt;span class="n"&gt;INTO&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;tutorial&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;v_inp_edit_junction&amp;quot;&lt;/span&gt; &lt;span class="n"&gt;VALUES&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;J2&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;33.03&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;None&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="mo"&gt;010100002040710000713&lt;/span&gt;&lt;span class="n"&gt;d0ad79f2b0f4152b81e85bad31c41&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;/span&gt;
 &lt;span class="code-line"&gt;&lt;span class="n"&gt;INSERT&lt;/span&gt; &lt;span class="n"&gt;INTO&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;tutorial&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;v_inp_edit_junction&amp;quot;&lt;/span&gt; &lt;span class="n"&gt;VALUES&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;J3&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;32.76&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;None&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="mo"&gt;010100002040710000&lt;/span&gt;&lt;span class="mi"&gt;85&lt;/span&gt;&lt;span class="n"&gt;eb51b82e2c0f4114ae47e1fcd31c41&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;/span&gt;
@@ -162,117 +162,124 @@ The location of a junction can be changed by dragging the junction to a new loca
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;As you can see, this insert query should also executed on the view that contains the junctions, not directly on the node table. Update and delete queries should also be performed on this&amp;nbsp;view.&lt;/p&gt;
-&lt;h1 id="conclusions"&gt;&lt;span class="caps"&gt;CONCLUSIONS&lt;/span&gt;:&lt;/h1&gt;
-&lt;p&gt;&lt;span class="caps"&gt;QGIS&lt;/span&gt; provides much more powerful tools to draw and modify your objects than using &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; directly. 
-No incremental IDs are handed out automatically, yet the field calculator provides a powerful tool ot generate them in bulk. Data integrity is maintained by the database trigger and constraints. This works works well, however you need to be &lt;strong&gt;&lt;em&gt;really** &lt;/em&gt;&lt;/strong&gt; careful to make your edits to the correct&amp;nbsp;layer.&lt;/p&gt;
-&lt;h3 id="open-ends"&gt;Open&amp;nbsp;ends:&lt;/h3&gt;
+&lt;p&gt;As you can see, this insert query should also executed on the view that contains the junctions, not directly on the node table. Update and delete queries should also be performed on this view.&lt;/p&gt;
+&lt;h1 id="conclusions"&gt;CONCLUSIONS:&lt;/h1&gt;
+&lt;p&gt;QGIS provides much more powerful tools to draw and modify your objects than using EPA SWMM directly. 
+No incremental IDs are handed out automatically, yet the field calculator provides a powerful tool ot generate them in bulk. Data integrity is maintained by the database trigger and constraints. This works works well, however you need to be &lt;strong&gt;&lt;em&gt;really&lt;/em&gt;&lt;/strong&gt; careful to make your edits to the correct layer.&lt;/p&gt;
+&lt;h3 id="open-ends"&gt;Open ends:&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;The description and &lt;span class="caps"&gt;TAG&lt;/span&gt; attributes of the junctions are not present in Giswater. Within a &lt;span class="caps"&gt;GIS&lt;/span&gt;-environment, there is less need for this functionality. However including the description attribute would be a minor development effort. Supporting the use of tags might need more&amp;nbsp;effort;&lt;/li&gt;
-&lt;li&gt;Giswater introduces the concepts of sectors. It is not yet clear to me what their function is and whether it is required to use&amp;nbsp;them;&lt;/li&gt;
-&lt;li&gt;The initial depth does not seem to be explicitly mentioned in the &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; help. This attribute will need to be examined&amp;nbsp;further.&lt;/li&gt;
+&lt;li&gt;The description and TAG attributes of the junctions are not present in Giswater. Within a GIS-environment, there is less need for this functionality. However including the description attribute would be a minor development effort. Supporting the use of tags might need more effort;&lt;/li&gt;
+&lt;li&gt;Giswater introduces the concepts of sectors. It is not yet clear to me what their function is and whether it is required to use them;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The initial depth does not seem to be explicitly mentioned in the EPA SWMM help. This attribute will need to be examined further.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;cadtools footnote&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;links to plugins&lt;/li&gt;
+&lt;li&gt;general review: what changes were unsaved :(&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="footnote"&gt;
 &lt;hr /&gt;
 &lt;ol&gt;
 &lt;li id="fn:backdrop_image"&gt;
-&lt;p&gt;It is possible to add a street map, utility map, topographic map, site development plan, or any other relevant picture or drawing as a backdrop image in &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;.This can be useful, yet &amp;#8230; to a proper &lt;span class="caps"&gt;GIS&lt;/span&gt;-environment.&amp;#160;&lt;a class="footnote-backref" href="#fnref:backdrop_image" rev="footnote" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;It is possible to add a street map, utility map, topographic map, site development plan, or any other relevant picture or drawing as a backdrop image in EPA SWMM.This can be useful, yet ... to a proper GIS-environment.&amp;#160;&lt;a class="footnote-backref" href="#fnref:backdrop_image" rev="footnote" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Erwin Sterrenburg</dc:creator><pubDate>Thu, 09 Oct 2014 00:00:00 +0200</pubDate><guid>tag:pilosa.eu,2014-10-09:blog/2014/10/09/swmm-giswater-tutorial-3-creating-junctions/</guid><category>SWMM</category><category>Giswater</category><category>Water</category></item><item><title>EPA SWMM / Giswater Tutorial 2: Project Setup</title><link>http://pilosa.eu/blog/2014/09/20/swmm-giswater-tutorial-2-project-setup/</link><description>&lt;p&gt;This is the 2&lt;sup&gt;nd&lt;/sup&gt;  episode in my tutorial on the using &lt;span class="caps"&gt;EPA&lt;/span&gt; Storm Water Management Model (&lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes how to create new project in &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;, how to create a project using Giswater and the initial options that need to be set before we can start creating our&amp;nbsp;network. &lt;/p&gt;
-&lt;h1 id="epa-swwm"&gt;&lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWWM&lt;/span&gt;&lt;/h1&gt;
-&lt;p&gt;Starting a new project in &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; is a simple as starting up the program. A new project is opened and you can directly start drawing a sewer network. A project can be saved as a &lt;span class="caps"&gt;SWMM&lt;/span&gt;-input file (&lt;strong&gt;&lt;span class="caps"&gt;INP&lt;/span&gt;-file&lt;/strong&gt;). Such an input-file contains both all objects in a project&amp;#8217;s network and all options set by the user. Since a standard set of default values is provided, we could start drawing the network without further preparation. Most options deal with the look-and-feel of the program and the simulation parameters. For these options, we will keep the default values for now. Some options however do affect the drawing of the network and will need to be set&amp;nbsp;beforehand:&lt;/p&gt;
+&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Erwin Sterrenburg</dc:creator><pubDate>Thu, 09 Oct 2014 00:00:00 +0200</pubDate><guid>tag:pilosa.eu,2014-10-09:blog/2014/10/09/swmm-giswater-tutorial-3-creating-junctions/</guid><category>SWMM</category><category>Giswater</category><category>Water</category></item><item><title>EPA SWMM / Giswater Tutorial 2: Project Setup</title><link>http://pilosa.eu/blog/2014/09/20/swmm-giswater-tutorial-2-project-setup/</link><description>&lt;p&gt;This is the 2&lt;sup&gt;nd&lt;/sup&gt;  episode in my tutorial on the using EPA Storm Water Management Model (EPA SWMM) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes how to create new project in EPA SWMM, how to create a project using Giswater and the initial options that need to be set before we can start creating our network. &lt;/p&gt;
+&lt;h1 id="epa-swwm"&gt;EPA SWWM&lt;/h1&gt;
+&lt;p&gt;Starting a new project in EPA SWMM is a simple as starting up the program. A new project is opened and you can directly start drawing a sewer network. A project can be saved as a SWMM-input file (&lt;strong&gt;INP-file&lt;/strong&gt;). Such an input-file contains both all objects in a project's network and all options set by the user. Since a standard set of default values is provided, we could start drawing the network without further preparation. Most options deal with the look-and-feel of the program and the simulation parameters. For these options, we will keep the default values for now. Some options however do affect the drawing of the network and will need to be set beforehand:&lt;/p&gt;
 &lt;p&gt;&lt;img alt="SWMM_Defaults" src="/images/SWMM_defaults.png" title="Default prefixes for EPA SWMM objects." /&gt; &lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;Specify whether the automatic computation of conduit lengths and subcatchment areas is turned on or&amp;nbsp;off.&lt;/li&gt;
-&lt;li&gt;Choose whether the positions of links above the invert of their connecting nodes are expressed as a Depth above the node invert or as the Elevation of the&amp;nbsp;offset.&lt;/li&gt;
+&lt;li&gt;Specify whether the automatic computation of conduit lengths and subcatchment areas is turned on or off.&lt;/li&gt;
+&lt;li&gt;Choose whether the positions of links above the invert of their connecting nodes are expressed as a Depth above the node invert or as the Elevation of the offset.&lt;/li&gt;
 &lt;li&gt;Select flow units that makes sense (i.e. change the default Cubic Feet per Second to Cubic Metres per Second).
 &lt;li&gt;Change the map dimensions and extent to appropriate values (available from the menu: &lt;strong&gt;View &lt;i class="fa fa-long-arrow-right"&gt;&lt;/i&gt; Dimensions&lt;/strong&gt;).
-&lt;li&gt;On the &lt;span class="caps"&gt;ID&lt;/span&gt; Labels page of the defaults menu (&lt;strong&gt;Project &lt;i class="fa fa-long-arrow-right"&gt;&lt;/i&gt; Defaults&lt;/strong&gt;), set the &lt;span class="caps"&gt;ID&lt;/span&gt; Prefixes as follows (leave the others blank):
+&lt;li&gt;On the ID Labels page of the defaults menu (&lt;strong&gt;Project &lt;i class="fa fa-long-arrow-right"&gt;&lt;/i&gt; Defaults&lt;/strong&gt;), set the ID Prefixes as follows (leave the others blank):
 &lt;ul&gt;
 &lt;li&gt;Rain Gages: &lt;strong&gt;Gage&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;Subcatchments: &lt;strong&gt;S&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;Junctions: &lt;strong&gt;J&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;Outfalls:  &lt;strong&gt;Out&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;Conduits: &lt;strong&gt;C&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class="caps"&gt;ID&lt;/span&gt; Increment: &lt;strong&gt;1&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;ID Increment: &lt;strong&gt;1&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;This will make &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; automatically label new objects with consecutive numbers following the  designated&amp;nbsp;prefix.&lt;/p&gt;
-&lt;h1 id="giswater"&gt;&lt;span class="caps"&gt;GISWATER&lt;/span&gt;&lt;/h1&gt;
-&lt;h3 id="software-configuration"&gt;Software&amp;nbsp;configuration&lt;/h3&gt;
-&lt;p&gt;The software configuration window can be opened from the menu (&lt;strong&gt;Configuration&lt;/strong&gt; &lt;i class="fa fa-long-arrow-right"&gt;&lt;/i&gt; &lt;strong&gt;Software configuration&lt;/strong&gt;). The options that can be set here determine how Giswater deals with inputfiles, outputfiles and the database. For these options, we keep the default values. If you would use your own database, this is the place where you can set up the location of the database administration program (&lt;span class="caps"&gt;PGADMIN3&lt;/span&gt;).&lt;/p&gt;
-&lt;h3 id="database-connection"&gt;Database&amp;nbsp;connection&lt;/h3&gt;
-&lt;p&gt;The software configuration window can be opened from the menu (&lt;strong&gt;Configuration&lt;/strong&gt; &lt;i class="fa fa-long-arrow-right"&gt;&lt;/i&gt; &lt;strong&gt;Database configuration&lt;/strong&gt;). If I remember correctly, this was all working correctly without alterations for the included portable postgis database. If you would use your own database, this is the place where you can set up the&amp;nbsp;connection.&lt;/p&gt;
-&lt;h3 id="creating-a-epa-swmm-project"&gt;Creating a &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;&amp;nbsp;project&lt;/h3&gt;
-&lt;p&gt;The easiest way to start a project in Giswater is to load the &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; &lt;span class="caps"&gt;DB&lt;/span&gt; Sample project.
-The corresponding option in the project menu loads a sample project into the db using the sql files in the installation directory. You can do this an play around for a while. The goal for this episode in my tutorial is to create an empty project, so we&amp;#8217;ll take a different&amp;nbsp;track:&lt;/p&gt;
+&lt;p&gt;This will make EPA SWMM automatically label new objects with consecutive numbers following the  designated prefix.&lt;/p&gt;
+&lt;h1 id="giswater"&gt;GISWATER&lt;/h1&gt;
+&lt;h3 id="software-configuration"&gt;Software configuration&lt;/h3&gt;
+&lt;p&gt;The software configuration window can be opened from the menu (&lt;strong&gt;Configuration&lt;/strong&gt; &lt;i class="fa fa-long-arrow-right"&gt;&lt;/i&gt; &lt;strong&gt;Software configuration&lt;/strong&gt;). The options that can be set here determine how Giswater deals with inputfiles, outputfiles and the database. For these options, we keep the default values. If you would use your own database, this is the place where you can set up the location of the database administration program (PGADMIN3).&lt;/p&gt;
+&lt;h3 id="database-connection"&gt;Database connection&lt;/h3&gt;
+&lt;p&gt;The software configuration window can be opened from the menu (&lt;strong&gt;Configuration&lt;/strong&gt; &lt;i class="fa fa-long-arrow-right"&gt;&lt;/i&gt; &lt;strong&gt;Database configuration&lt;/strong&gt;). If I remember correctly, this was all working correctly without alterations for the included portable postgis database. If you would use your own database, this is the place where you can set up the connection.&lt;/p&gt;
+&lt;h3 id="creating-a-epa-swmm-project"&gt;Creating a EPA SWMM project&lt;/h3&gt;
+&lt;p&gt;The easiest way to start a project in Giswater is to load the EPA SWMM DB Sample project.
+The corresponding option in the project menu loads a sample project into the db using the sql files in the installation directory. You can do this an play around for a while. The goal for this episode in my tutorial is to create an empty project, so we'll take a different track:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Open the &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; window (&lt;strong&gt;Software&lt;/strong&gt; &lt;i class="fa fa-long-arrow-right"&gt;&lt;/i&gt; &lt;strong&gt;&lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;&lt;/strong&gt;):&lt;/li&gt;
+&lt;li&gt;Open the EPA SWMM window (&lt;strong&gt;Software&lt;/strong&gt; &lt;i class="fa fa-long-arrow-right"&gt;&lt;/i&gt; &lt;strong&gt;EPA SWMM&lt;/strong&gt;):&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;img alt="Giswater_EPA_SWMM" src="/images/Giswater_EPA_SWMM.png" title="Giswater EPA SWMM window." /&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Create a project and supply the following characteristics:&lt;ul&gt;
-&lt;li&gt;Name of the&amp;nbsp;project&lt;/li&gt;
-&lt;li&gt;Title of the&amp;nbsp;project&lt;/li&gt;
-&lt;li&gt;Author of the&amp;nbsp;project&lt;/li&gt;
-&lt;li&gt;Date&amp;nbsp;create&lt;/li&gt;
-&lt;li&gt;&lt;span class="caps"&gt;SRID&lt;/span&gt; of the coordinate system to be&amp;nbsp;used&lt;/li&gt;
+&lt;li&gt;Name of the project&lt;/li&gt;
+&lt;li&gt;Title of the project&lt;/li&gt;
+&lt;li&gt;Author of the project&lt;/li&gt;
+&lt;li&gt;Date create&lt;/li&gt;
+&lt;li&gt;SRID of the coordinate system to be used&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;img alt="Giswater_create_project" src="/images/Giswater_create_project.png" title="Giswater create project window." /&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Pressing the options button would open en windows in which we can set a broad array of options. A few of the affect  our system have sensible defaults Options: sensible defaults, so we keep them as&amp;nbsp;is.&lt;/li&gt;
+&lt;li&gt;Pressing the options button would open en windows in which we can set a broad array of options. A few of the affect  our system have sensible defaults Options: sensible defaults, so we keep them as is.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id="creating-a-gis-project"&gt;Creating a &lt;span class="caps"&gt;GIS&lt;/span&gt;-project&lt;/h3&gt;
-&lt;p&gt;After we created the project, all necessary tables are present so theoretically we could start filling these tables with information about our system. However, these tables are not yet easy accessible for the &lt;span class="caps"&gt;GIS&lt;/span&gt; superpowers yet. In order to facilitate this, Giswater contains a function to create a &lt;span class="caps"&gt;GIS&lt;/span&gt;-project that can be opened and modified using &lt;span class="caps"&gt;QGIS&lt;/span&gt;. During this process, a &lt;span class="caps"&gt;QGIS&lt;/span&gt;-project is created with the &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; data (i.e. the objects in the system and input tables) and simulation analysis in its table of&amp;nbsp;contents. &lt;/p&gt;
+&lt;h3 id="creating-a-gis-project"&gt;Creating a GIS-project&lt;/h3&gt;
+&lt;p&gt;After we created the project, all necessary tables are present so theoretically we could start filling these tables with information about our system. However, these tables are not yet easy accessible for the GIS superpowers yet. In order to facilitate this, Giswater contains a function to create a GIS-project that can be opened and modified using QGIS. During this process, a QGIS-project is created with the EPA SWMM data (i.e. the objects in the system and input tables) and simulation analysis in its table of contents. &lt;/p&gt;
 &lt;p&gt;&lt;img alt="Giswater_create_gisproject" src="/images/Giswater_create_gisproject.png" title="Giswater create GIS-project window." /&gt;&lt;/p&gt;
-&lt;p&gt;Now I could should you our tutorial project in &lt;span class="caps"&gt;QGIS&lt;/span&gt;, yet that would look somewhat empty in it&amp;#8217;s current state. Therefore I&amp;#8217;ll provide a screenshot of the &lt;span class="caps"&gt;GIS&lt;/span&gt;-project created based on the sample&amp;nbsp;project:&lt;/p&gt;
+&lt;p&gt;Now I could should you our tutorial project in QGIS, yet that would look somewhat empty in it's current state. Therefore I'll provide a screenshot of the GIS-project created based on the sample project:&lt;/p&gt;
 &lt;p&gt;&lt;img alt="QGIS_sample_epaswmm" src="/images/QGIS_sample_epaswmm.png" title="Sample EPA SWMM project in QGIS." /&gt;&lt;/p&gt;
-&lt;h1 id="conclusions"&gt;&lt;span class="caps"&gt;CONCLUSIONS&lt;/span&gt;:&lt;/h1&gt;
-&lt;p&gt;Starting a new project in Giswater is a little more work than in vanilla &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;. This amount of work however is still very small. Creating a &lt;span class="caps"&gt;GIS&lt;/span&gt;-project is trivial and gives us the opportunity to visualize and edit our system in a proper &lt;span class="caps"&gt;GIS&lt;/span&gt;-environment with the possibility to add our own data. background maps, web services etc.&amp;nbsp;etc.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Erwin Sterrenburg</dc:creator><pubDate>Sat, 20 Sep 2014 00:00:00 +0200</pubDate><guid>tag:pilosa.eu,2014-09-20:blog/2014/09/20/swmm-giswater-tutorial-2-project-setup/</guid><category>SWMM</category><category>Giswater</category><category>Water</category></item><item><title>EPA SWMM / Giswater Tutorial 1: Installation</title><link>http://pilosa.eu/blog/2014/09/10/swmm-giswater-tutorial-1-installation/</link><description>&lt;p&gt;This is the 1&lt;sup&gt;st&lt;/sup&gt; episode in my tutorial on the using &lt;span class="caps"&gt;EPA&lt;/span&gt; Storm Water Management Model (&lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes the installation&amp;nbsp;process.&lt;/p&gt;
-&lt;p&gt;The instructions in the &lt;a href="http://www.giswater.org/print/book/export/html/17"&gt;Giswater documentation&lt;/a&gt; provided sufficient information for installing this software. To install you must download the installer package and execute it. Remember you can choose the &lt;a href="http://download.giswater.org/giswater_stand-alone.exe"&gt;Giswater stand-alone install package&lt;/a&gt; or the &lt;a href="http://download.giswater.org/giswater_all-in-one.exe"&gt;all-in-one install package&lt;/a&gt;. The all-in-one installer package is designed with a portable version of PostgreSQL+PostGIS 2.1. Remember you need to have installed an updated Java Runtime Environment (&lt;span class="caps"&gt;JRE&lt;/span&gt;) on your&amp;nbsp;computer.&lt;/p&gt;
-&lt;p&gt;I took the easy road and used the all-in-one installer. Installation using the installation wizard proved to be straight-forward. When the dust had settled, the following had taken&amp;nbsp;place:&lt;/p&gt;
+&lt;h1 id="conclusions"&gt;CONCLUSIONS:&lt;/h1&gt;
+&lt;p&gt;Starting a new project in Giswater is a little more work than in vanilla EPA SWMM. This amount of work however is still very small. Creating a GIS-project is trivial and gives us the opportunity to visualize and edit our system in a proper GIS-environment with the possibility to add our own data. background maps, web services etc. etc.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Erwin Sterrenburg</dc:creator><pubDate>Sat, 20 Sep 2014 00:00:00 +0200</pubDate><guid>tag:pilosa.eu,2014-09-20:blog/2014/09/20/swmm-giswater-tutorial-2-project-setup/</guid><category>SWMM</category><category>Giswater</category><category>Water</category></item><item><title>EPA SWMM / Giswater Tutorial 1: Installation</title><link>http://pilosa.eu/blog/2014/09/10/swmm-giswater-tutorial-1-installation/</link><description>&lt;p&gt;This is the 1&lt;sup&gt;st&lt;/sup&gt; episode in my tutorial on the using EPA Storm Water Management Model (EPA SWMM) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes the installation process.&lt;/p&gt;
+&lt;p&gt;The instructions in the &lt;a href="http://www.giswater.org/print/book/export/html/17"&gt;Giswater documentation&lt;/a&gt; provided sufficient information for installing this software. To install you must download the installer package and execute it. Remember you can choose the &lt;a href="http://download.giswater.org/giswater_stand-alone.exe"&gt;Giswater stand-alone install package&lt;/a&gt; or the &lt;a href="http://download.giswater.org/giswater_all-in-one.exe"&gt;all-in-one install package&lt;/a&gt;. The all-in-one installer package is designed with a portable version of PostgreSQL+PostGIS 2.1. Remember you need to have installed an updated Java Runtime Environment (JRE) on your computer.&lt;/p&gt;
+&lt;p&gt;I took the easy road and used the all-in-one installer. Installation using the installation wizard proved to be straight-forward. When the dust had settled, the following had taken place:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;Giswater had been placed in it&amp;#8217;s standard installation path (&lt;strong&gt;C:\Program Files\Giswater\&lt;/strong&gt;, so apparently it&amp;#8217;s a 64-bit application) with the following sub-folders:&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;epa&lt;/strong&gt; - &lt;span class="caps"&gt;EPANET&lt;/span&gt; &lt;span class="amp"&gt;&amp;amp;&lt;/span&gt; &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; command line&amp;nbsp;executables;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;gis&lt;/strong&gt; - templates for gisproject&amp;nbsp;export(?);&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;images&lt;/strong&gt; - images used in the Giswater graphical user&amp;nbsp;interface;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;inp&lt;/strong&gt; - sqlite-databases used in the information exchange between the database and the input / output files of the simulation tools &lt;span class="amp"&gt;&amp;amp;&lt;/span&gt; templates for these&amp;nbsp;files;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;legal&lt;/strong&gt; - &lt;span class="caps"&gt;GPL&lt;/span&gt; v3&amp;nbsp;license;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;lib&lt;/strong&gt; - java libraries used by the Giswater&amp;nbsp;application;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;samples&lt;/strong&gt; - &lt;span class="caps"&gt;SQL&lt;/span&gt;-scripts containing data for sample&amp;nbsp;projects;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;sql&lt;/strong&gt; - &lt;span class="caps"&gt;SQL&lt;/span&gt;-scripts containing database&amp;nbsp;logic.&lt;/li&gt;
+&lt;li&gt;Giswater had been placed in it's standard installation path (&lt;strong&gt;C:\Program Files\Giswater\&lt;/strong&gt;, so apparently it's a 64-bit application) with the following sub-folders:&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;epa&lt;/strong&gt; - EPANET &amp;amp; EPA SWMM command line executables;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;gis&lt;/strong&gt; - templates for gisproject export(?);&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;images&lt;/strong&gt; - images used in the Giswater graphical user interface;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;inp&lt;/strong&gt; - sqlite-databases used in the information exchange between the database and the input / output files of the simulation tools &amp;amp; templates for these files;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;legal&lt;/strong&gt; - GPL v3 license;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;lib&lt;/strong&gt; - java libraries used by the Giswater application;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;samples&lt;/strong&gt; - SQL-scripts containing data for sample projects;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;sql&lt;/strong&gt; - SQL-scripts containing database logic.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Some additional folders had been placed in &lt;strong&gt;C:\Users\&amp;lt;username&amp;gt;\Giswater\&lt;/strong&gt;:&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;config&lt;/strong&gt; - some general configuration&amp;nbsp;files;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;log&lt;/strong&gt; - logging directory for giswater&amp;nbsp;application;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;portable&lt;/strong&gt; - portable installation of postgresql + postgis +&amp;nbsp;pgadmin3.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;config&lt;/strong&gt; - some general configuration files;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;log&lt;/strong&gt; - logging directory for giswater application;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;portable&lt;/strong&gt; - portable installation of postgresql + postgis + pgadmin3.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;h2 id="epa-swwm"&gt;&lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWWM&lt;/span&gt;&lt;/h2&gt;
-&lt;p&gt;Since one of my objectives is to make a comparison between using &lt;span class="caps"&gt;SWMM&lt;/span&gt; toghether with Giswater and a vanilla &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; setup, I also need to have &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; 5.0.022 installed (the only version supported by Giswater). However, this version is not available anymore from the &lt;a href="http://www2.epa.gov/water-research/storm-water-management-model-swmm"&gt;&lt;span class="caps"&gt;EPA&lt;/span&gt; website&lt;/a&gt;. After about 3 years of sleep, the &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; model is actively developed again. Usually this is good news, but when other products depend on older versions that have been taken offline, it is bad news as&amp;nbsp;well&amp;#8230;&lt;/p&gt;
-&lt;p&gt;For this tutorial, it won&amp;#8217;t be a problem, since I already had version 5.0.022 installed on my computer. Yet, there is a bigger issue here: a lot of functionality with regard to the visualization of the simulation results (charts, profiles, animations, etc.) is not possible without the &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; graphical user interface. Following could be done to make this functionality also available to Giswater users (in order of personal&amp;nbsp;preference):&lt;/p&gt;
+&lt;h2 id="epa-swwm"&gt;EPA SWWM&lt;/h2&gt;
+&lt;p&gt;Since one of my objectives is to make a comparison between using SWMM toghether with Giswater and a vanilla EPA SWMM setup, I also need to have EPA SWMM 5.0.022 installed (the only version supported by Giswater). However, this version is not available anymore from the &lt;a href="http://www2.epa.gov/water-research/storm-water-management-model-swmm"&gt;EPA website&lt;/a&gt;. After about 3 years of sleep, the EPA SWMM model is actively developed again. Usually this is good news, but when other products depend on older versions that have been taken offline, it is bad news as well...&lt;/p&gt;
+&lt;p&gt;For this tutorial, it won't be a problem, since I already had version 5.0.022 installed on my computer. Yet, there is a bigger issue here: a lot of functionality with regard to the visualization of the simulation results (charts, profiles, animations, etc.) is not possible without the EPA SWMM graphical user interface. Following could be done to make this functionality also available to Giswater users (in order of personal preference):&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;Giswater developers keep their software compatible with the most recent version of &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;;&lt;/li&gt;
-&lt;li&gt;&lt;span class="caps"&gt;EPA&lt;/span&gt; also makes version 5.0.022 available for download, since this has been the stable version for almost 3&amp;nbsp;years;&lt;/li&gt;
-&lt;li&gt;Giswater developers also supply a download for the full version of &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; 5.0.022, not just the command line&amp;nbsp;version.&lt;/li&gt;
+&lt;li&gt;Giswater developers keep their software compatible with the most recent version of EPA SWMM;&lt;/li&gt;
+&lt;li&gt;EPA also makes version 5.0.022 available for download, since this has been the stable version for almost 3 years;&lt;/li&gt;
+&lt;li&gt;Giswater developers also supply a download for the full version of EPA SWMM 5.0.022, not just the command line version.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;Let&amp;#8217;s hope one of the parties involved reads this and takes action to solve this issue &lt;i class="fa fa-smile-o"&gt;&lt;/i&gt;.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Erwin Sterrenburg</dc:creator><pubDate>Wed, 10 Sep 2014 00:00:00 +0200</pubDate><guid>tag:pilosa.eu,2014-09-10:blog/2014/09/10/swmm-giswater-tutorial-1-installation/</guid><category>SWMM</category><category>Giswater</category><category>Water</category></item><item><title>Why Pilosa?</title><link>http://pilosa.eu/blog/2014/09/02/why-pilosa/</link><description>&lt;blockquote&gt;
+&lt;p&gt;Let's hope one of the parties involved reads this and takes action to solve this issue &lt;i class="fa fa-smile-o"&gt;&lt;/i&gt;.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Erwin Sterrenburg</dc:creator><pubDate>Wed, 10 Sep 2014 00:00:00 +0200</pubDate><guid>tag:pilosa.eu,2014-09-10:blog/2014/09/10/swmm-giswater-tutorial-1-installation/</guid><category>SWMM</category><category>Giswater</category><category>Water</category></item><item><title>Why Pilosa?</title><link>http://pilosa.eu/blog/2014/09/02/why-pilosa/</link><description>&lt;blockquote&gt;
 &lt;p&gt;I reject holism. I challenge you to tell me, for instance, how a holistic
 description of an ant colony sheds any more light on it than is shed by a
 description of the ants inside it, and their roles, and their interrelationships.
 Any holistic explanation of an ant colony will inevitably fall far short of
 explaining where the consciousness experienced by an ant colony arises from.
-&lt;cite&gt;Dr. Anteater in &amp;#8220;Ant Fugue&amp;#8221;, part of  &amp;#8220;Gödel, Escher, Bach: An Eternal Golden Braid&amp;#8221; by Douglas R. Hofstadter&lt;/cite&gt;&lt;/p&gt;
+&lt;cite&gt;Dr. Anteater in "Ant Fugue", part of  "Gödel, Escher, Bach: An Eternal Golden Braid" by Douglas R. Hofstadter&lt;/cite&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;It’s humans that are the most curious animal on the&amp;nbsp;planet.&lt;/p&gt;
+&lt;p&gt;It’s humans that are the most curious animal on the planet.&lt;/p&gt;
 &lt;table&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;img src="/images/tamandua.png" alt="Tamandua" title="Wise and curious anteater" /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/td&gt;
@@ -295,19 +302,19 @@ explaining where the consciousness experienced by an ant colony arises from.
  insight in the potential effects of different decentralization regimes
  in water allocation management with regard to the spatial and temporal
  distribution of water availability and agricultural water use in a
- semi-arid river&amp;nbsp;basin.&lt;/p&gt;
+ semi-arid river basin.&lt;/p&gt;
 &lt;p&gt;Relevant processes include physical processes such as hydrological processes,
  water user responses to variations and changes in water availability and social processes
- between water users and water&amp;nbsp;managers.&lt;/p&gt;
+ between water users and water managers.&lt;/p&gt;
 &lt;p&gt;The results are relevant for research on relevant initial condition,
  context factors and design principles for participative river basin management.
  Water demand, water allocation management and water availability are strongly
  related in semi-arid environments, where the irrigation sector is responsible
  for a large part of consumptive water use. Variations in water abstractions
- for irrigation depend on irrigated area and irrigation requirements per&amp;nbsp;hectare.&lt;/p&gt;
+ for irrigation depend on irrigated area and irrigation requirements per hectare.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;All Tamanduas share a fascination for ants: the usual Tamandua (meaning
-&amp;#8220;anteater&amp;#8221; in both Tupi and Portuguese) tends to see them as a tasty
+"anteater" in both Tupi and Portuguese) tends to see them as a tasty
 snack. This Tamandua however, uses ants - a common metaphor for
 agents - to analyze a complex system. When observing natural ant
 colonies it can easily be seen that the complexity of each single ant is
@@ -316,48 +323,50 @@ even been able to demonstrate the ability to solve geometric problems.
 Water allocation management in a river catchment is another example
 of such a complex system: relatively simple actions and decisions of
 autonomous stakeholders can lead to complex water scarcity patterns.
-Tamandua aims to increase insight in what is going on in the &amp;#8220;ant colony
-of water&amp;nbsp;allocation&amp;#8221;.&lt;/p&gt;
+Tamandua aims to increase insight in what is going on in the "ant colony
+of water allocation".&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id="why-this-name"&gt;Why this&amp;nbsp;name?&lt;/h2&gt;
+&lt;h2 id="why-this-name"&gt;Why this name?&lt;/h2&gt;
 &lt;p&gt;Plan was to use tamandua:
-a name I came up with for .. model developed during my graduation &amp;#8230; fond of ever&amp;nbsp;since.&lt;/p&gt;
-&lt;p&gt;Dr&amp;nbsp;anteater&lt;/p&gt;
-&lt;p&gt;Tamandua + meanying +&amp;nbsp;image&lt;/p&gt;
+a name I came up with for .. model developed during my graduation ... fond of ever since.&lt;/p&gt;
+&lt;p&gt;Dr anteater&lt;/p&gt;
+&lt;p&gt;Tamandua + meanying + image&lt;/p&gt;
 &lt;p&gt;However: domains already taken
-One step up: pilosa = &amp;#8230;&amp;nbsp;Sloths&lt;/p&gt;
+One step up: pilosa = ...
+Sloths&lt;/p&gt;
 &lt;p&gt;Xenartha
-Doodles  .. armadillo-like creature + image&amp;nbsp;Many&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Erwin Sterrenburg</dc:creator><pubDate>Tue, 02 Sep 2014 00:00:00 +0200</pubDate><guid>tag:pilosa.eu,2014-09-02:blog/2014/09/02/why-pilosa/</guid><category>PYTHON</category><category>BLOG</category></item><item><title>Why Pelican?</title><link>http://pilosa.eu/blog/2014/09/01/why-pelican/</link><description>&lt;p&gt;The idea of a personal website and blog had been floating around in my 
+Doodles  .. armadillo-like creature + image
+Many&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Erwin Sterrenburg</dc:creator><pubDate>Tue, 02 Sep 2014 00:00:00 +0200</pubDate><guid>tag:pilosa.eu,2014-09-02:blog/2014/09/02/why-pilosa/</guid><category>PYTHON</category><category>BLOG</category></item><item><title>Why Pelican?</title><link>http://pilosa.eu/blog/2014/09/01/why-pelican/</link><description>&lt;p&gt;The idea of a personal website and blog had been floating around in my 
 head for a long long time. Most of this time, I expected the result
 to be powered by &lt;a href="https://www.djangoproject.com/" title="Django"&gt;Django&lt;/a&gt; /
 &lt;a href="http://mezzanine.jupo.org/" title="Mezzanine"&gt;Mezzanine&lt;/a&gt;.
 Some weeks ago, I finally got to work and set things into motion. The result 
 however was not really satisfying. All functionality was there and 
 the looks kept making me happy, yet the approach felt like overkill
-for my simple&amp;nbsp;needs.&lt;/p&gt;
+for my simple needs.&lt;/p&gt;
 &lt;p&gt;Some internet research for alternatives opened up
 a whole world of static site generators that seemed much 
-more appropriate for a site like this. Among these, I&amp;#8217;ve chosen
-&lt;a href="http://blog.getpelican.com/" title="Pelican"&gt;Pelican&lt;/a&gt; for the following&amp;nbsp;reasons:&lt;/p&gt;
+more appropriate for a site like this. Among these, I've chosen
+&lt;a href="http://blog.getpelican.com/" title="Pelican"&gt;Pelican&lt;/a&gt; for the following reasons:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;it is written in familiar language (python) and uses a familiar template system&amp;nbsp;(jinja2);&lt;/li&gt;
-&lt;li&gt;it&amp;#8217;s extensive collection of themes and&amp;nbsp;plugins;&lt;/li&gt;
+&lt;li&gt;it is written in familiar language (python) and uses a familiar template system (jinja2);&lt;/li&gt;
+&lt;li&gt;it's extensive collection of themes and plugins;&lt;/li&gt;
 &lt;li&gt;the documentation is elaborate and many fellow bloggers have written helpful posts
- on how to use and customize&amp;nbsp;Pelican;&lt;/li&gt;
+ on how to use and customize Pelican;&lt;/li&gt;
 &lt;li&gt;pelicans are awesome!&lt;sup id="fnref:staticgenerators"&gt;&lt;a class="footnote-ref" href="#fn:staticgenerators" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;img alt="awesome pelican" src="/images/pelican.jpg" title="Awesome pelican" /&gt; 
-&lt;cite&gt;By &lt;a href="http://carolinabirds.org/" title="DickDaniels"&gt;DickDaniels&lt;/a&gt; (Own work), &lt;a href="http://creativecommons.org/licenses/by-sa/3.0" title="CC-BY-SA-3.0"&gt;&lt;span class="caps"&gt;CC&lt;/span&gt;-&lt;span class="caps"&gt;BY&lt;/span&gt;-&lt;span class="caps"&gt;SA&lt;/span&gt;-3.0&lt;/a&gt; or &lt;a href="http://www.gnu.org/copyleft/fdl.html" title="GFDL"&gt;&lt;span class="caps"&gt;GFDL&lt;/span&gt;&lt;/a&gt;, via Wikimedia Commons&lt;/cite&gt;&lt;/p&gt;
+&lt;cite&gt;By &lt;a href="http://carolinabirds.org/" title="DickDaniels"&gt;DickDaniels&lt;/a&gt; (Own work), &lt;a href="http://creativecommons.org/licenses/by-sa/3.0" title="CC-BY-SA-3.0"&gt;CC-BY-SA-3.0&lt;/a&gt; or &lt;a href="http://www.gnu.org/copyleft/fdl.html" title="GFDL"&gt;GFDL&lt;/a&gt;, via Wikimedia Commons&lt;/cite&gt;&lt;/p&gt;
 &lt;p&gt;&lt;br&gt;
 The only big con of this approach is the need to use a 3rd party service for comments.&lt;sup id="fnref:staticcomments"&gt;&lt;a class="footnote-ref" href="#fn:staticcomments" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt;
-The most widely used comment hosting service is Disqus, which I implemented here as well since it&amp;#8217;s
-omnipresence suggest they must do something right. After&amp;nbsp;all:&lt;/p&gt;
+The most widely used comment hosting service is Disqus, which I implemented here as well since it's
+omnipresence suggest they must do something right. After all:&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;Fifty million Frenchmen can&amp;#8217;t be&amp;nbsp;wrong&lt;/p&gt;
+&lt;p&gt;Fifty million Frenchmen can't be wrong&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;None-the-less using a service that I have blocked by Ghostery during most of my
-browsing time feels somewhat wrong, so this might change in the&amp;nbsp;future.&lt;/p&gt;
-&lt;h2 id="why-this-theme"&gt;Why this&amp;nbsp;theme?&lt;/h2&gt;
+browsing time feels somewhat wrong, so this might change in the future.&lt;/p&gt;
+&lt;h2 id="why-this-theme"&gt;Why this theme?&lt;/h2&gt;
 &lt;p&gt;The theme I created for Mezzanine consisted of a dark color scheme
 with a dynamically generated fractal background.
 After moving to Pelican, I looked at the available themes to see which 
@@ -365,7 +374,7 @@ of these would form the best starting point to re-create this look.
 However, when I encountered the pure theme, this theme seemed to be 
 almost good enough without further modification. 
 The only drawback was a severe shortage of bananas, but that was easy
-enough to solve. Bananas improve&amp;nbsp;everything.&lt;/p&gt;
+enough to solve. Bananas improve everything.&lt;/p&gt;
 &lt;div class="footnote"&gt;
 &lt;hr /&gt;
 &lt;ol&gt;
@@ -381,11 +390,11 @@ enough to solve. Bananas improve&amp;nbsp;everything.&lt;/p&gt;
  &lt;a href="http://posativ.org/isso/"&gt;Isso&lt;/a&gt;, yet would take some of the simplicity of a static site generator approach away.&amp;#160;&lt;a class="footnote-backref" href="#fnref:staticcomments" rev="footnote" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Erwin Sterrenburg</dc:creator><pubDate>Mon, 01 Sep 2014 00:00:00 +0200</pubDate><guid>tag:pilosa.eu,2014-09-01:blog/2014/09/01/why-pelican/</guid><category>PYTHON</category><category>BLOG</category></item><item><title>Hello World</title><link>http://pilosa.eu/blog/2014/08/28/hello-world/</link><description>&lt;p&gt;Welcome&lt;/p&gt;
-&lt;p&gt;Who am&amp;nbsp;I?&lt;/p&gt;
-&lt;p&gt;Why a&amp;nbsp;blog?&lt;/p&gt;
-&lt;p&gt;What to expect&amp;nbsp;here?&lt;/p&gt;
+&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Erwin Sterrenburg</dc:creator><pubDate>Mon, 01 Sep 2014 00:00:00 +0200</pubDate><guid>tag:pilosa.eu,2014-09-01:blog/2014/09/01/why-pelican/</guid><category>PYTHON</category><category>BLOG</category></item><item><title>Hello World</title><link>http://pilosa.eu/blog/2014/08/28/hello-world/</link><description>&lt;p&gt;Welcome&lt;/p&gt;
+&lt;p&gt;Who am I?&lt;/p&gt;
+&lt;p&gt;Why a blog?&lt;/p&gt;
+&lt;p&gt;What to expect here?&lt;/p&gt;
 &lt;p&gt;practical excercise
-naslagwerk, zowel voor mijzelf als voor&amp;nbsp;anderen&lt;/p&gt;
-&lt;p&gt;Both professional  and .. projects, valuable addition to&amp;nbsp;documentation&lt;/p&gt;
-&lt;p&gt;Check out the posts and leave a comment if you feel like&amp;nbsp;it.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Erwin Sterrenburg</dc:creator><pubDate>Thu, 28 Aug 2014 00:00:00 +0200</pubDate><guid>tag:pilosa.eu,2014-08-28:blog/2014/08/28/hello-world/</guid><category>BLOG</category></item></channel></rss>
+naslagwerk, zowel voor mijzelf als voor anderen&lt;/p&gt;
+&lt;p&gt;Both professional  and .. projects, valuable addition to documentation&lt;/p&gt;
+&lt;p&gt;Check out the posts and leave a comment if you feel like it.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Erwin Sterrenburg</dc:creator><pubDate>Thu, 28 Aug 2014 00:00:00 +0200</pubDate><guid>tag:pilosa.eu,2014-08-28:blog/2014/08/28/hello-world/</guid><category>BLOG</category></item></channel></rss>

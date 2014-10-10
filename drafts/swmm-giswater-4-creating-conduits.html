@@ -20,7 +20,7 @@
     <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
-        <title>SWMM GISWATER 4: Creating Conduits // PILOSA.EU // Scribblings of World's Most Curious Anteater</title>
+        <title>SWMM GISWATER 4: Creating Conduits // PILOSA.EU // Scribblings of World's Most Curious Anteater</title>
 
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
@@ -70,88 +70,88 @@
         <div class="content">
             <section class="post">
                 <header class="post-header">
-                    <h1><span class="caps">SWMM</span> <span class="caps">GISWATER</span> 4: Creating&nbsp;Conduits</h1>
+                    <h1>SWMM GISWATER 4: Creating Conduits</h1>
                         <p class="post-meta">
                             // under                                 <a class="post-category" href="http://pilosa.eu/tag/giswater.html">GISWATER</a>
                                 <a class="post-category" href="http://pilosa.eu/tag/swmm.html">SWMM</a>
                         </p>
                 </header>
             </section>
-            <h1 id="giswater-tutorial-4-creating-conduits"><span class="caps">GISWATER</span> tutorial 4: creating&nbsp;conduits:</h1>
-<p>What is the minimum information you&nbsp;need?</p>
+            <h1 id="giswater-tutorial-4-creating-conduits">GISWATER tutorial 4: creating conduits:</h1>
+<p>What is the minimum information you need?</p>
 <ul>
-<li>location (i.e. geometry, begin and end-node automatically (if not possible, not&nbsp;arc?)</li>
-<li>arcID (db constraint: simply refuses to&nbsp;save)</li>
+<li>location (i.e. geometry, begin and end-node automatically (if not possible, not arc?)</li>
+<li>arcID (db constraint: simply refuses to save)</li>
 </ul>
-<p><span class="quo">&#8216;</span>B2424298424436&#8217;, 1.86, 2.24, &#8216;T&#8217;, &#8216;<span class="caps">BETON</span>&#8217;, 1, null, 0, 0, 0, &#8216;<span class="caps">NO</span>&#8217;, null, null,&nbsp;&#8216;sector_01&#8217;</p>
+<p>'B2424298424436', 1.86, 2.24, 'T', 'BETON', 1, null, 0, 0, 0, 'NO', null, null, 'sector_01'</p>
 <ul>
-<li>names of the inlet and outlet&nbsp;nodes</li>
-<li>offset depth or elevation of the conduit above the inlet and outlet node&nbsp;inverts</li>
-<li>conduit&nbsp;length</li>
-<li>Manning&#8217;s&nbsp;roughness</li>
-<li>cross-sectional&nbsp;geometry</li>
-<li>entrance/exit&nbsp;losses</li>
-<li>presence of a flap gate to prevent reverse&nbsp;flow</li>
-<li>inlet geometry code number if conduit acts as a&nbsp;culvert</li>
+<li>names of the inlet and outlet nodes</li>
+<li>offset depth or elevation of the conduit above the inlet and outlet node inverts</li>
+<li>conduit length</li>
+<li>Manning's roughness</li>
+<li>cross-sectional geometry</li>
+<li>entrance/exit losses</li>
+<li>presence of a flap gate to prevent reverse flow</li>
+<li>inlet geometry code number if conduit acts as a culvert</li>
 </ul>
-<p>direction from high to low!!! will this be a problem during&nbsp;calculations?</p>
-<p>The (&#8230; elaborate) <span class="caps">SWMM</span> help provides us with the following information on&nbsp;junctions:</p>
+<p>direction from high to low!!! will this be a problem during calculations?</p>
+<p>The (... elaborate) SWMM help provides us with the following information on junctions:</p>
 <blockquote>
 <p>Conduits are pipes or channels that move water from one node to another in the conveyance system.
   Their cross-sectional shapes can be selected from a variety of standard open and closed geometries.
-  Irregular natural cross-section shapes are also supported, as are user-defined closed&nbsp;shapes.</p>
-<p>The principal input parameters for conduits&nbsp;are:</p>
+  Irregular natural cross-section shapes are also supported, as are user-defined closed shapes.</p>
+<p>The principal input parameters for conduits are:</p>
 <ul>
-<li>names of the inlet and outlet&nbsp;nodes</li>
-<li>offset depth or elevation of the conduit above the inlet and outlet node&nbsp;inverts</li>
-<li>conduit&nbsp;length</li>
-<li>Manning&#8217;s&nbsp;roughness</li>
-<li>cross-sectional&nbsp;geometry</li>
-<li>entrance/exit&nbsp;losses</li>
-<li>presence of a flap gate to prevent reverse&nbsp;flow</li>
-<li>inlet geometry code number if conduit acts as a&nbsp;culvert.</li>
+<li>names of the inlet and outlet nodes</li>
+<li>offset depth or elevation of the conduit above the inlet and outlet node inverts</li>
+<li>conduit length</li>
+<li>Manning's roughness</li>
+<li>cross-sectional geometry</li>
+<li>entrance/exit losses</li>
+<li>presence of a flap gate to prevent reverse flow</li>
+<li>inlet geometry code number if conduit acts as a culvert.</li>
 </ul>
 <p>Conduits designated as culverts are checked continuously during dynamic wave flow routing
-  to see if they operate under Inlet Control as defined in the Federal Highway Administration&#8217;s
-  publication Hydraulic Design of Highway Culverts (Publication No. <span class="caps">FHWA</span>-<span class="caps">NHI</span>-01-020, May&nbsp;2005).</p>
-<p><cite>Dr. Anteater in &#8220;Ant Fugue&#8221; in Godel Escher Bach by Douglas R. Hofstadter</cite></p>
+  to see if they operate under Inlet Control as defined in the Federal Highway Administration's
+  publication Hydraulic Design of Highway Culverts (Publication No. FHWA-NHI-01-020, May 2005).</p>
+<p><cite>Dr. Anteater in "Ant Fugue" in Godel Escher Bach by Douglas R. Hofstadter</cite></p>
 </blockquote>
 <p>For now, we keep it as simple as possible and leave the two optional attributes for later. However, there are some other
-attributes that may seem trivial, yet still require&nbsp;attention:</p>
+attributes that may seem trivial, yet still require attention:</p>
 <ul>
 <li>Geometry</li>
 <li>ArcID /Name
- User-assigned conduit&nbsp;name.</li>
+ User-assigned conduit name.</li>
 </ul>
-<h1 id="epa-swmm"><span class="caps">EPA</span> <span class="caps">SWMM</span></h1>
+<h1 id="epa-swmm">EPA SWMM</h1>
 <h1 id="giswater">Giswater</h1>
-<h2 id="material-pipe-profile">Material <span class="amp">&amp;</span> pipe&nbsp;profile</h2>
-<p>Now that&nbsp;&#8230;</p>
-<p>&#8230;.
+<h2 id="material-pipe-profile">Material &amp; pipe profile</h2>
+<p>Now that ...</p>
+<p>....
 differnet methodes available:
-administrative&nbsp;data:</p>
+administrative data:</p>
 <ul>
-<li>Using the <span class="caps">GISWATER</span>&nbsp;interface</li>
-<li>Editing the administrative tables in <span class="caps">QGIS</span></li>
-<li>Directly inserting into the&nbsp;database</li>
+<li>Using the GISWATER interface</li>
+<li>Editing the administrative tables in QGIS</li>
+<li>Directly inserting into the database</li>
 </ul>
 <p>Since I have to do some scripting to .. the required information from differenct sources
-decided to compile my project into an <span class="caps">SQL</span> file, similar to
-biggest difference is that &#8230; to minimum, making use of the &#8230; built-in the database <span class="caps">FN</span>: example project seems to be a complete
-dbdump, &#8230; would be more complex and less transparant then the approach to make the sql-queries mimic a manual&nbsp;workflow.</p>
+decided to compile my project into an SQL file, similar to
+biggest difference is that ... to minimum, making use of the ... built-in the database FN: example project seems to be a complete
+dbdump, ... would be more complex and less transparant then the approach to make the sql-queries mimic a manual workflow.</p>
 <p>Materials:</p>
 <ul>
 <li>Materials</li>
 <li>CAT_ARC</li>
 <li>sector?</li>
 </ul>
-<p>View in <span class="caps">GISWATER</span></p>
-<h2 id="qgis-as-frontdoor"><span class="caps">QGIS</span> as&nbsp;frontdoor</h2>
+<p>View in GISWATER</p>
+<h2 id="qgis-as-frontdoor">QGIS as frontdoor</h2>
 <p>Some of the
 <em> manning (from material)
 </em> crossection (from cat_arc)
 <em> name of inlet + outlet node (results from geometry)
-</em> length (from&nbsp;geometry)</p>
+</em> length (from geometry)</p>
 <ul>
 <li>arcid</li>
 <li>geometry</li>
@@ -161,41 +161,42 @@ dbdump, &#8230; would be more complex and less transparant then the approach to 
 <p>z1 / z2 (from data)
 kentry / kexit / kaverage (later on)
 qinit / qmax
-flapgate + culvert&nbsp;sector_id</p>
+flapgate + culvert
+sector_id</p>
 <p>Inlet Offset
- Depth or elevation of the conduit invert above the node invert at the inlet end of the conduit (feet or&nbsp;meters).</p>
+ Depth or elevation of the conduit invert above the node invert at the inlet end of the conduit (feet or meters).</p>
 <p>Outlet Offset
- Depth or elevation of the conduit invert above the node invert at the outlet end of the conduit (feet or&nbsp;meters).</p>
+ Depth or elevation of the conduit invert above the node invert at the outlet end of the conduit (feet or meters).</p>
 <p>Initial Flow
- Initial flow in the conduit at the start of the simulation (flow&nbsp;units).</p>
+ Initial flow in the conduit at the start of the simulation (flow units).</p>
 <p>Maximum Flow
- Maximum flow allowed in the conduit (flow units) - use 0 or leave blank if not&nbsp;applicable.</p>
+ Maximum flow allowed in the conduit (flow units) - use 0 or leave blank if not applicable.</p>
 <p>Max. Depth
- Maximum depth of the conduit&#8217;s cross section (feet or&nbsp;meters).</p>
-<p>kentry / kexit /&nbsp;kaverage</p>
+ Maximum depth of the conduit's cross section (feet or meters).</p>
+<p>kentry / kexit / kaverage</p>
 <p>Entry Loss Coeff.
- Head loss coefficient associated with energy losses at the entrance of the conduit. For culverts, refer to Culvert Inlet Loss Coefficients&nbsp;table.</p>
+ Head loss coefficient associated with energy losses at the entrance of the conduit. For culverts, refer to Culvert Inlet Loss Coefficients table.</p>
 <p>Exit Loss Coeff.
- Head loss coefficient associated with energy losses at the exit of the conduit. For culverts, use a value of&nbsp;1.0.</p>
+ Head loss coefficient associated with energy losses at the exit of the conduit. For culverts, use a value of 1.0.</p>
 <p>Avg. Loss Coeff.
- Head loss coefficient associated with energy losses along the length of the&nbsp;conduit.</p>
-<p>flap&nbsp;gate</p>
+ Head loss coefficient associated with energy losses along the length of the conduit.</p>
+<p>flap gate</p>
 <p>Flap Gate
- <span class="caps">YES</span> if a flap gate exists that prevents backflow through the conduit, or <span class="caps">NO</span> if no flap gate&nbsp;exists.</p>
+ YES if a flap gate exists that prevents backflow through the conduit, or NO if no flap gate exists.</p>
 <p>culvert</p>
 <p>Culvert Code
- Code number of inlet geometry if conduit is a culvert subject to possible inlet flow control &#8212; leave blank otherwise. Refer to the table of Culvert Code&nbsp;Numbers.</p>
+ Code number of inlet geometry if conduit is a culvert subject to possible inlet flow control -- leave blank otherwise. Refer to the table of Culvert Code Numbers.</p>
 <p>Barrels?!
-The Barrels field specifies how many identical parallel conduits exist between its end&nbsp;nodes.</p>
+The Barrels field specifies how many identical parallel conduits exist between its end nodes.</p>
 <p>New node: just place it :)
 Deleting node: connected arcs also deleted!
 Moving a node: connected arcs updated!
-Change top_elev: direction of connected arcs is&nbsp;updated!</p>
+Change top_elev: direction of connected arcs is updated!</p>
 <p>New arc: from begin to end
 Change geometry of arc (does not end on node): impossible to place an arc that is not connected to both begin- and end node, so nothing happens
 change of geometry (snap to node): begin / end node id + direction are updated
-Delete arc: no effect on connected&nbsp;nodes</p>
-<p>overnemen z1,&nbsp;z2????</p>
+Delete arc: no effect on connected nodes</p>
+<p>overnemen z1, z2????</p>
             <a href="#" class="go-top">Go Top</a>
     <div class="comments">
         <div id="disqus_thread"></div>
