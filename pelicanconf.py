@@ -85,7 +85,8 @@ ARTICLE_URL = 'blog/{date:%Y}/{date:%m}/{date:%d}/{slug}/'
 ARTICLE_SAVE_AS = 'blog/{date:%Y}/{date:%m}/{date:%d}/{slug}/index.html'
 
 PLUGIN_PATHS = [os.path.join(os.getcwd(), "..", "pelican-plugins")]
-PLUGINS = ['render_math', 'extended_sitemap', 'better_codeblock_line_numbering']
+#PLUGINS = ['render_math', 'extended_sitemap', 'better_codeblock_line_numbering']
+PLUGINS = ['extended_sitemap', 'better_codeblock_line_numbering']
 
 TAG_CLOUD_STEPS = 4
 
