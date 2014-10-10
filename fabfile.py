@@ -4,6 +4,7 @@ import os
 import sys
 import SimpleHTTPServer
 import SocketServer
+from sys import platform as _platform
 
 # Local path configuration (can be absolute or relative to fabfile)
 env.deploy_path = 'output'
@@ -66,9 +67,19 @@ def gh_publish():
     local('pelican content --output output --settings publishconf.py')
 
 def gh_upload():
+    print _platform
     gh_publish()
-    local('ghp-import.py output')
-    local('git push origin gh-pages')
+    if _platform == "linux" or _platform == "linux2":
+        local('ghp-import output')
+        # linux
+    elif _platform == "darwin":
+        # OS X
+        print "je hebt helemaal gaan Mac"
+    elif _platform == "win32":
+        # Windows...
+        local('ghp-import.py output')
+    
+    local('git push origin gh-pages --force')
 
 @hosts(production)
 def publish():
@@ -80,5 +91,8 @@ def publish():
         delete=True,
         extra_opts='-c',
     )
+
+
+
 
 
