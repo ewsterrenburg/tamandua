@@ -6,7 +6,7 @@
     <meta name="description" content="PILOSA.EU, Scribblings of World's Most Curious Anteater">
 
 
-        <link rel="alternate" href="/feed.xml" type="application/rss+xml" title="PILOSA.EU Full RSS Feed"/>
+        <link rel="alternate" href="http://pilosa.eu/feed.xml" type="application/rss+xml" title="PILOSA.EU Full RSS Feed"/>
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
     <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
@@ -57,7 +57,7 @@
                                     <a href="https://www.linkedin.com/in/ewsterrenburg">
                                         <i class="fa fa-linkedin fa-3x"></i>
                                     </a>
-                                    <a href="feed.xml">
+                                    <a href="http://pilosa.eu/feed.xml">
                                         <i class="fa fa-rss fa-3x"></i>
                                     </a>
                                 <p>
@@ -78,7 +78,7 @@
                         </p>
                 </header>
             </section>
-            <p>This is the 3<sup>rd</sup> episode in my tutorial on the using <span class="caps">EPA</span> Storm Water Management Model (<span class="caps">EPA</span> <span class="caps">SWMM</span>) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes how to create junctions in <span class="caps">EPA</span> <span class="caps">SWMM</span>, using <span class="caps">QGIS</span> and using <span class="caps">SQL</span> insert&nbsp;statements. </p>
+            <p>This is the 3<sup>rd</sup> episode in my tutorial on using <span class="caps">EPA</span> Storm Water Management Model (<span class="caps">EPA</span> <span class="caps">SWMM</span>) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episode describes how to create junctions in <span class="caps">EPA</span> <span class="caps">SWMM</span>, using <span class="caps">QGIS</span> and using <span class="caps">SQL</span> insert&nbsp;statements. </p>
 <p>The wonderful <span class="caps">EPA</span> <span class="caps">SWMM</span> help provides us with the following information on&nbsp;junctions:</p>
 <blockquote>
 <p>Junctions are drainage system nodes where links join together.
@@ -91,7 +91,7 @@
 <p>The principal input parameters for a junction&nbsp;are:</p>
 <ul>
 <li>invert&nbsp;elevation;</li>
-<li>height to ground surface (Maximum depth at the junction (i.e., the distance from the invert to the ground surface) (feet or meters). If zero, then the distance from the invert to the top of the highest connecting link will be&nbsp;used;</li>
+<li>height to ground surface: maximum depth at the junction (i.e., the distance from the invert to the ground surface) (feet or meters). If zero, then the distance from the invert to the top of the highest connecting link will be&nbsp;used;</li>
 <li>ponded surface area when flooded&nbsp;(optional);</li>
 <li>external inflow data&nbsp;(optional).</li>
 </ul>
@@ -109,10 +109,10 @@
 <li>It is possible to draw a new node on the map, in which case the location where you click the map is used to determine the X- and&nbsp;Y-coordinate;</li>
 <li>The other way around is to navigate to junctions in the tree view in the tree view, select &#8220;junctions&#8221; by using the left mouse button, followed by pressing the &#8220;Add new&#8221; button. Using this approach, the location on the map where the junction is placed is determined based on the values supplied for the X- and&nbsp;Y-coordinate.</li>
 </ol>
-<p><img alt="SWMM_create_junction" src="/images/SWMM_create_junction.png" title="Creating a junction in EPA SWMM." /> </p>
-<p>In both cases, a NodeID is automatically generated using an autoincrementor, with the prefixes and increment supplied in the project defaults (see <a href="/blog/2014/09/20/swmm-giswater-tutorial-2-project-setup/">Episode 2: Project Setup</a>). 
+<p><img alt="SWMM_create_junction" src="/images/SWMM_create_junction.png" title="Creating a junction in EPA SWMM." /></p>
+<p>In both cases, a NodeID is automatically generated using an autoincrementor, with the prefixes and increment supplied in the project defaults (see <a href="/blog/2014/09/20/swmm-giswater-tutorial-2-project-setup/">Episode 2: Project Setup</a>).
 It is possible to replace this automatically generated NodeID with your own value, yet each node should have an unique <span class="caps">ID</span>. This constrained is enforced by the&nbsp;software.</p>
-<p>Double-clicking on a node opens it&#8217;s attritute form in which the attributes can be modified.
+<p>Double-clicking on a node opens it&#8217;s attribute form in which the attributes can be modified.
 The location of a junction can be changed by dragging the junction to a new location, or by changing the X- and Y-attributes. A selected node can be removed by pressing the &#8220;Delete&#8221; key on your keyboard, or by using the &#8220;Delete object&#8221; button next to the &#8220;Add new&#8221;&nbsp;button.</p>
 <h1 id="giswater-qgis-as-frontdoor"><span class="caps">GISWATER</span>: <span class="caps">QGIS</span> <span class="caps">AS</span> <span class="caps">FRONTDOOR</span></h1>
 <p>The Giswater equivalent of drawing a junction in <span class="caps">EPA</span> <span class="caps">SWMM</span> directly, would be to draw a new feature in in the junction layer of the corresponding <span class="caps">GIS</span>-project. This approach offers the following&nbsp;advantages:</p>
@@ -123,9 +123,9 @@ The location of a junction can be changed by dragging the junction to a new loca
 <li>A field calculator to update attributes in&nbsp;bulk.</li>
 </ul>
 <h3 id="sectors">Sectors</h3>
-<p>Giswater introduces the concept of sectors. I haven&#8217;t found out yet whether using sectors in your data is required or not. I&#8217;ll ignore them for now and come back to this either when I&#8217;ll make an episode on the function of sectors or when the calculation refuses to run <i class="fa fa-smile-o"></i>.</p>
+<p>Giswater introduces the concept of sectors. I haven&#8217;t found out yet whether using sectors in your data is required or not. I&#8217;ll ignore them for now and come back to this either when I&#8217;ll make an episode on the functioning of sectors or when the calculation refuses to run <i class="fa fa-smile-o"></i>.</p>
 <h3 id="drawing-new-junctions">Drawing new&nbsp;junctions</h3>
-<p><img alt="QGIS_create_junctions" src="/images/QGIS_create_junctions.png" title="Creating junctions in QGIS." /> </p>
+<p><img alt="QGIS_create_junctions" src="/images/QGIS_create_junctions.png" title="Creating junctions in QGIS." /></p>
 <ol>
 <li>Make the Junctions layer (<strong><span class="caps">EPA</span> <span class="caps">SWMM</span> <span class="caps">DATA</span></strong> <i class="fa fa-long-arrow-right"></i> <strong>Hydraulics</strong> <i class="fa fa-long-arrow-right"></i> <strong>Node</strong> <i class="fa fa-long-arrow-right"></i> <strong>Junctions</strong> ) active by clicking on this layer in the content tree of the&nbsp;map;</li>
 <li>Toggle editing (<strong>a</strong>);</li>
@@ -171,11 +171,11 @@ The location of a junction can be changed by dragging the junction to a new loca
 </ol>
 <h3 id="important-donts">Important <span class="caps">DON</span>&#8217;Ts</h3>
 <ul>
-<li><strong>Do ++<span class="caps">NOT</span>++ mess around in the nodes layer or in the results layers!!! Drawing in these layers will not activate the required database functions to &#8230; the new objects in the correct&nbsp;way.</strong></li>
-<li><strong>Make sure your Postgres server is running when starting the <span class="caps">QGIS</span> project (i.e. do not close the command prompt window of the portable Postgres). If the server stops with your <span class="caps">GIS</span>-project open, <span class="caps">QGIS</span> will spit out a endless loop of pop-ups stating that it is not able to reach the server. <span class="caps">QGIS</span> can now only be stopped with&nbsp;violence.</strong></li>
+<li>Do <strong><em><span class="caps">NOT</span></em></strong> mess around in the nodes layer or in the results layers!!! Drawing in these layers will not activate the required database functions to create new objects&nbsp;correctly.</li>
+<li>Make sure your Postgres server is running when starting the <span class="caps">QGIS</span> project (i.e. do not close the command prompt window of the portable Postgres). If the server stops with your <span class="caps">GIS</span>-project open, <span class="caps">QGIS</span> will spit out a endless loop of pop-ups stating that it is not able to reach the server. <span class="caps">QGIS</span> can now only be stopped with&nbsp;violence.</li>
 </ul>
 <h1 id="giswater-sql-as-backdoor"><span class="caps">GISWATER</span>: <span class="caps">SQL</span> <span class="caps">AS</span> <span class="caps">BACKDOOR</span></h1>
-<p>When you are drawing a drainage system from scratch, <span class="caps">QGIS</span> (or other <span class="caps">GIS</span> software configured for editing the correct tables) would be the way to go. However, in many cases information is already available from other sources (<span class="caps">CAD</span>-drawings, geodatabases, Excel-files, etc.). In these cases, you could also use scripting to interpret this information and insert it into the database. These insert queries could directly be executed from your code, yet I like to keep insight in what is happening. Therefore, my approach was to use python scripts which write the insert queries to a <span class="caps">SQL</span>-file. </p>
+<p>When you are drawing a drainage system from scratch, <span class="caps">QGIS</span> (or other <span class="caps">GIS</span> software configured for editing the correct tables) would be the way to go. However, in many cases information is already available from other sources (<span class="caps">CAD</span>-drawings, geodatabases, Excel-files, etc.). In these cases, you could also use scripting to interpret this information and insert it into the database. These insert queries could directly be executed from your code, yet I like to keep insight in what is happening. Therefore, my approach was to use python scripts which write the insert queries to a <span class="caps">SQL</span>-script. </p>
 <p>If X- and Y-coordinates are available, the value to be inserted in the geometry field can be generated using <a href="http://www.fabianowski.eu/projects/ppygis/">PPyGIS</a>. Although in the documentation is stated that PPyGIS is young and has several limitations, it does this job really well. The following python code generates insert statements for 4 junctions in a strictly random street somewhere in the east of the&nbsp;Netherlands:</p>
 <div class="highlight"><pre><span class="code-line"><span class="kn">import</span> <span class="nn">ppygis</span></span>
 <span class="code-line"><span class="kn">import</span> <span class="nn">psycopg2</span></span>
@@ -249,14 +249,7 @@ No incremental IDs are handed out automatically, yet the field calculator provid
 <ul>
 <li>The description and <span class="caps">TAG</span> attributes of the junctions are not present in Giswater. Within a <span class="caps">GIS</span>-environment, there is less need for this functionality. However including the description attribute would be a minor development effort. Supporting the use of tags might need more&nbsp;effort;</li>
 <li>Giswater introduces the concepts of sectors. It is not yet clear to me what their function is and whether it is required to use&nbsp;them;</li>
-<li>
-<p>The initial depth does not seem to be explicitly mentioned in the <span class="caps">EPA</span> <span class="caps">SWMM</span> help. This attribute will need to be examined&nbsp;further.</p>
-</li>
-<li>
-<p>cadtools&nbsp;footnote</p>
-</li>
-<li>links to&nbsp;plugins</li>
-<li>general review: what changes were unsaved&nbsp;:(</li>
+<li>The initial depth does not seem to be explicitly mentioned in the <span class="caps">EPA</span> <span class="caps">SWMM</span> help. This attribute will need to be examined&nbsp;further.</li>
 </ul>
 <div class="footnote">
 <hr />

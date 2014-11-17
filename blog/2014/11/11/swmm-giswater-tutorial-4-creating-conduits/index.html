@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PILOSA.EU, Scribblings of World's Most Curious Anteater">
+
+
+        <link rel="alternate" href="http://pilosa.eu/feed.xml" type="application/rss+xml" title="PILOSA.EU Full RSS Feed"/>
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+        <title>EPA SWMM / Giswater Tutorial 4: Creating Conduits // PILOSA.EU // Scribblings of World's Most Curious Anteater</title>
+
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://pilosa.eu/theme/css/pure.css">
+    <link rel="stylesheet" href="http://pilosa.eu/theme/css/pygments.css">
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".content").fitVids();
+        });
+    </script>
+</head>
+
+<body>
+    <div class="pure-g-r" id="layout">
+        <div class="sidebar pure-u">
+            <div class="cover-img" style="background-image: url('/images/bananas.jpeg')">
+                <div class="cover-body">
+                    <header class="header">
+                        <hgroup>
+                            <h1 class="brand-main"><a href="http://pilosa.eu">PILOSA.EU</a></h1>
+                            <p class="tagline">Scribblings of World's Most Curious Anteater</p>
+                                <p class="links"><a href="http://pilosa.eu/archives.html">Archive</a></p>
+                                <p class="links"><a href="http://pilosa.eu/about.html">About</a></p>
+                                <p class="social">
+                                    <a href="mailto:ewsterrenburg@gmail.com">
+                                        <i class="fa fa-envelope-o fa-3x"></i>
+                                    </a>
+                                    <a href="https://github.com/ewsterrenburg/">
+                                        <i class="fa fa-github fa-3x"></i>
+                                    </a>
+                                    <a href="https://www.linkedin.com/in/ewsterrenburg">
+                                        <i class="fa fa-linkedin fa-3x"></i>
+                                    </a>
+                                    <a href="http://pilosa.eu/feed.xml">
+                                        <i class="fa fa-rss fa-3x"></i>
+                                    </a>
+                                <p>
+                        </hgroup>
+                    </header>
+                </div>
+            </div>
+        </div>
+    <div class="pure-u">
+        <div class="content">
+            <section class="post">
+                <header class="post-header">
+                    <h1><span class="caps">EPA</span> <span class="caps">SWMM</span> / Giswater Tutorial 4: Creating&nbsp;Conduits</h1>
+                        <p class="post-meta">
+                            // under                                 <a class="post-category" href="http://pilosa.eu/tag/swmm.html">SWMM</a>
+                                <a class="post-category" href="http://pilosa.eu/tag/giswater.html">Giswater</a>
+                                <a class="post-category" href="http://pilosa.eu/tag/water.html">Water</a>
+                        </p>
+                </header>
+            </section>
+            <p>This is the 4<sup>th</sup> episode in my tutorial on using <span class="caps">EPA</span> Storm Water Management Model (<span class="caps">EPA</span> <span class="caps">SWMM</span>) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes how to create conduits in <span class="caps">EPA</span> <span class="caps">SWMM</span>, using <span class="caps">QGIS</span> and using <span class="caps">SQL</span> insert&nbsp;statements.</p>
+<p>The wonderful <span class="caps">EPA</span> <span class="caps">SWMM</span> help provides us with the following information on&nbsp;conduits:</p>
+<blockquote>
+<p>Conduits are pipes or channels that move water from one node to another in the conveyance system.
+  Their cross-sectional shapes can be selected from a variety of standard open and closed geometries.
+  Irregular natural cross-section shapes are also supported, as are user-defined closed&nbsp;shapes.</p>
+<p>The principal input parameters for conduits&nbsp;are:</p>
+<ul>
+<li>Names of the inlet and outlet&nbsp;nodes;</li>
+<li>Offset depth or elevation of the conduit above the inlet and outlet node&nbsp;inverts;</li>
+<li>Conduit&nbsp;length;</li>
+<li>Manning&#8217;s&nbsp;roughness;</li>
+<li>Cross-sectional geometry  (profile describing parameters and the number of&nbsp;barrels);</li>
+<li>Loss coefficients (headloss coefficients for the entrance, exit and average along the length of the&nbsp;conduit);</li>
+<li>Presence of a flap gate to prevent reverse&nbsp;flow;</li>
+<li>Inlet geometry code number if conduit acts as a&nbsp;culvert.</li>
+</ul>
+<p>Conduits designated as culverts are checked continuously during dynamic wave flow routing
+  to see if they operate under Inlet Control as defined in the Federal Highway Administration&#8217;s
+  publication Hydraulic Design of Highway Culverts (Publication No. <span class="caps">FHWA</span>-<span class="caps">NHI</span>-01-020, May&nbsp;2005).</p>
+</blockquote>
+<p>Attributes that can be supplied, yet not mentioned as principal input parameters&nbsp;are:</p>
+<ul>
+<li>Initial flow in the conduit at the start of the&nbsp;simulation;</li>
+<li>Maximum flow allowed in the conduit (use 0 or leave blank if not&nbsp;applicable);</li>
+<li>Maximum depth of the conduit&#8217;s cross&nbsp;section;</li>
+<li>Culvert code number of inlet geometry if conduit is a culvert subject to possible inlet flow control (leave blank&nbsp;otherwise).</li>
+</ul>
+<p>Similar to the junctions, there are some other attributes that may seem trivial, yet still require&nbsp;attention:</p>
+<ul>
+<li>Geometry;</li>
+<li>ArcID.</li>
+</ul>
+<h1 id="arc-node-topology"><span class="caps">ARC</span>-<span class="caps">NODE</span> <span class="caps">TOPOLOGY</span></h1>
+<p><span class="caps">EPA</span> <span class="caps">SWMM</span> is modelling the drainage system using an Arc-Node Topological Model. Such a topology exerts some rules of the objects in order to maintain network&nbsp;integrity.</p>
+<blockquote>
+<ol>
+<li>
+<p>A node is an intersection point where two or more arcs meet. Can also occur at the end of a “dangling” arc (i.e. an arc that is not connected to another&nbsp;arc);</p>
+</li>
+<li>
+<p>An arc is defined as a line vector that start and end at a node. Arcs can either be straight line vectors between two nodes or consist of multiple segments that together form the connection between two nodes. The (optional) points along an arc that define its shape are called&nbsp;Vertices;</p>
+</li>
+<li>
+<p>Every Arc has a direction (which may or may not be the same as the hydraulic&nbsp;direction).</p>
+</li>
+</ol>
+</blockquote>
+<p>The rules described above, result in the following behavior of the&nbsp;objects:</p>
+<ul>
+<li>A new arc can only be constructed as a connection between 2 separate existing&nbsp;nodes;</li>
+<li>If an arc is deleted, nodes that were previously connected are not&nbsp;affected;</li>
+<li>If a node is deleted, arcs that were previously connected are deleted as&nbsp;well;</li>
+<li>If the geometry of an arc is modified, the new geometry should also connect two separate existing&nbsp;nodes.</li>
+<li>If a node is moved to a new position, geometry of the connected arcs is updated&nbsp;accordingly.</li>
+</ul>
+<h1 id="epa-swmm"><span class="caps">EPA</span> <span class="caps">SWMM</span></h1>
+<p>The graphical user interface of <span class="caps">EPA</span> <span class="caps">SWMM</span> provides two ways to create a new&nbsp;conduit:</p>
+<ol>
+<li>It is possible to draw a new conduit on the map. In this case the inlet node, outlet node and direction on how the conduit is drawn. These conduits can either be straight lines or contain additional&nbsp;vertices.</li>
+<li>The other way around is to usting the &#8220;Add new&#8221; button. Using this approach, a conduit is drawn as a straight line between the last two junctions that have been&nbsp;drawn.</li>
+</ol>
+<p>In both cases, an ArcID is automatically generated using an autoincrementor, with the prefixes and increment supplied in the project defaults (see <a href="/blog/2014/09/20/swmm-giswater-tutorial-2-project-setup/">Episode 2: Project Setup</a>). It is possible to replace this automatically generated ArcID with your own value, yet each node should have an unique <span class="caps">ID</span>. This constrained is enforced by the&nbsp;software.</p>
+<p>Double-clicking on a conduit opens it&#8217;s attribute form in which the attributes can be modified. elected reaches can be removed by pressing the &#8220;Delete&#8221; key on your keyboard, or by using the &#8220;Delete object&#8221; button next to the &#8220;Add new&#8221; button. Pressing the right mouse button on a conduit, opens a context menu with the following&nbsp;options:</p>
+<ul>
+<li>Copy / paste: transfer attributes from one conduit to&nbsp;another;</li>
+<li>Delete: delete the&nbsp;conduit;</li>
+<li>Reverse: reverse the direction of the conduit (i.e. exchange inlet node and outlet node&nbsp;properties);</li>
+<li>Convert to: convert the object type to one of the other object types that can form an arc (pump, orifice, weir <span class="amp">&amp;</span>&nbsp;outlet);</li>
+<li>Vertices: start editing the vertices of the&nbsp;conduit;</li>
+<li>Properties: open the attribute form for the&nbsp;conduit.</li>
+</ul>
+<p><img alt="SWMM_create_conduit" src="/images/SWMM_create_conduit.png" title="Creating a conduit in EPA SWMM." /></p>
+<p>The inlet node and outlet node of a conduit can only be changed using the attribute form. If one of these values is changed, the geometry of the conduit is updated accordingly. If the inlet node is changed, the segment that connects the original inlet node with the second vertex (second-to-last for the outlet node) is replaced with a straight segment from this vertex to the new inlet&nbsp;node.</p>
+<h1 id="giswater-qgis-as-frontdoor"><span class="caps">GISWATER</span>: <span class="caps">QGIS</span> <span class="caps">AS</span> <span class="caps">FRONTDOOR</span></h1>
+<p>The Giswater equivalent of drawing a conduit in <span class="caps">EPA</span> <span class="caps">SWMM</span> directly, would be to draw a new feature in in the conduit layer of the corresponding <span class="caps">GIS</span>-project. However, whereas in <span class="caps">EPA</span> <span class="caps">SWMM</span> the cross-sectional geometry and roughness coefficient are attributes of each reach, <span class="caps">GISWATER</span> uses a different approach. <span class="caps">GISWATER</span> is using lookup tables for the profile definitions and materials (with their manning roughness coefficient as an attribute). The profile definition and material are not mandatory attributes of a conduit, yet conduits without a cross-section geometry do not make sense. Therefore, we need at least one profile definition and material definition to choose before we can create a&nbsp;conduit.</p>
+<h3 id="material-pipe-profile-definitions">Material <span class="amp">&amp;</span> pipe profile&nbsp;definitions</h3>
+<p>Material and profile definitions could be created and modified by editing the administrative tables in <span class="caps">QGIS</span> or by executing <span class="caps">SQL</span>-statements. The developers of <span class="caps">GISWATER</span> have been so kind to provide a functionality for managing material (<strong>Data</strong> <i class="fa fa-long-arrow-right"></i> <strong>Materials catalog</strong>) and profile definitions (<strong>Data</strong> <i class="fa fa-long-arrow-right"></i> <strong>Arc catalog</strong>).</p>
+<p>Using these catalogs to manage material definitions is straight-forward<sup id="fnref:cat_mat"><a class="footnote-ref" href="#fn:cat_mat" rel="footnote">1</a></sup>.
+Only thing to only thing is one has to realize that &#8220;n&#8221; is the Manning&#8217;s roughness coefficient. For profile definitions however, we have an issue: how do we know the meaning of the editable fields? When a shape is selected in th cross-section editor of <span class="caps">EPA</span> <span class="caps">SWMM</span>, an appropriate set of edit fields appears for describing the dimensions of that shape. However, with <span class="caps">GISWATER</span>, only the field names of the underlying database fields are visible as labels. With names like &#8220;Geom1&#8221;, &#8220;Geom2&#8221;, &#8220;Geom3&#8221; <span class="amp">&amp;</span> &#8220;Geom4&#8221;, this does not provide much help. Only way I managed to create correct profiles is to create the profiles in the <span class="caps">EPA</span> <span class="caps">SWMM</span> interface and reverse engineer the meaning of the parameters for the different shapes from the resulting <span class="caps">INP</span>-file.</p>
+<p><img alt="Giswater_cat_arc" src="/images/Giswater_cat_arc.png" title="Arc catalogue in GISWATER." /></p>
+<h3 id="drawing-conduits">Drawing&nbsp;conduits</h3>
+<p>The drawing process for the conduits is very similar to the process described for <a href="/blog/2014/10/09/swmm-giswater-tutorial-3-creating-junctions">junctions</a>.</p>
+<p><img alt="QGIS_create_conduits" src="/images/QGIS_create_conduits.png" title="Creating a conduit in QGIS." /></p>
+<p>Notable differences&nbsp;are:</p>
+<ul>
+<li>The conduits are directional lines. An arrow is showing the direction on the&nbsp;map;</li>
+<li>Material definitions and profile definitions have to be created in the corresponding lookup&nbsp;tables;</li>
+<li>Whereas junctions can be located freely, conduits should always connect two separate existing nodes. If this requirement is not met, trying to save the conduit will result in a commit&nbsp;error.</li>
+</ul>
+<p><img alt="QGIS_conduit_commit_error" src="/images/QGIS_conduit_commit_error.png" title="Commit error for unconnected arc." /></p>
+<h1 id="giswater-sql-as-backdoor"><span class="caps">GISWATER</span>: <span class="caps">SQL</span> <span class="caps">AS</span> <span class="caps">BACKDOOR</span></h1>
+<p>The same recipe as used for the junctions, will also work for the conduits. The following python code generates insert statements for 3 conduits that connect the junctions that were placed in a strictly random street somewhere in the east of the Netherlands during <a href="/blog/2014/10/09/swmm-giswater-tutorial-3-creating-junctions">Episode 3: Creating Junctions</a>:</p>
+<div class="highlight"><pre><span class="code-line"><span class="kn">import</span> <span class="nn">ppygis</span></span>
+<span class="code-line"><span class="kn">import</span> <span class="nn">psycopg2</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="n">SRID</span> <span class="o">=</span> <span class="mi">28992</span></span>
+<span class="code-line"><span class="n">schema</span> <span class="o">=</span> <span class="s">&#39;tutorial&#39;</span></span>
+<span class="code-line"><span class="n">junction_view</span> <span class="o">=</span> <span class="s">&#39;v_inp_edit_junction&#39;</span></span>
+<span class="code-line"><span class="n">junction_fields</span> <span class="o">=</span> <span class="s">&#39;(node_id, top_elev, ymax, y0, ysur, apond, sector_id, the_geom)&#39;</span></span>
+<span class="code-line"><span class="n">junction_query</span> <span class="o">=</span> <span class="s">r&#39;INSERT INTO &quot;{0}&quot;.&quot;{1}&quot; {2} VALUES (</span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">junction_view</span><span class="p">,</span> <span class="n">junction_fields</span><span class="p">)</span></span>
+<span class="code-line"><span class="n">conduit_view</span> <span class="o">=</span> <span class="s">&#39;v_inp_edit_conduit&#39;</span></span>
+<span class="code-line"><span class="n">conduit_fields</span> <span class="o">=</span> <span class="s">&#39;(arc_id, z1, z2, arccat_id, matcat_id, barrels, culvert, kentry, kexit, kavg, flap, q0, qmax, sector_id, the_geom)&#39;</span></span>
+<span class="code-line"><span class="n">conduit_query</span> <span class="o">=</span> <span class="s">r&#39;INSERT INTO &quot;{0}&quot;.&quot;{1}&quot; {2} VALUES (</span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">,</span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">conduit_view</span><span class="p">,</span> <span class="n">conduit_fields</span><span class="p">)</span></span>
+<span class="code-line"></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="k">class</span> <span class="nc">Junction</span><span class="p">():</span></span>
+<span class="code-line">    <span class="sd">&#39;&#39;&#39;</span></span>
+<span class="code-line"><span class="sd">    This is a junction</span></span>
+<span class="code-line"><span class="sd">    &#39;&#39;&#39;</span></span>
+<span class="code-line">    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">NodeID</span><span class="p">,</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">):</span></span>
+<span class="code-line">        <span class="sd">&#39;&#39;&#39;</span></span>
+<span class="code-line"><span class="sd">        Constructor</span></span>
+<span class="code-line"><span class="sd">        &#39;&#39;&#39;</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">NodeID</span> <span class="o">=</span> <span class="n">NodeID</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">MaxDepth</span> <span class="o">=</span> <span class="mi">0</span>           <span class="c"># take values from connected reaches</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">InitDepth</span> <span class="o">=</span> <span class="mi">0</span>          <span class="c"># 0 for now, to be examined later</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">SurchargeDepth</span> <span class="o">=</span> <span class="mi">0</span>     <span class="c"># optional, to be examined later</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">PondingArea</span> <span class="o">=</span> <span class="mi">0</span>        <span class="c"># optional, to be examined later</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">SectorID</span> <span class="o">=</span> <span class="bp">None</span>        <span class="c"># ignore for now, to be examined later</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">Geometry</span> <span class="o">=</span> <span class="n">ppygis</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span><span class="n">srid</span><span class="o">=</span><span class="n">SRID</span><span class="p">)</span></span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="nd">@property</span></span>
+<span class="code-line">    <span class="k">def</span> <span class="nf">InsertValues</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></span>
+<span class="code-line">        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NodeID</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MaxDepth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">InitDepth</span><span class="p">,</span> \</span>
+<span class="code-line">                <span class="bp">self</span><span class="o">.</span><span class="n">SurchargeDepth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">PondingArea</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">SectorID</span><span class="p">,</span> \</span>
+<span class="code-line">                <span class="bp">self</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">write_ewkb</span><span class="p">())</span></span>
+<span class="code-line"></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="k">class</span> <span class="nc">Conduit</span><span class="p">():</span></span>
+<span class="code-line">    <span class="sd">&#39;&#39;&#39;</span></span>
+<span class="code-line"><span class="sd">    This is a conduit</span></span>
+<span class="code-line"><span class="sd">    &#39;&#39;&#39;</span></span>
+<span class="code-line">    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ArcID</span><span class="p">,</span><span class="n">StartNode</span><span class="p">,</span><span class="n">EndNode</span><span class="p">,</span><span class="n">InletOffset</span><span class="p">,</span><span class="n">OutletOffset</span><span class="p">):</span></span>
+<span class="code-line">        <span class="sd">&#39;&#39;&#39;</span></span>
+<span class="code-line"><span class="sd">        Constructor</span></span>
+<span class="code-line"><span class="sd">        &#39;&#39;&#39;</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">ArcID</span> <span class="o">=</span> <span class="n">ArcID</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">InletOffset</span> <span class="o">=</span> <span class="n">InletOffset</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">OutletOffset</span> <span class="o">=</span> <span class="n">OutletOffset</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">ArcCat_ID</span> <span class="o">=</span> <span class="s">&quot;ROUND500&quot;</span>    <span class="c"># Profile definition created previously</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">MatCat_ID</span> <span class="o">=</span> <span class="s">&quot;CONCRETE&quot;</span>    <span class="c"># Material created previously</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">Barrels</span> <span class="o">=</span> <span class="mi">1</span>               <span class="c"># 1 for now, to be examined later</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">Culvert</span> <span class="o">=</span> <span class="bp">None</span>            <span class="c"># ignore for now, to be examined later</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">Kentry</span> <span class="o">=</span> <span class="mi">0</span>                <span class="c"># 0 for now, to be examined later</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">Kexit</span> <span class="o">=</span> <span class="mi">0</span>                 <span class="c"># 0 for now, to be examined later</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">Kavg</span> <span class="o">=</span> <span class="mi">0</span>                  <span class="c"># 0 for now, to be examined later</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">Flap</span> <span class="o">=</span> <span class="s">&#39;NO&#39;</span>               <span class="c"># NO for now, to be examined later</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">Q0</span> <span class="o">=</span> <span class="mi">0</span>                    <span class="c"># 0 for now, to be examined later</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">Qmax</span> <span class="o">=</span> <span class="mi">0</span>                  <span class="c"># 0 for now, to be examined later</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">SectorID</span> <span class="o">=</span> <span class="bp">None</span>           <span class="c"># ignore for now, to be examined later</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">StartNode</span> <span class="o">=</span> <span class="n">StartNode</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">EndNode</span> <span class="o">=</span> <span class="n">EndNode</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">Geometry</span> <span class="o">=</span> <span class="n">ppygis</span><span class="o">.</span><span class="n">LineString</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">StartNode</span><span class="o">.</span><span class="n">Geometry</span><span class="p">,</span> \</span>
+<span class="code-line">                                          <span class="bp">self</span><span class="o">.</span><span class="n">EndNode</span><span class="o">.</span><span class="n">Geometry</span><span class="p">,),</span> <span class="n">srid</span><span class="o">=</span><span class="n">SRID</span><span class="p">)</span></span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="nd">@property</span></span>
+<span class="code-line">    <span class="k">def</span> <span class="nf">InsertValues</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></span>
+<span class="code-line">        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ArcID</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">InletOffset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">OutletOffset</span><span class="p">,</span> \</span>
+<span class="code-line">                <span class="bp">self</span><span class="o">.</span><span class="n">ArcCat_ID</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MatCat_ID</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Barrels</span><span class="p">,</span> \</span>
+<span class="code-line">                <span class="bp">self</span><span class="o">.</span><span class="n">Culvert</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Kentry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Kexit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Kavg</span><span class="p">,</span> \</span>
+<span class="code-line">                <span class="bp">self</span><span class="o">.</span><span class="n">Flap</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Qmax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">SectorID</span><span class="p">,</span> \</span>
+<span class="code-line">                <span class="bp">self</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">write_ewkb</span><span class="p">())</span></span>
+<span class="code-line"></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&#39;dbname=giswater_ddb user=postgres port=5431&#39;</span><span class="p">)</span></span>
+<span class="code-line"><span class="n">cur</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="c"># Here you can put the logic that reads out the files/databases</span></span>
+<span class="code-line"><span class="c"># that contain locations and/or attributes of your objects</span></span>
+<span class="code-line"><span class="n">node_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;J1&#39;</span><span class="p">,</span> <span class="s">&#39;J2&#39;</span><span class="p">,</span> <span class="s">&#39;J3&#39;</span><span class="p">,</span> <span class="s">&#39;J4&#39;</span><span class="p">]</span></span>
+<span class="code-line"><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mf">255320.35</span><span class="p">,</span> <span class="mf">255347.98</span><span class="p">,</span> <span class="mf">255365.84</span><span class="p">,</span> <span class="mf">255375.21</span><span class="p">]</span></span>
+<span class="code-line"><span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mf">472276.25</span><span class="p">,</span> <span class="mf">472302.63</span><span class="p">,</span> <span class="mf">472319.22</span><span class="p">,</span> <span class="mf">472328.19</span><span class="p">]</span></span>
+<span class="code-line"><span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="mf">33.11</span><span class="p">,</span> <span class="mf">33.03</span><span class="p">,</span> <span class="mf">32.76</span><span class="p">,</span> <span class="mf">32.89</span><span class="p">]</span></span>
+<span class="code-line"><span class="n">arc_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;C1&#39;</span><span class="p">,</span><span class="s">&#39;C2&#39;</span><span class="p">,</span><span class="s">&#39;C3&#39;</span><span class="p">]</span></span>
+<span class="code-line"><span class="n">junction_list</span> <span class="o">=</span> <span class="p">[]</span></span>
+<span class="code-line"></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="c"># insert queries for the junctions</span></span>
+<span class="code-line"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span></span>
+<span class="code-line">    <span class="n">example_junction</span> <span class="o">=</span> <span class="n">Junction</span><span class="p">(</span><span class="n">node_ids</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">z</span><span class="p">[</span><span class="n">i</span><span class="p">])</span></span>
+<span class="code-line">    <span class="n">junction_values</span> <span class="o">=</span>  <span class="n">example_junction</span><span class="o">.</span><span class="n">InsertValues</span></span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="c"># and write the resulting query to a file, not stdout</span></span>
+<span class="code-line">    <span class="k">print</span> <span class="n">cur</span><span class="o">.</span><span class="n">mogrify</span><span class="p">(</span><span class="n">junction_query</span><span class="p">,</span> <span class="n">junction_values</span><span class="p">)</span></span>
+<span class="code-line">    <span class="n">junction_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">example_junction</span><span class="p">)</span></span>
+<span class="code-line"></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="c"># insert queries for the conduits</span></span>
+<span class="code-line"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span></span>
+<span class="code-line">    <span class="n">start_node</span> <span class="o">=</span> <span class="n">junction_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></span>
+<span class="code-line">    <span class="n">end_node</span> <span class="o">=</span> <span class="n">junction_list</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span></span>
+<span class="code-line">    <span class="n">inlet_offset</span> <span class="o">=</span> <span class="mf">0.5</span></span>
+<span class="code-line">    <span class="n">outlet_offset</span> <span class="o">=</span> <span class="mf">0.5</span></span>
+<span class="code-line">    <span class="n">example_conduit</span> <span class="o">=</span> <span class="n">Conduit</span><span class="p">(</span><span class="n">arc_ids</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">start_node</span><span class="p">,</span> <span class="n">end_node</span><span class="p">,</span> \</span>
+<span class="code-line">                              <span class="n">inlet_offset</span><span class="p">,</span> <span class="n">outlet_offset</span><span class="p">)</span></span>
+<span class="code-line">    <span class="n">conduit_values</span> <span class="o">=</span>  <span class="n">example_conduit</span><span class="o">.</span><span class="n">InsertValues</span></span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="c"># and write the resulting query to a file, not stdout</span></span>
+<span class="code-line">    <span class="k">print</span> <span class="n">cur</span><span class="o">.</span><span class="n">mogrify</span><span class="p">(</span><span class="n">conduit_query</span><span class="p">,</span> <span class="n">conduit_values</span><span class="p">)</span></span>
+<span class="code-line"></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></span>
+</pre></div>
+
+
+<p>Which results in the following <span class="caps">SQL</span>-statement with some very long&nbsp;lines:</p>
+<div class="highlight"><pre><span class="code-line"><span class="n">INSERT</span> <span class="n">INTO</span> <span class="s">&quot;tutorial&quot;</span><span class="p">.</span><span class="s">&quot;v_inp_edit_junction&quot;</span> <span class="n">VALUES</span> <span class="p">(</span><span class="err">&#39;</span><span class="n">J1</span><span class="err">&#39;</span><span class="p">,</span> <span class="mf">33.11</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">None</span><span class="p">,</span> <span class="err">&#39;</span><span class="mo">010100002040710000</span><span class="n">cdccccccc22a0f410000000051d31c41</span><span class="err">&#39;</span><span class="p">);</span></span>
+<span class="code-line"><span class="n">INSERT</span> <span class="n">INTO</span> <span class="s">&quot;tutorial&quot;</span><span class="p">.</span><span class="s">&quot;v_inp_edit_junction&quot;</span> <span class="n">VALUES</span> <span class="p">(</span><span class="err">&#39;</span><span class="n">J2</span><span class="err">&#39;</span><span class="p">,</span> <span class="mf">33.03</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">None</span><span class="p">,</span> <span class="err">&#39;</span><span class="mo">010100002040710000713</span><span class="n">d0ad79f2b0f4152b81e85bad31c41</span><span class="err">&#39;</span><span class="p">);</span></span>
+<span class="code-line"><span class="n">INSERT</span> <span class="n">INTO</span> <span class="s">&quot;tutorial&quot;</span><span class="p">.</span><span class="s">&quot;v_inp_edit_junction&quot;</span> <span class="n">VALUES</span> <span class="p">(</span><span class="err">&#39;</span><span class="n">J3</span><span class="err">&#39;</span><span class="p">,</span> <span class="mf">32.76</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">None</span><span class="p">,</span> <span class="err">&#39;</span><span class="mo">010100002040710000</span><span class="mi">85</span><span class="n">eb51b82e2c0f4114ae47e1fcd31c41</span><span class="err">&#39;</span><span class="p">);</span></span>
+<span class="code-line"><span class="n">INSERT</span> <span class="n">INTO</span> <span class="s">&quot;tutorial&quot;</span><span class="p">.</span><span class="s">&quot;v_inp_edit_junction&quot;</span> <span class="n">VALUES</span> <span class="p">(</span><span class="err">&#39;</span><span class="n">J4</span><span class="err">&#39;</span><span class="p">,</span> <span class="mf">32.89</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">None</span><span class="p">,</span> <span class="err">&#39;</span><span class="mf">010100002040710000e17</span><span class="n">a14ae792c0f41295c8fc220d41c41</span><span class="err">&#39;</span><span class="p">);</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="n">INSERT</span> <span class="n">INTO</span> <span class="s">&quot;tutorial&quot;</span><span class="p">.</span><span class="s">&quot;v_inp_edit_conduit&quot;</span> <span class="p">(</span><span class="n">arc_id</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">arccat_id</span><span class="p">,</span> <span class="n">matcat_id</span><span class="p">,</span> <span class="n">barrels</span><span class="p">,</span> <span class="n">culvert</span><span class="p">,</span> <span class="n">kentry</span><span class="p">,</span> <span class="n">kexit</span><span class="p">,</span> <span class="n">kavg</span><span class="p">,</span> <span class="n">flap</span><span class="p">,</span> <span class="n">q0</span><span class="p">,</span> <span class="n">qmax</span><span class="p">,</span> <span class="n">sector_id</span><span class="p">,</span> <span class="n">the_geom</span><span class="p">)</span> <span class="n">VALUES</span> <span class="p">(</span><span class="err">&#39;</span><span class="n">C1</span><span class="err">&#39;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="err">&#39;</span><span class="n">ROUND500</span><span class="err">&#39;</span><span class="p">,</span> <span class="err">&#39;</span><span class="n">CONCRETE</span><span class="err">&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="err">&#39;</span><span class="n">NO</span><span class="err">&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="err">&#39;</span><span class="mo">01020000204071000002000000</span><span class="n">cdccccccc22a0f410000000051d31c41713d0ad79f2b0f4152b81e85bad31c41</span><span class="err">&#39;</span><span class="p">);</span></span>
+<span class="code-line"><span class="n">INSERT</span> <span class="n">INTO</span> <span class="s">&quot;tutorial&quot;</span><span class="p">.</span><span class="s">&quot;v_inp_edit_conduit&quot;</span> <span class="p">(</span><span class="n">arc_id</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">arccat_id</span><span class="p">,</span> <span class="n">matcat_id</span><span class="p">,</span> <span class="n">barrels</span><span class="p">,</span> <span class="n">culvert</span><span class="p">,</span> <span class="n">kentry</span><span class="p">,</span> <span class="n">kexit</span><span class="p">,</span> <span class="n">kavg</span><span class="p">,</span> <span class="n">flap</span><span class="p">,</span> <span class="n">q0</span><span class="p">,</span> <span class="n">qmax</span><span class="p">,</span> <span class="n">sector_id</span><span class="p">,</span> <span class="n">the_geom</span><span class="p">)</span> <span class="n">VALUES</span> <span class="p">(</span><span class="err">&#39;</span><span class="n">C2</span><span class="err">&#39;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="err">&#39;</span><span class="n">ROUND500</span><span class="err">&#39;</span><span class="p">,</span> <span class="err">&#39;</span><span class="n">CONCRETE</span><span class="err">&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="err">&#39;</span><span class="n">NO</span><span class="err">&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="err">&#39;</span><span class="mo">01020000204071000002000000713</span><span class="n">d0ad79f2b0f4152b81e85bad31c4185eb51b82e2c0f4114ae47e1fcd31c41</span><span class="err">&#39;</span><span class="p">);</span></span>
+<span class="code-line"><span class="n">INSERT</span> <span class="n">INTO</span> <span class="s">&quot;tutorial&quot;</span><span class="p">.</span><span class="s">&quot;v_inp_edit_conduit&quot;</span> <span class="p">(</span><span class="n">arc_id</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">arccat_id</span><span class="p">,</span> <span class="n">matcat_id</span><span class="p">,</span> <span class="n">barrels</span><span class="p">,</span> <span class="n">culvert</span><span class="p">,</span> <span class="n">kentry</span><span class="p">,</span> <span class="n">kexit</span><span class="p">,</span> <span class="n">kavg</span><span class="p">,</span> <span class="n">flap</span><span class="p">,</span> <span class="n">q0</span><span class="p">,</span> <span class="n">qmax</span><span class="p">,</span> <span class="n">sector_id</span><span class="p">,</span> <span class="n">the_geom</span><span class="p">)</span> <span class="n">VALUES</span> <span class="p">(</span><span class="err">&#39;</span><span class="n">C3</span><span class="err">&#39;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="err">&#39;</span><span class="n">ROUND500</span><span class="err">&#39;</span><span class="p">,</span> <span class="err">&#39;</span><span class="n">CONCRETE</span><span class="err">&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="err">&#39;</span><span class="n">NO</span><span class="err">&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="err">&#39;</span><span class="mo">01020000204071000002000000</span><span class="mi">85</span><span class="n">eb51b82e2c0f4114ae47e1fcd31c41e17a14ae792c0f41295c8fc220d41c41</span><span class="err">&#39;</span><span class="p">);</span></span>
+</pre></div>
+
+
+<h1 id="conclusions"><span class="caps">CONCLUSIONS</span>:</h1>
+<p>Although it took a while to grasp the behavior that was going on, the use of Arc-Node topology makes sense for an urban drainage network and does a good job maintaining network integrity.
+<span class="caps">GISWATER</span> mimics the network behavior of plain <span class="caps">SWMM</span> really well. The addition of directional arrows communicates that the objects form a network and provide insight in the direction of the arcs. However, without proper instruction, this may result in confusion when users are under the impression that the arrows are showing hydraulic&nbsp;direction.</p>
+<p><span class="caps">GISWATER</span> introduces a system of material definitions and profile definitions for the reaches. This approach appeals to me conceptually. However, in its current form, the profile catalog is far from user-friendly: the meaning of the input parameters is unclear for the various&nbsp;shapes.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:cat_mat">
+<p>Although there seems to be a little bug in the version of <span class="caps">GISWATER</span> I&#8217;m running (v1,0.186), since trying to save a material resulted in the following message: &#8220;The column name roughness was not found in this ResultSet&#8221;. Adding records to the material definition table from <span class="caps">QGIS</span> worked correctly.&#160;<a class="footnote-backref" href="#fnref:cat_mat" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+            <a href="#" class="go-top">Go Top</a>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = "pilosa"; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+<footer class="footer">
+    <p>&copy; Erwin Sterrenburg &ndash;
+        Built with <a href="https://github.com/PurePelicanTheme/pure-single">Pure Theme</a>
+        for <a href="http://blog.getpelican.com/">Pelican</a>
+    </p>
+</footer>        </div>
+    </div>
+    </div>
+    <script>
+        var $top = $('.go-top');
+
+        // Show or hide the sticky footer button
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                $top.fadeIn(200);
+            } else {
+                $top.fadeOut(200);
+            }
+        });
+
+        // Animate the scroll to top
+        $top.click(function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop: 0}, 300);
+        })
+
+        // Makes sure that the href="#" attached to the <a> elements
+        // don't scroll you back up the page.
+        $('body').on('click', 'a[href="#"]', function(event) {
+            event.preventDefault();
+        });
+    </script>
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+            var pageTracker = _gat._getTracker("UA-53900294-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+    </script>
+
+</body>
+</html>
