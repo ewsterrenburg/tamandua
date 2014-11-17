@@ -3,9 +3,9 @@ author: Erwin Sterrenburg
 title: EPA SWMM / Giswater Tutorial 1: Installation
 slug: swmm-giswater-tutorial-1-installation
 tags: SWMM, Giswater, Water
-summary: This is the 1<sup>st</sup> episode in my tutorial on the using EPA Storm Water Management Model (EPA SWMM) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes the installation process.
+summary: This is the 1<sup>st</sup> episode in my tutorial on using EPA Storm Water Management Model (EPA SWMM) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episode describes the installation process.
 
-This is the 1<sup>st</sup> episode in my tutorial on the using EPA Storm Water Management Model (EPA SWMM) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes the installation process.
+This is the 1<sup>st</sup> episode in my tutorial on using EPA Storm Water Management Model (EPA SWMM) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episode describes the installation process.
 
 The instructions in the [Giswater documentation](http://www.giswater.org/print/book/export/html/17) provided sufficient information for installing this software. To install you must download the installer package and execute it. Remember you can choose the [Giswater stand-alone install package](http://download.giswater.org/giswater_stand-alone.exe) or the [all-in-one install package](http://download.giswater.org/giswater_all-in-one.exe). The all-in-one installer package is designed with a portable version of PostgreSQL+PostGIS 2.1. Remember you need to have installed an updated Java Runtime Environment (JRE) on your computer.
 

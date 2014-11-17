@@ -3,9 +3,9 @@ author: Erwin Sterrenburg
 title: EPA SWMM / Giswater Tutorial 2: Project Setup
 slug: swmm-giswater-tutorial-2-project-setup
 tags: SWMM, Giswater, Water
-summary: This is the 2<sup>nd</sup> episode in my tutorial on the using EPA Storm Water Management Model (EPA SWMM) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes how to create new project in EPA SWMM, how to create a project using Giswater and the initial options that need to be set before we can start creating our network.
+summary: This is the 2<sup>nd</sup> episode in my tutorial on using EPA Storm Water Management Model (EPA SWMM) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episode describes how to create new project in EPA SWMM, how to create a project using Giswater and the initial options that need to be set before we can start creating our network.
 
-This is the 2<sup>nd</sup>  episode in my tutorial on the using EPA Storm Water Management Model (EPA SWMM) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes how to create new project in EPA SWMM, how to create a project using Giswater and the initial options that need to be set before we can start creating our network. 
+This is the 2<sup>nd</sup>  episode in my tutorial on using EPA Storm Water Management Model (EPA SWMM) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episode describes how to create new project in EPA SWMM, how to create a project using Giswater and the initial options that need to be set before we can start creating our network. 
 
 #EPA SWWM
 Starting a new project in EPA SWMM is a simple as starting up the program. A new project is opened and you can directly start drawing a sewer network. A project can be saved as a SWMM-input file (**INP-file**). Such an input-file contains both all objects in a project's network and all options set by the user. Since a standard set of default values is provided, we could start drawing the network without further preparation. Most options deal with the look-and-feel of the program and the simulation parameters. For these options, we will keep the default values for now. Some options however do affect the drawing of the network and will need to be set beforehand:
