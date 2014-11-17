@@ -3,9 +3,9 @@ author: Erwin Sterrenburg
 title: EPA SWMM / Giswater Tutorial 3: Creating Junctions
 slug: swmm-giswater-tutorial-3-creating-junctions
 tags: SWMM, Giswater, Water
-summary: This is the 3<sup>rd</sup> episode in my tutorial on the using EPA Storm Water Management Model (EPA SWMM) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes how to create junctions in EPA SWMM, using QGIS and using SQL insert statements.
+summary: This is the 3<sup>rd</sup> episode in my tutorial on using EPA Storm Water Management Model (EPA SWMM) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episode describes how to create junctions in EPA SWMM, using QGIS and using SQL insert statements.
 
-This is the 3<sup>rd</sup> episode in my tutorial on the using EPA Storm Water Management Model (EPA SWMM) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes how to create junctions in EPA SWMM, using QGIS and using SQL insert statements. 
+This is the 3<sup>rd</sup> episode in my tutorial on using EPA Storm Water Management Model (EPA SWMM) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episode describes how to create junctions in EPA SWMM, using QGIS and using SQL insert statements. 
 
 The wonderful EPA SWMM help provides us with the following information on junctions:
 >   Junctions are drainage system nodes where links join together.
@@ -19,7 +19,7 @@ The wonderful EPA SWMM help provides us with the following information on juncti
 >   The principal input parameters for a junction are:
 
 >   * invert elevation;
->   * height to ground surface (Maximum depth at the junction (i.e., the distance from the invert to the ground surface) (feet or meters). If zero, then the distance from the invert to the top of the highest connecting link will be used;
+>   * height to ground surface: maximum depth at the junction (i.e., the distance from the invert to the ground surface) (feet or meters). If zero, then the distance from the invert to the top of the highest connecting link will be used;
 >   * ponded surface area when flooded (optional);
 >   * external inflow data (optional).
 
@@ -37,14 +37,13 @@ The graphical user interface of EPA SWMM provides two ways to create a new node:
 1. It is possible to draw a new node on the map, in which case the location where you click the map is used to determine the X- and Y-coordinate;
 2. The other way around is to navigate to junctions in the tree view in the tree view, select "junctions" by using the left mouse button, followed by pressing the "Add new" button. Using this approach, the location on the map where the junction is placed is determined based on the values supplied for the X- and Y-coordinate.
 
-![SWMM_create_junction](/images/SWMM_create_junction.png "Creating a junction in EPA SWMM.") 
+![SWMM_create_junction](/images/SWMM_create_junction.png "Creating a junction in EPA SWMM.")
 
-In both cases, a NodeID is automatically generated using an autoincrementor, with the prefixes and increment supplied in the project defaults (see [Episode 2: Project Setup](/blog/2014/09/20/swmm-giswater-tutorial-2-project-setup/)). 
+In both cases, a NodeID is automatically generated using an autoincrementor, with the prefixes and increment supplied in the project defaults (see [Episode 2: Project Setup](/blog/2014/09/20/swmm-giswater-tutorial-2-project-setup/)).
 It is possible to replace this automatically generated NodeID with your own value, yet each node should have an unique ID. This constrained is enforced by the software.
 
-Double-clicking on a node opens it's attritute form in which the attributes can be modified.
+Double-clicking on a node opens it's attribute form in which the attributes can be modified.
 The location of a junction can be changed by dragging the junction to a new location, or by changing the X- and Y-attributes. A selected node can be removed by pressing the "Delete" key on your keyboard, or by using the "Delete object" button next to the "Add new" button.
-
 
 #GISWATER: QGIS AS FRONTDOOR
 
@@ -56,11 +55,11 @@ The Giswater equivalent of drawing a junction in EPA SWMM directly, would be to 
 - A field calculator to update attributes in bulk.
 
 ###Sectors
-Giswater introduces the concept of sectors. I haven't found out yet whether using sectors in your data is required or not. I'll ignore them for now and come back to this either when I'll make an episode on the function of sectors or when the calculation refuses to run :fa-smile-o:.
+Giswater introduces the concept of sectors. I haven't found out yet whether using sectors in your data is required or not. I'll ignore them for now and come back to this either when I'll make an episode on the functioning of sectors or when the calculation refuses to run :fa-smile-o:.
 
 ###Drawing new junctions
 
-![QGIS_create_junctions](/images/QGIS_create_junctions.png "Creating junctions in QGIS.") 
+![QGIS_create_junctions](/images/QGIS_create_junctions.png "Creating junctions in QGIS.")
 
 1. Make the Junctions layer (**EPA SWMM DATA** :fa-long-arrow-right: **Hydraulics** :fa-long-arrow-right: **Node** :fa-long-arrow-right: **Junctions** ) active by clicking on this layer in the content tree of the map;
 2. Toggle editing (**a**);
@@ -105,11 +104,11 @@ Giswater introduces the concept of sectors. I haven't found out yet whether usin
 
 ###Important DON'Ts
 
--   **Do ++NOT++ mess around in the nodes layer or in the results layers!!! Drawing in these layers will not activate the required database functions to ... the new objects in the correct way.**
--   **Make sure your Postgres server is running when starting the QGIS project (i.e. do not close the command prompt window of the portable Postgres). If the server stops with your GIS-project open, QGIS will spit out a endless loop of pop-ups stating that it is not able to reach the server. QGIS can now only be stopped with violence.**
+-   Do ***NOT*** mess around in the nodes layer or in the results layers!!! Drawing in these layers will not activate the required database functions to create new objects correctly.
+-   Make sure your Postgres server is running when starting the QGIS project (i.e. do not close the command prompt window of the portable Postgres). If the server stops with your GIS-project open, QGIS will spit out a endless loop of pop-ups stating that it is not able to reach the server. QGIS can now only be stopped with violence.
 
 #GISWATER: SQL AS BACKDOOR
-When you are drawing a drainage system from scratch, QGIS (or other GIS software configured for editing the correct tables) would be the way to go. However, in many cases information is already available from other sources (CAD-drawings, geodatabases, Excel-files, etc.). In these cases, you could also use scripting to interpret this information and insert it into the database. These insert queries could directly be executed from your code, yet I like to keep insight in what is happening. Therefore, my approach was to use python scripts which write the insert queries to a SQL-file. 
+When you are drawing a drainage system from scratch, QGIS (or other GIS software configured for editing the correct tables) would be the way to go. However, in many cases information is already available from other sources (CAD-drawings, geodatabases, Excel-files, etc.). In these cases, you could also use scripting to interpret this information and insert it into the database. These insert queries could directly be executed from your code, yet I like to keep insight in what is happening. Therefore, my approach was to use python scripts which write the insert queries to a SQL-script. 
 
 If X- and Y-coordinates are available, the value to be inserted in the geometry field can be generated using [PPyGIS](http://www.fabianowski.eu/projects/ppygis/). Although in the documentation is stated that PPyGIS is young and has several limitations, it does this job really well. The following python code generates insert statements for 4 junctions in a strictly random street somewhere in the east of the Netherlands:
 
@@ -185,7 +184,7 @@ As you can see, this insert query should also executed on the view that contains
 #CONCLUSIONS:
 
 QGIS provides much more powerful tools to draw and modify your objects than using EPA SWMM directly. 
-No incremental IDs are handed out automatically, yet the field calculator provides a powerful tool ot generate them in bulk. Data integrity is maintained by the database trigger and constraints. This works works well, however you need to be ***really** *** careful to make your edits to the correct layer.
+No incremental IDs are handed out automatically, yet the field calculator provides a powerful tool ot generate them in bulk. Data integrity is maintained by the database trigger and constraints. This works works well, however you need to be ***really*** careful to make your edits to the correct layer.
 
 ###Open ends:
 
