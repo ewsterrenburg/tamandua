@@ -17,7 +17,7 @@ DEFAULT_PAGINATION = 5
 MD_EXTENSIONS = [FontAwesomeExtension(), 'codehilite(css_class=highlight,linenums=False)', 'extra', 'toc']
 
 # Leave this blank for local development, publishconf.py has the "real" value:
-SITEURL = ''
+SITEURL = 'http://localhost:8000/'
 RELATIVE_URLS = True
 
 # Feed generation is usually not desired when developing
@@ -34,7 +34,7 @@ SOCIAL = (
     ('envelope-o', 'mailto:ewsterrenburg@gmail.com'),
     ('github', 'https://github.com/ewsterrenburg/'),
     ('linkedin', 'https://www.linkedin.com/in/ewsterrenburg'),
-    ('rss', FEED_ALL_RSS),
+    ('rss', 'http://pilosa.eu/feed.xml'),
 )
 
 
