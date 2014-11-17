@@ -6,7 +6,7 @@ Slug: about
 [PILOSA.EU](/) is the personal website and blog of Erwin Sterrenburg, 
 which happens to be me :fa-smile-o:. I am a Civil Engineer with a MSc
  in [Water Engineering & Management](http://www.utwente.nl/ctw/wem/).
-Currently I am working as a consultant for [Royal HaskoningDHV](http://rhdhv.com)
+Currently I am working as a consultant for [Royal HaskoningDHV](http://rhdhv.com)[^disclaimer]
  in the department of [Geo Information Management](http://geosolutions.nl/). 
 In this function I contribute to a varied array of projects, with geoinformatics as the leitmotif.
  
@@ -32,8 +32,7 @@ A healthy dose of curiosity has resulted in a long list of professional & person
 - Web Technology
 - ...
 
-
-
+[^disclaimer]: This is my personal website, all content strictly reflects my personal thoughts, opinions & mistakes.
 
 
 
