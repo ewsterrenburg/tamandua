@@ -6,17 +6,17 @@ tags: GISWATER, SWMM
 status: draft
 summary: A short welcome message
 
-5. outfalls + outlets
+5. outfalls
 6. sectors?
 7. subcatchments
-8. ..
+15. rain gages
+8. outlets
 9. pumpdinges
 10. dividers
 11. storage
 12. orifices
 13. weirs
 14. climatology
-15. rain gages
 16. patterns
 17. controls
 18. curves & timeseries
@@ -36,6 +36,7 @@ summary: A short welcome message
 32. calibration
 33. covello & merckhofer analyse
 34. SWMM as a webservice
+35. operational
 
 
 
