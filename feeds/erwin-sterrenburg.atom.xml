@@ -1,5 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>PILOSA.EU</title><link href="http://pilosa.eu/" rel="alternate"></link><link href="http://pilosa.eu/feeds%5Cerwin-sterrenburg.atom.xml" rel="self"></link><id>http://pilosa.eu/</id><updated>2014-11-11T00:00:00+01:00</updated><entry><title>EPA SWMM / Giswater Tutorial 4: Creating Conduits</title><link href="http://pilosa.eu/blog/2014/11/11/swmm-giswater-tutorial-4-creating-conduits/" rel="alternate"></link><updated>2014-11-11T00:00:00+01:00</updated><author><name>Erwin Sterrenburg</name></author><id>tag:pilosa.eu,2014-11-11:blog/2014/11/11/swmm-giswater-tutorial-4-creating-conduits/</id><summary type="html">&lt;p&gt;This is the 4&lt;sup&gt;th&lt;/sup&gt; episode in my tutorial on using &lt;span class="caps"&gt;EPA&lt;/span&gt; Storm Water Management Model (&lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes how to create conduits in &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;, using &lt;span class="caps"&gt;QGIS&lt;/span&gt; and using &lt;span class="caps"&gt;SQL&lt;/span&gt; insert&amp;nbsp;statements.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>PILOSA.EU</title><link href="http://pilosa.eu/" rel="alternate"></link><link href="http://pilosa.eu/feeds%5Cerwin-sterrenburg.atom.xml" rel="self"></link><id>http://pilosa.eu/</id><updated>2015-03-24T00:00:00+01:00</updated><entry><title>“Dynamic Default Attributes in an ArcGIS Python Toolbox”</title><link href="http://pilosa.eu/blog/2015/03/24/dynamic-default-attributes-in-arcgis-python-toolbox/" rel="alternate"></link><updated>2015-03-24T00:00:00+01:00</updated><author><name>Erwin Sterrenburg</name></author><id>tag:pilosa.eu,2015-03-24:blog/2015/03/24/dynamic-default-attributes-in-arcgis-python-toolbox/</id><summary type="html">&lt;p&gt;Once upon a time, on a computer not that far away, there was a ArcGIS python toolbox. This python toolbox contained a tool with a set of parameters. The values for these parameters would remain (slight variatons of) the same value for a long time. However, sometimes one or more parameter values would change drastically, which would make the newly supplied value the new default&amp;nbsp;value.&lt;/p&gt;
+&lt;p&gt;This blogpost contains an overview of my struggles trying to enforce this behavior. The original tool uses a logfile from which the parameter values are read during initialization and to which the parameter values are written when the tool is executed. In this example I will simply use the current time as my &amp;#8220;external datasource&amp;#8221;. The tool will read out the current time, use it as a default value for its only parameter and print the value of this parameter to the message dialog. Using this approach, I can more precisely identify what is happening and an what moment exactly the default value of the tool is being&amp;nbsp;set.&lt;/p&gt;
+&lt;h1 id="9595init9595"&gt;__init__&lt;/h1&gt;
+&lt;p&gt;I expected an ArcGIS tool to be constructed when the tool is being opened by a user and to be destroyed after the tool has either been run or has been cancelled by the user. This would imply that the parameters, so my first attempt at &amp;#8220;timetool.pyt&amp;#8221; looked as&amp;nbsp;follows:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="code-line"&gt;&lt;span class="c"&gt;#!/usr/bin/env python&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;span class="c"&gt;# -*- coding: utf-8 -*-&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;datetime&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;TimeTool&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Define the tool (tool name is the name of the class).&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;label&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Present time&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;description&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Prints a message with the present time&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;canRunInBackground&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;getParameterInfo&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Define parameter definitions&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="n"&gt;present_time&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;arcpy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Parameter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;            &lt;span class="n"&gt;displayName&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Present time&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;            &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;present_time&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;            &lt;span class="n"&gt;datatype&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;String&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;            &lt;span class="n"&gt;parameterType&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Required&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;            &lt;span class="n"&gt;direction&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Input&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;            &lt;span class="p"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="c"&gt;# supply a start value for the parameter as suggested value&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="c"&gt;# during the initialization of the tool:&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="n"&gt;now&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;datetime&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;datetime&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;now&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="n"&gt;present_time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;unicode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;now&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="n"&gt;params&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;present_time&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;params&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;isLicensed&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Set whether tool is licensed to execute.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;updateParameters&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;parameters&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Modify the values and properties of parameters before internal&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;span class="sd"&gt;        validation is performed.  This method is called whenever a parameter&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;span class="sd"&gt;        has been changed.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="k"&gt;return&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;updateMessages&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;parameters&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Modify the messages created by internal validation for each tool&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;span class="sd"&gt;        parameter.  This method is called after internal validation.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="k"&gt;return&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;execute&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;parameters&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;messages&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;The source code of the tool.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="n"&gt;arcpy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;AddMessage&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;parameters&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="k"&gt;return&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Toolbox&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Define the toolbox (the name of the toolbox&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;span class="sd"&gt;            is the name of the .pyt file).&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;label&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;TimeTool_Toolbox&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;alias&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Toolbox with TimeTool&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;tools&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;TimeTool&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The first time I started this tool, it was working as intended. Yet, some further testing showed that its behavior didn&amp;#8217;t correspond to what it should&amp;nbsp;be:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Open the tool, cancel execution, then restart:&lt;/strong&gt; our entry box is populated with the value we received when we started the tool for the first&amp;nbsp;time;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Running the tool with default input, then restart:&lt;/strong&gt; our entry box is populated with the value we received when we started the tool for the first&amp;nbsp;time;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Running the tool with modified input value, then restart:&lt;/strong&gt; during the first run our modified value is being printed, during the second run our entry box is still populated with the value we received when we started the tool for the first&amp;nbsp;time;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Opening an entirely new &lt;span class="caps"&gt;MXD&lt;/span&gt;&lt;/strong&gt;: even after opening a new &lt;span class="caps"&gt;MXD&lt;/span&gt;, our entry box is still populated with the value we received when we started the tool for the first&amp;nbsp;time.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;A pattern is emerging: the default value of the parameter is set during the first time the tool is being opened the ArcMAP session. The tool appears to be constructed during the first time it is being opened, then kept in memory for future&amp;nbsp;use.&lt;/p&gt;
+&lt;h1 id="updateparameters"&gt;updateParameters&lt;/h1&gt;
+&lt;p&gt;Conclusion is that we need to find another way capture the event of an user starting up the tool. Unfortunately, the &lt;a href="http://resources.arcgis.com/en/help/main/10.2/index.html#//001500000024000000"&gt;ArcGIS help pages&lt;/a&gt; do not provide us with a &amp;#8220;InitializeParameters&amp;#8221; method. It does however give us the &amp;#8220;updateParameters&amp;#8221; method, which is being called whenever a parameter has been changed. Apparently one or more parameters do change when a tool is being opened, since execution of the method is triggered when opening a&amp;nbsp;tool.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="code-line"&gt;&lt;span class="c"&gt;#!/usr/bin/env python&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;span class="c"&gt;# -*- coding: utf-8 -*-&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;datetime&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;TimeTool&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Define the tool (tool name is the name of the class).&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;label&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Present time&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;description&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Prints a message with the present time&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;canRunInBackground&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;getParameterInfo&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Define parameter definitions&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="n"&gt;present_time&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;arcpy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Parameter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;            &lt;span class="n"&gt;displayName&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Present time&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;            &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;present_time&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;            &lt;span class="n"&gt;datatype&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;String&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;            &lt;span class="n"&gt;parameterType&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Required&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;            &lt;span class="n"&gt;direction&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Input&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;            &lt;span class="p"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="n"&gt;params&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;present_time&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;params&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;isLicensed&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Set whether tool is licensed to execute.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;updateParameters&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;parameters&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Modify the values and properties of parameters before internal&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;span class="sd"&gt;        validation is performed.  This method is called whenever a parameter&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;span class="sd"&gt;        has been changed.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="c"&gt;# supply a start value for the parameter as suggested value&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="c"&gt;# when the parameter does not yet have a value:&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;parameters&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;            &lt;span class="n"&gt;now&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;datetime&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;datetime&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;now&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;            &lt;span class="n"&gt;parameters&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;unicode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;now&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="k"&gt;return&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;updateMessages&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;parameters&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Modify the messages created by internal validation for each tool&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;span class="sd"&gt;        parameter.  This method is called after internal validation.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="k"&gt;return&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;execute&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;parameters&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;messages&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;The source code of the tool.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="n"&gt;arcpy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;AddMessage&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;parameters&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="k"&gt;return&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Toolbox&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Define the toolbox (the name of the toolbox&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;&lt;span class="sd"&gt;            is the name of the .pyt file).&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;label&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;TimeTool_Toolbox&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;alias&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Toolbox with TimeTool&amp;quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class="code-line"&gt;        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;tools&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;TimeTool&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Testing the behavior of the tool now gives the following&amp;nbsp;results:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Open the tool, cancel execution, then restart:&lt;/strong&gt; our entry box is populated with a new value when we restart the&amp;nbsp;tool;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Running the tool with default input, then restart:&lt;/strong&gt; our entry box is populated with a new value when we restart the&amp;nbsp;tool;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Running the tool with modified input value, then restart:&lt;/strong&gt; during the first run our modified value is being printed, during the second run our entry box is populated with a new&amp;nbsp;value;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Opening an entirely new &lt;span class="caps"&gt;MXD&lt;/span&gt;&lt;/strong&gt;: our entry box is populated with a new value when we restart the&amp;nbsp;tool;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Open the tool, delete the contents of our entry box&lt;/strong&gt;: our entry box is populated with a new&amp;nbsp;value.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Again, a pattern is emerging: the default value of the parameter is set evertime the users opens the tool. For our original usecase, this approach will do the trick. It still is some kind of work-around though, and has the following&amp;nbsp;drawbacks:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Deleting the contents from the entry box will result in the entry box being&amp;nbsp;repopulated;&lt;/li&gt;
+&lt;li&gt;This approach will only work for required parameters. If it is used for optional parameters, the parameter will be given the value of our suggestion if kept&amp;nbsp;blank.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Using a precondition with a sensible combination of required parameters should be enough to soothen these drawbacks and make the tool usable. A hidden quirk will still persist though, if a user would delete the values for the chosen set of parameters &lt;i class="fa fa-frown-o"&gt;&lt;/i&gt;.&lt;/p&gt;
+&lt;p&gt;In an attempt to remove this quirk, I have been trying to give the tool an extra attribute &amp;#8220;self.initialized&amp;#8221; and use this attribute as my precondition. Using this approach did not succeed due to the following&amp;nbsp;issues:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;We might be able to attribute to False in the execution method of the tool. But how-to how to set this to False on&amp;nbsp;cancel?&lt;/li&gt;
+&lt;li&gt;Modifying a tool&amp;#8217;s attributes outside the initialization method does not seem to&amp;nbsp;work.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id="conclusion"&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;I have not been able to find a way to capture the moment at which the parameters of the tool are being initialized. The updateParameters method does provide sufficient possibilities to come up with an usable&amp;nbsp;work-around.&lt;/p&gt;</summary><category term="Python"></category><category term="ESRI"></category><category term="ArcGIS"></category></entry><entry><title>EPA SWMM / Giswater Tutorial 4: Creating Conduits</title><link href="http://pilosa.eu/blog/2014/11/11/swmm-giswater-tutorial-4-creating-conduits/" rel="alternate"></link><updated>2014-11-11T00:00:00+01:00</updated><author><name>Erwin Sterrenburg</name></author><id>tag:pilosa.eu,2014-11-11:blog/2014/11/11/swmm-giswater-tutorial-4-creating-conduits/</id><summary type="html">&lt;p&gt;This is the 4&lt;sup&gt;th&lt;/sup&gt; episode in my tutorial on using &lt;span class="caps"&gt;EPA&lt;/span&gt; Storm Water Management Model (&lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episodes describes how to create conduits in &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;, using &lt;span class="caps"&gt;QGIS&lt;/span&gt; and using &lt;span class="caps"&gt;SQL&lt;/span&gt; insert&amp;nbsp;statements.&lt;/p&gt;
 &lt;p&gt;The wonderful &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; help provides us with the following information on&amp;nbsp;conduits:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Conduits are pipes or channels that move water from one node to another in the conveyance system.
@@ -231,7 +386,74 @@ Only thing to only thing is one has to realize that &amp;#8220;n&amp;#8221; is t
 &lt;p&gt;Although there seems to be a little bug in the version of &lt;span class="caps"&gt;GISWATER&lt;/span&gt; I&amp;#8217;m running (v1,0.186), since trying to save a material resulted in the following message: &amp;#8220;The column name roughness was not found in this ResultSet&amp;#8221;. Adding records to the material definition table from &lt;span class="caps"&gt;QGIS&lt;/span&gt; worked correctly.&amp;#160;&lt;a class="footnote-backref" href="#fnref:cat_mat" rev="footnote" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</summary><category term="SWMM"></category><category term="Giswater"></category><category term="Water"></category></entry><entry><title>EPA SWMM / Giswater Tutorial 3: Creating Junctions</title><link href="http://pilosa.eu/blog/2014/10/09/swmm-giswater-tutorial-3-creating-junctions/" rel="alternate"></link><updated>2014-10-09T00:00:00+02:00</updated><author><name>Erwin Sterrenburg</name></author><id>tag:pilosa.eu,2014-10-09:blog/2014/10/09/swmm-giswater-tutorial-3-creating-junctions/</id><summary type="html">&lt;p&gt;This is the 3&lt;sup&gt;rd&lt;/sup&gt; episode in my tutorial on using &lt;span class="caps"&gt;EPA&lt;/span&gt; Storm Water Management Model (&lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episode describes how to create junctions in &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;, using &lt;span class="caps"&gt;QGIS&lt;/span&gt; and using &lt;span class="caps"&gt;SQL&lt;/span&gt; insert&amp;nbsp;statements. &lt;/p&gt;
+&lt;/div&gt;</summary><category term="SWMM"></category><category term="Giswater"></category><category term="Water"></category></entry><entry><title>EPA SWMM / Giswater Tutorial 5: Outfalls</title><link href="http://pilosa.eu/blog/2014/11/11/swmm-giswater-tutorial-5-outfalls/" rel="alternate"></link><updated>2014-11-11T00:00:00+01:00</updated><author><name>Erwin Sterrenburg</name></author><id>tag:pilosa.eu,2014-11-11:blog/2014/11/11/swmm-giswater-tutorial-5-outfalls/</id><summary type="html">&lt;p&gt;This is the 5&lt;sup&gt;th&lt;/sup&gt; episode in my tutorial on using &lt;span class="caps"&gt;EPA&lt;/span&gt; Storm Water Management Model (&lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;) and Giswater for rainfall-runoff modeling for an urban drainage network&amp;nbsp;system.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Outfalls are terminal nodes of the drainage system used to define final downstream boundaries under Dynamic Wave flow routing. For other types of flow routing they behave as a junction. Only a single link can be connected to an outfall&amp;nbsp;node.&lt;/p&gt;
+&lt;p&gt;The boundary conditions at an outfall can be described by any one of the following stage relationships: 
+* the critical or normal flow depth in the connecting&amp;nbsp;conduit  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;a fixed stage&amp;nbsp;elevation  &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;a tidal stage described in a table of tide height versus hour of the&amp;nbsp;day  &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;a user-defined time series of stage versus&amp;nbsp;time.  &lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The principal input parameters for outfalls&amp;nbsp;include: &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;invert&amp;nbsp;elevation  &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;boundary condition type and stage&amp;nbsp;description  &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;presence of a flap gate to prevent backflow through the&amp;nbsp;outfall.  &lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Name 
+ User-assigned outfall&amp;nbsp;name. &lt;/p&gt;
+&lt;p&gt;X-Coordinate 
+ Horizontal location of the outfall on the Study Area Map. If left blank then the outfall will not appear on the&amp;nbsp;map. &lt;/p&gt;
+&lt;p&gt;Y-Coordinate 
+ Vertical location of the outfall on the Study Area Map. If left blank then the outfall will not appear on the&amp;nbsp;map. &lt;/p&gt;
+&lt;p&gt;Description 
+ Click the ellipsis button (or press Enter) to edit an optional description of the&amp;nbsp;outfall. &lt;/p&gt;
+&lt;p&gt;Tag 
+ Optional label used to categorize or classify the&amp;nbsp;outfall. &lt;/p&gt;
+&lt;p&gt;Inflows 
+ Click the ellipsis button (or press Enter) to assign external direct, dry weather or &lt;span class="caps"&gt;RDII&lt;/span&gt; inflows to the&amp;nbsp;outfall. &lt;/p&gt;
+&lt;p&gt;Treatment 
+ Click the ellipsis button (or press Enter) to edit a set of treatment functions for pollutants entering the&amp;nbsp;node. &lt;/p&gt;
+&lt;p&gt;Invert El. 
+ Invert elevation of the outfall (feet or&amp;nbsp;meters). &lt;/p&gt;
+&lt;p&gt;Tide Gate 
+ &lt;span class="caps"&gt;YES&lt;/span&gt; - tide gate present to prevent backflow 
+&lt;span class="caps"&gt;NO&lt;/span&gt; - no tide gate&amp;nbsp;present &lt;/p&gt;
+&lt;p&gt;Type 
+ Type of outfall boundary condition: 
+&lt;span class="caps"&gt;FREE&lt;/span&gt;: outfall stage determined by minimum of critical flow depth and normal flow depth in the connecting conduit 
+&lt;span class="caps"&gt;NORMAL&lt;/span&gt;: outfall stage based on normal flow depth in the connecting conduit 
+&lt;span class="caps"&gt;FIXED&lt;/span&gt;: outfall stage set to a fixed value 
+&lt;span class="caps"&gt;TIDAL&lt;/span&gt;: outfall stage given by a table of tide elevation versus time of day 
+&lt;span class="caps"&gt;TIMESERIES&lt;/span&gt;: outfall stage supplied from a time series of&amp;nbsp;elevations &lt;/p&gt;
+&lt;p&gt;Fixed Stage 
+ Water elevation for a &lt;span class="caps"&gt;FIXED&lt;/span&gt; type of outfall (feet or&amp;nbsp;meters). &lt;/p&gt;
+&lt;p&gt;Tidal Curve Name 
+ Name of the Tidal Curve relating water elevation to hour of the day for a &lt;span class="caps"&gt;TIDAL&lt;/span&gt; outfall (double-click to edit the&amp;nbsp;curve). &lt;/p&gt;
+&lt;p&gt;Time Series Name 
+ Name of time series containing time history of outfall stage for a &lt;span class="caps"&gt;TIMESERIES&lt;/span&gt; outfall (double-click to edit the&amp;nbsp;series). &lt;/p&gt;
+&lt;p&gt;Only thing required before running the model is possible is to create an&amp;nbsp;outfall.&lt;/p&gt;
+&lt;p&gt;Create outfall
+Run &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; (not that the results make any sense without&amp;nbsp;inflows)&lt;/p&gt;
+&lt;p&gt;&lt;span class="caps"&gt;GISWATER&lt;/span&gt;: run not&amp;nbsp;possilbe&lt;/p&gt;
+&lt;h1 id="conclusions"&gt;&lt;span class="caps"&gt;CONCLUSIONS&lt;/span&gt;:&lt;/h1&gt;
+&lt;p&gt;Convert - absent in &lt;span class="caps"&gt;GISWATER&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Sectors are relevant&amp;nbsp;:)&lt;/p&gt;</summary><category term="SWMM"></category><category term="Giswater"></category><category term="Water"></category></entry><entry><title>EPA SWMM / Giswater Tutorial 3: Creating Junctions</title><link href="http://pilosa.eu/blog/2014/10/09/swmm-giswater-tutorial-3-creating-junctions/" rel="alternate"></link><updated>2014-10-09T00:00:00+02:00</updated><author><name>Erwin Sterrenburg</name></author><id>tag:pilosa.eu,2014-10-09:blog/2014/10/09/swmm-giswater-tutorial-3-creating-junctions/</id><summary type="html">&lt;p&gt;This is the 3&lt;sup&gt;rd&lt;/sup&gt; episode in my tutorial on using &lt;span class="caps"&gt;EPA&lt;/span&gt; Storm Water Management Model (&lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;) and Giswater for rainfall-runoff modeling for an urban drainage network system. This episode describes how to create junctions in &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt;, using &lt;span class="caps"&gt;QGIS&lt;/span&gt; and using &lt;span class="caps"&gt;SQL&lt;/span&gt; insert&amp;nbsp;statements. &lt;/p&gt;
 &lt;p&gt;The wonderful &lt;span class="caps"&gt;EPA&lt;/span&gt; &lt;span class="caps"&gt;SWMM&lt;/span&gt; help provides us with the following information on&amp;nbsp;junctions:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Junctions are drainage system nodes where links join together.

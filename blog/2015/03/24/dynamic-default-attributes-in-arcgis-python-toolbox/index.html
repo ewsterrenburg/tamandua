@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PILOSA.EU, Scribblings of World's Most Curious Anteater">
+
+
+        <link rel="alternate" href="http://pilosa.eu/feed.xml" type="application/rss+xml" title="PILOSA.EU Full RSS Feed"/>
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+        <title>“Dynamic Default Attributes in an ArcGIS Python Toolbox” // PILOSA.EU // Scribblings of World's Most Curious Anteater</title>
+
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://pilosa.eu/theme/css/pure.css">
+    <link rel="stylesheet" href="http://pilosa.eu/theme/css/pygments.css">
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".content").fitVids();
+        });
+    </script>
+</head>
+
+<body>
+    <div class="pure-g-r" id="layout">
+        <div class="sidebar pure-u">
+            <div class="cover-img" style="background-image: url('/images/bananas.jpeg')">
+                <div class="cover-body">
+                    <header class="header">
+                        <hgroup>
+                            <h1 class="brand-main"><a href="http://pilosa.eu">PILOSA.EU</a></h1>
+                            <p class="tagline">Scribblings of World's Most Curious Anteater</p>
+                                <p class="links"><a href="http://pilosa.eu/archives.html">Archive</a></p>
+                                <p class="links"><a href="http://pilosa.eu/about.html">About</a></p>
+                                <p class="social">
+                                    <a href="mailto:ewsterrenburg@gmail.com">
+                                        <i class="fa fa-envelope-o fa-3x"></i>
+                                    </a>
+                                    <a href="https://github.com/ewsterrenburg/">
+                                        <i class="fa fa-github fa-3x"></i>
+                                    </a>
+                                    <a href="https://www.linkedin.com/in/ewsterrenburg">
+                                        <i class="fa fa-linkedin fa-3x"></i>
+                                    </a>
+                                    <a href="http://pilosa.eu/feed.xml">
+                                        <i class="fa fa-rss fa-3x"></i>
+                                    </a>
+                                <p>
+                        </hgroup>
+                    </header>
+                </div>
+            </div>
+        </div>
+    <div class="pure-u">
+        <div class="content">
+            <section class="post">
+                <header class="post-header">
+                    <h1><span class="dquo">&#8220;</span>Dynamic Default Attributes in an ArcGIS Python&nbsp;Toolbox&#8221;</h1>
+                        <p class="post-meta">
+                            // under                                 <a class="post-category" href="http://pilosa.eu/tag/python.html">Python</a>
+                                <a class="post-category" href="http://pilosa.eu/tag/esri.html">ESRI</a>
+                                <a class="post-category" href="http://pilosa.eu/tag/arcgis.html">ArcGIS</a>
+                        </p>
+                </header>
+            </section>
+            <p>Once upon a time, on a computer not that far away, there was a ArcGIS python toolbox. This python toolbox contained a tool with a set of parameters. The values for these parameters would remain (slight variatons of) the same value for a long time. However, sometimes one or more parameter values would change drastically, which would make the newly supplied value the new default&nbsp;value.</p>
+<p>This blogpost contains an overview of my struggles trying to enforce this behavior. The original tool uses a logfile from which the parameter values are read during initialization and to which the parameter values are written when the tool is executed. In this example I will simply use the current time as my &#8220;external datasource&#8221;. The tool will read out the current time, use it as a default value for its only parameter and print the value of this parameter to the message dialog. Using this approach, I can more precisely identify what is happening and an what moment exactly the default value of the tool is being&nbsp;set.</p>
+<h1 id="9595init9595">__init__</h1>
+<p>I expected an ArcGIS tool to be constructed when the tool is being opened by a user and to be destroyed after the tool has either been run or has been cancelled by the user. This would imply that the parameters, so my first attempt at &#8220;timetool.pyt&#8221; looked as&nbsp;follows:</p>
+<div class="highlight"><pre><span class="code-line"><span class="c">#!/usr/bin/env python</span></span>
+<span class="code-line"><span class="c"># -*- coding: utf-8 -*-</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="kn">import</span> <span class="nn">datetime</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="k">class</span> <span class="nc">TimeTool</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span></span>
+<span class="code-line">    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></span>
+<span class="code-line">        <span class="sd">&quot;&quot;&quot;Define the tool (tool name is the name of the class).&quot;&quot;&quot;</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s">&quot;Present time&quot;</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s">&quot;Prints a message with the present time&quot;</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">canRunInBackground</span> <span class="o">=</span> <span class="bp">False</span></span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="k">def</span> <span class="nf">getParameterInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></span>
+<span class="code-line">        <span class="sd">&quot;&quot;&quot;Define parameter definitions&quot;&quot;&quot;</span></span>
+<span class="code-line">        <span class="n">present_time</span> <span class="o">=</span> <span class="n">arcpy</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span></span>
+<span class="code-line">            <span class="n">displayName</span><span class="o">=</span><span class="s">&quot;Present time&quot;</span><span class="p">,</span></span>
+<span class="code-line">            <span class="n">name</span><span class="o">=</span><span class="s">&quot;present_time&quot;</span><span class="p">,</span></span>
+<span class="code-line">            <span class="n">datatype</span><span class="o">=</span><span class="s">&quot;String&quot;</span><span class="p">,</span></span>
+<span class="code-line">            <span class="n">parameterType</span><span class="o">=</span><span class="s">&quot;Required&quot;</span><span class="p">,</span></span>
+<span class="code-line">            <span class="n">direction</span><span class="o">=</span><span class="s">&quot;Input&quot;</span></span>
+<span class="code-line">            <span class="p">)</span></span>
+<span class="code-line"></span>
+<span class="code-line">        <span class="c"># supply a start value for the parameter as suggested value</span></span>
+<span class="code-line">        <span class="c"># during the initialization of the tool:</span></span>
+<span class="code-line">        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span></span>
+<span class="code-line">        <span class="n">present_time</span><span class="o">.</span><span class="n">value</span><span class="o">=</span><span class="nb">unicode</span><span class="p">(</span><span class="n">now</span><span class="p">)</span></span>
+<span class="code-line"></span>
+<span class="code-line">        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">present_time</span><span class="p">]</span></span>
+<span class="code-line">        <span class="k">return</span> <span class="n">params</span></span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="k">def</span> <span class="nf">isLicensed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></span>
+<span class="code-line">        <span class="sd">&quot;&quot;&quot;Set whether tool is licensed to execute.&quot;&quot;&quot;</span></span>
+<span class="code-line">        <span class="k">return</span> <span class="bp">True</span></span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="k">def</span> <span class="nf">updateParameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span></span>
+<span class="code-line">        <span class="sd">&quot;&quot;&quot;Modify the values and properties of parameters before internal</span></span>
+<span class="code-line"><span class="sd">        validation is performed.  This method is called whenever a parameter</span></span>
+<span class="code-line"><span class="sd">        has been changed.&quot;&quot;&quot;</span></span>
+<span class="code-line">        <span class="k">return</span></span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="k">def</span> <span class="nf">updateMessages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span></span>
+<span class="code-line">        <span class="sd">&quot;&quot;&quot;Modify the messages created by internal validation for each tool</span></span>
+<span class="code-line"><span class="sd">        parameter.  This method is called after internal validation.&quot;&quot;&quot;</span></span>
+<span class="code-line">        <span class="k">return</span></span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">messages</span><span class="p">):</span></span>
+<span class="code-line">        <span class="sd">&quot;&quot;&quot;The source code of the tool.&quot;&quot;&quot;</span></span>
+<span class="code-line">        <span class="n">arcpy</span><span class="o">.</span><span class="n">AddMessage</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></span>
+<span class="code-line">        <span class="k">return</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="k">class</span> <span class="nc">Toolbox</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span></span>
+<span class="code-line">    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></span>
+<span class="code-line">        <span class="sd">&quot;&quot;&quot;Define the toolbox (the name of the toolbox</span></span>
+<span class="code-line"><span class="sd">            is the name of the .pyt file).&quot;&quot;&quot;</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s">&quot;TimeTool_Toolbox&quot;</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">alias</span> <span class="o">=</span> <span class="s">&quot;Toolbox with TimeTool&quot;</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">tools</span> <span class="o">=</span> <span class="p">[</span><span class="n">TimeTool</span><span class="p">]</span></span>
+</pre></div>
+
+
+<p>The first time I started this tool, it was working as intended. Yet, some further testing showed that its behavior didn&#8217;t correspond to what it should&nbsp;be:</p>
+<ul>
+<li><strong>Open the tool, cancel execution, then restart:</strong> our entry box is populated with the value we received when we started the tool for the first&nbsp;time;</li>
+<li><strong>Running the tool with default input, then restart:</strong> our entry box is populated with the value we received when we started the tool for the first&nbsp;time;</li>
+<li><strong>Running the tool with modified input value, then restart:</strong> during the first run our modified value is being printed, during the second run our entry box is still populated with the value we received when we started the tool for the first&nbsp;time;</li>
+<li><strong>Opening an entirely new <span class="caps">MXD</span></strong>: even after opening a new <span class="caps">MXD</span>, our entry box is still populated with the value we received when we started the tool for the first&nbsp;time.</li>
+</ul>
+<p>A pattern is emerging: the default value of the parameter is set during the first time the tool is being opened the ArcMAP session. The tool appears to be constructed during the first time it is being opened, then kept in memory for future&nbsp;use.</p>
+<h1 id="updateparameters">updateParameters</h1>
+<p>Conclusion is that we need to find another way capture the event of an user starting up the tool. Unfortunately, the <a href="http://resources.arcgis.com/en/help/main/10.2/index.html#//001500000024000000">ArcGIS help pages</a> do not provide us with a &#8220;InitializeParameters&#8221; method. It does however give us the &#8220;updateParameters&#8221; method, which is being called whenever a parameter has been changed. Apparently one or more parameters do change when a tool is being opened, since execution of the method is triggered when opening a&nbsp;tool.</p>
+<div class="highlight"><pre><span class="code-line"><span class="c">#!/usr/bin/env python</span></span>
+<span class="code-line"><span class="c"># -*- coding: utf-8 -*-</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="kn">import</span> <span class="nn">datetime</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="k">class</span> <span class="nc">TimeTool</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span></span>
+<span class="code-line">    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></span>
+<span class="code-line">        <span class="sd">&quot;&quot;&quot;Define the tool (tool name is the name of the class).&quot;&quot;&quot;</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s">&quot;Present time&quot;</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s">&quot;Prints a message with the present time&quot;</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">canRunInBackground</span> <span class="o">=</span> <span class="bp">False</span></span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="k">def</span> <span class="nf">getParameterInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></span>
+<span class="code-line">        <span class="sd">&quot;&quot;&quot;Define parameter definitions&quot;&quot;&quot;</span></span>
+<span class="code-line">        <span class="n">present_time</span> <span class="o">=</span> <span class="n">arcpy</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span></span>
+<span class="code-line">            <span class="n">displayName</span><span class="o">=</span><span class="s">&quot;Present time&quot;</span><span class="p">,</span></span>
+<span class="code-line">            <span class="n">name</span><span class="o">=</span><span class="s">&quot;present_time&quot;</span><span class="p">,</span></span>
+<span class="code-line">            <span class="n">datatype</span><span class="o">=</span><span class="s">&quot;String&quot;</span><span class="p">,</span></span>
+<span class="code-line">            <span class="n">parameterType</span><span class="o">=</span><span class="s">&quot;Required&quot;</span><span class="p">,</span></span>
+<span class="code-line">            <span class="n">direction</span><span class="o">=</span><span class="s">&quot;Input&quot;</span></span>
+<span class="code-line">            <span class="p">)</span></span>
+<span class="code-line"></span>
+<span class="code-line">        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">present_time</span><span class="p">]</span></span>
+<span class="code-line">        <span class="k">return</span> <span class="n">params</span></span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="k">def</span> <span class="nf">isLicensed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></span>
+<span class="code-line">        <span class="sd">&quot;&quot;&quot;Set whether tool is licensed to execute.&quot;&quot;&quot;</span></span>
+<span class="code-line">        <span class="k">return</span> <span class="bp">True</span></span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="k">def</span> <span class="nf">updateParameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span></span>
+<span class="code-line">        <span class="sd">&quot;&quot;&quot;Modify the values and properties of parameters before internal</span></span>
+<span class="code-line"><span class="sd">        validation is performed.  This method is called whenever a parameter</span></span>
+<span class="code-line"><span class="sd">        has been changed.&quot;&quot;&quot;</span></span>
+<span class="code-line"></span>
+<span class="code-line">        <span class="c"># supply a start value for the parameter as suggested value</span></span>
+<span class="code-line">        <span class="c"># when the parameter does not yet have a value:</span></span>
+<span class="code-line">        <span class="k">if</span> <span class="ow">not</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">:</span></span>
+<span class="code-line">            <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span></span>
+<span class="code-line">            <span class="n">parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">now</span><span class="p">)</span></span>
+<span class="code-line">        <span class="k">return</span></span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="k">def</span> <span class="nf">updateMessages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span></span>
+<span class="code-line">        <span class="sd">&quot;&quot;&quot;Modify the messages created by internal validation for each tool</span></span>
+<span class="code-line"><span class="sd">        parameter.  This method is called after internal validation.&quot;&quot;&quot;</span></span>
+<span class="code-line">        <span class="k">return</span></span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">messages</span><span class="p">):</span></span>
+<span class="code-line">        <span class="sd">&quot;&quot;&quot;The source code of the tool.&quot;&quot;&quot;</span></span>
+<span class="code-line">        <span class="n">arcpy</span><span class="o">.</span><span class="n">AddMessage</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></span>
+<span class="code-line">        <span class="k">return</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="k">class</span> <span class="nc">Toolbox</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span></span>
+<span class="code-line">    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></span>
+<span class="code-line">        <span class="sd">&quot;&quot;&quot;Define the toolbox (the name of the toolbox</span></span>
+<span class="code-line"><span class="sd">            is the name of the .pyt file).&quot;&quot;&quot;</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s">&quot;TimeTool_Toolbox&quot;</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">alias</span> <span class="o">=</span> <span class="s">&quot;Toolbox with TimeTool&quot;</span></span>
+<span class="code-line">        <span class="bp">self</span><span class="o">.</span><span class="n">tools</span> <span class="o">=</span> <span class="p">[</span><span class="n">TimeTool</span><span class="p">]</span></span>
+</pre></div>
+
+
+<p>Testing the behavior of the tool now gives the following&nbsp;results:</p>
+<ul>
+<li><strong>Open the tool, cancel execution, then restart:</strong> our entry box is populated with a new value when we restart the&nbsp;tool;</li>
+<li><strong>Running the tool with default input, then restart:</strong> our entry box is populated with a new value when we restart the&nbsp;tool;</li>
+<li><strong>Running the tool with modified input value, then restart:</strong> during the first run our modified value is being printed, during the second run our entry box is populated with a new&nbsp;value;</li>
+<li><strong>Opening an entirely new <span class="caps">MXD</span></strong>: our entry box is populated with a new value when we restart the&nbsp;tool;</li>
+<li><strong>Open the tool, delete the contents of our entry box</strong>: our entry box is populated with a new&nbsp;value.</li>
+</ul>
+<p>Again, a pattern is emerging: the default value of the parameter is set evertime the users opens the tool. For our original usecase, this approach will do the trick. It still is some kind of work-around though, and has the following&nbsp;drawbacks:</p>
+<ul>
+<li>Deleting the contents from the entry box will result in the entry box being&nbsp;repopulated;</li>
+<li>This approach will only work for required parameters. If it is used for optional parameters, the parameter will be given the value of our suggestion if kept&nbsp;blank.</li>
+</ul>
+<p>Using a precondition with a sensible combination of required parameters should be enough to soothen these drawbacks and make the tool usable. A hidden quirk will still persist though, if a user would delete the values for the chosen set of parameters <i class="fa fa-frown-o"></i>.</p>
+<p>In an attempt to remove this quirk, I have been trying to give the tool an extra attribute &#8220;self.initialized&#8221; and use this attribute as my precondition. Using this approach did not succeed due to the following&nbsp;issues:</p>
+<ol>
+<li>We might be able to attribute to False in the execution method of the tool. But how-to how to set this to False on&nbsp;cancel?</li>
+<li>Modifying a tool&#8217;s attributes outside the initialization method does not seem to&nbsp;work.</li>
+</ol>
+<h1 id="conclusion">Conclusion</h1>
+<p>I have not been able to find a way to capture the moment at which the parameters of the tool are being initialized. The updateParameters method does provide sufficient possibilities to come up with an usable&nbsp;work-around.</p>
+            <a href="#" class="go-top">Go Top</a>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = "pilosa"; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+<footer class="footer">
+    <p>&copy; Erwin Sterrenburg &ndash;
+        Built with <a href="https://github.com/PurePelicanTheme/pure-single">Pure Theme</a>
+        for <a href="http://blog.getpelican.com/">Pelican</a>
+    </p>
+</footer>        </div>
+    </div>
+    </div>
+    <script>
+        var $top = $('.go-top');
+
+        // Show or hide the sticky footer button
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                $top.fadeIn(200);
+            } else {
+                $top.fadeOut(200);
+            }
+        });
+
+        // Animate the scroll to top
+        $top.click(function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop: 0}, 300);
+        })
+
+        // Makes sure that the href="#" attached to the <a> elements
+        // don't scroll you back up the page.
+        $('body').on('click', 'a[href="#"]', function(event) {
+            event.preventDefault();
+        });
+    </script>
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+            var pageTracker = _gat._getTracker("UA-53900294-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+    </script>
+
+</body>
+</html>

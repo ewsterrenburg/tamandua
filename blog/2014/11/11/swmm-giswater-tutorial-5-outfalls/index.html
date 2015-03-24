@@ -20,7 +20,7 @@
     <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
-        <title>SWMM GISWATER n: long-to-do-list // PILOSA.EU // Scribblings of World's Most Curious Anteater</title>
+        <title>EPA SWMM / Giswater Tutorial 5: Outfalls // PILOSA.EU // Scribblings of World's Most Curious Anteater</title>
 
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
@@ -70,56 +70,82 @@
         <div class="content">
             <section class="post">
                 <header class="post-header">
-                    <h1><span class="caps">SWMM</span> <span class="caps">GISWATER</span> n:&nbsp;long-to-do-list</h1>
+                    <h1><span class="caps">EPA</span> <span class="caps">SWMM</span> / Giswater Tutorial 5:&nbsp;Outfalls</h1>
                         <p class="post-meta">
-                            // under                                 <a class="post-category" href="http://pilosa.eu/tag/giswater.html">GISWATER</a>
-                                <a class="post-category" href="http://pilosa.eu/tag/swmm.html">SWMM</a>
+                            // under                                 <a class="post-category" href="http://pilosa.eu/tag/swmm.html">SWMM</a>
+                                <a class="post-category" href="http://pilosa.eu/tag/giswater.html">Giswater</a>
+                                <a class="post-category" href="http://pilosa.eu/tag/water.html">Water</a>
                         </p>
                 </header>
             </section>
-            <ol>
-<li>outfalls</li>
-<li>sectors?</li>
-<li>subcatchments</li>
-<li>rain&nbsp;gages</li>
-<li>outlets</li>
-<li>pumpdinges</li>
-<li>dividers</li>
-<li>storage</li>
-<li>orifices</li>
-<li>weirs</li>
-<li>climatology</li>
-<li>patterns</li>
-<li>controls</li>
-<li>curves <span class="amp">&amp;</span>&nbsp;timeseries</li>
-<li>water&nbsp;quality</li>
-<li>custom&nbsp;cross-sections</li>
-<li>rest&nbsp;Hydrology</li>
-<li>rest&nbsp;Hydraulics</li>
-<li>output in <span class="caps">QGIS</span></li>
-<li>output in <span class="caps">SWMM</span>&nbsp;gui</li>
-<li>preferences <span class="amp">&amp;</span>&nbsp;options</li>
-<li>working with&nbsp;scenarios</li>
-<li><span class="caps">SWMM</span> error&nbsp;messages</li>
-<li>postgis&nbsp;errors</li>
-<li><span class="caps">QGIS</span> <span class="caps">SWMM</span>&nbsp;plugin</li>
-<li>validation</li>
-<li>verificaton</li>
-<li>calibration</li>
-<li>covello <span class="amp">&amp;</span> merckhofer&nbsp;analyse</li>
-<li><span class="caps">SWMM</span> as a&nbsp;webservice</li>
-<li>operational</li>
-</ol>
-<p><span class="caps">GISWATER</span> tutorial X: working with&nbsp;scenarios:</p>
-<p>boundary&nbsp;conditions</p>
-<p>system itself
-    still &#8230;
-        - save project
-        - open sql and replace schema-name
-        - open project (is this possible or manual schema creation required?)
-        - make system changes
-        - compare results (possible to open two separate instances of <span class="caps">SWMM</span>&nbsp;gui?)</p>
-<p>(small changes: open inp file in swmm, make changes, run&nbsp;simulation)</p>
+            <p>This is the 5<sup>th</sup> episode in my tutorial on using <span class="caps">EPA</span> Storm Water Management Model (<span class="caps">EPA</span> <span class="caps">SWMM</span>) and Giswater for rainfall-runoff modeling for an urban drainage network&nbsp;system.</p>
+<blockquote>
+<p>Outfalls are terminal nodes of the drainage system used to define final downstream boundaries under Dynamic Wave flow routing. For other types of flow routing they behave as a junction. Only a single link can be connected to an outfall&nbsp;node.</p>
+<p>The boundary conditions at an outfall can be described by any one of the following stage relationships: 
+* the critical or normal flow depth in the connecting&nbsp;conduit  </p>
+<ul>
+<li>
+<p>a fixed stage&nbsp;elevation  </p>
+</li>
+<li>
+<p>a tidal stage described in a table of tide height versus hour of the&nbsp;day  </p>
+</li>
+<li>
+<p>a user-defined time series of stage versus&nbsp;time.  </p>
+</li>
+</ul>
+<p>The principal input parameters for outfalls&nbsp;include: </p>
+<ul>
+<li>
+<p>invert&nbsp;elevation  </p>
+</li>
+<li>
+<p>boundary condition type and stage&nbsp;description  </p>
+</li>
+<li>
+<p>presence of a flap gate to prevent backflow through the&nbsp;outfall.  </p>
+</li>
+</ul>
+</blockquote>
+<p>Name 
+ User-assigned outfall&nbsp;name. </p>
+<p>X-Coordinate 
+ Horizontal location of the outfall on the Study Area Map. If left blank then the outfall will not appear on the&nbsp;map. </p>
+<p>Y-Coordinate 
+ Vertical location of the outfall on the Study Area Map. If left blank then the outfall will not appear on the&nbsp;map. </p>
+<p>Description 
+ Click the ellipsis button (or press Enter) to edit an optional description of the&nbsp;outfall. </p>
+<p>Tag 
+ Optional label used to categorize or classify the&nbsp;outfall. </p>
+<p>Inflows 
+ Click the ellipsis button (or press Enter) to assign external direct, dry weather or <span class="caps">RDII</span> inflows to the&nbsp;outfall. </p>
+<p>Treatment 
+ Click the ellipsis button (or press Enter) to edit a set of treatment functions for pollutants entering the&nbsp;node. </p>
+<p>Invert El. 
+ Invert elevation of the outfall (feet or&nbsp;meters). </p>
+<p>Tide Gate 
+ <span class="caps">YES</span> - tide gate present to prevent backflow 
+<span class="caps">NO</span> - no tide gate&nbsp;present </p>
+<p>Type 
+ Type of outfall boundary condition: 
+<span class="caps">FREE</span>: outfall stage determined by minimum of critical flow depth and normal flow depth in the connecting conduit 
+<span class="caps">NORMAL</span>: outfall stage based on normal flow depth in the connecting conduit 
+<span class="caps">FIXED</span>: outfall stage set to a fixed value 
+<span class="caps">TIDAL</span>: outfall stage given by a table of tide elevation versus time of day 
+<span class="caps">TIMESERIES</span>: outfall stage supplied from a time series of&nbsp;elevations </p>
+<p>Fixed Stage 
+ Water elevation for a <span class="caps">FIXED</span> type of outfall (feet or&nbsp;meters). </p>
+<p>Tidal Curve Name 
+ Name of the Tidal Curve relating water elevation to hour of the day for a <span class="caps">TIDAL</span> outfall (double-click to edit the&nbsp;curve). </p>
+<p>Time Series Name 
+ Name of time series containing time history of outfall stage for a <span class="caps">TIMESERIES</span> outfall (double-click to edit the&nbsp;series). </p>
+<p>Only thing required before running the model is possible is to create an&nbsp;outfall.</p>
+<p>Create outfall
+Run <span class="caps">EPA</span> <span class="caps">SWMM</span> (not that the results make any sense without&nbsp;inflows)</p>
+<p><span class="caps">GISWATER</span>: run not&nbsp;possilbe</p>
+<h1 id="conclusions"><span class="caps">CONCLUSIONS</span>:</h1>
+<p>Convert - absent in <span class="caps">GISWATER</span></p>
+<p>Sectors are relevant&nbsp;:)</p>
             <a href="#" class="go-top">Go Top</a>
     <div class="comments">
         <div id="disqus_thread"></div>
