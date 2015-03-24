@@ -80,7 +80,7 @@
             </section>
             <p>Once upon a time, on a computer not that far away, there was a ArcGIS python toolbox. This python toolbox contained a tool with a set of parameters. The values for these parameters would remain (slight variatons of) the same value for a long time. However, sometimes one or more parameter values would change drastically, which would make the newly supplied value the new default&nbsp;value.</p>
 <p>This blogpost contains an overview of my struggles trying to enforce this behavior. The original tool uses a logfile from which the parameter values are read during initialization and to which the parameter values are written when the tool is executed. In this example I will simply use the current time as my &#8220;external datasource&#8221;. The tool will read out the current time, use it as a default value for its only parameter and print the value of this parameter to the message dialog. Using this approach, I can more precisely identify what is happening and an what moment exactly the default value of the tool is being&nbsp;set.</p>
-<h1 id="9595init9595">__init__</h1>
+<h1 id="getparameterinfo">getParameterInfo</h1>
 <p>I expected an ArcGIS tool to be constructed when the tool is being opened by a user and to be destroyed after the tool has either been run or has been cancelled by the user. This would imply that the parameters, so my first attempt at &#8220;timetool.pyt&#8221; looked as&nbsp;follows:</p>
 <div class="highlight"><pre><span class="code-line"><span class="c">#!/usr/bin/env python</span></span>
 <span class="code-line"><span class="c"># -*- coding: utf-8 -*-</span></span>
