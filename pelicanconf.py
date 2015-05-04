@@ -14,7 +14,7 @@ DEFAULT_LANG = u'en'
 DEFAULT_PAGINATION = 5
 
 # By default we enable pretty highlighing in markdown:
-MD_EXTENSIONS = [FontAwesomeExtension(), 'codehilite(css_class=highlight,linenums=False)', 'extra', 'toc']
+MD_EXTENSIONS = [FontAwesomeExtension(), 'codehilite(css_class=highlight,linenums=False)', 'extra', 'toc', 'typogrify']
 
 # Leave this blank for local development, publishconf.py has the "real" value:
 SITEURL = 'http://localhost:8000/'
@@ -33,7 +33,7 @@ MENUITEMS = [('Archive', 'archives.html'), ('About', 'about.html'),]
 SOCIAL = (
     ('envelope-o', 'mailto:ewsterrenburg@gmail.com'),
     ('github', 'https://github.com/ewsterrenburg/'),
-    ('linkedin', 'https://www.linkedin.com/in/ewsterrenburg'),
+    ('linkedin-square', 'https://www.linkedin.com/in/ewsterrenburg/'),
     ('rss', 'http://pilosa.eu/feed.xml'),
 )
 
